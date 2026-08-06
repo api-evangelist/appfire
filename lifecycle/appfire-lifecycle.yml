@@ -1,0 +1,59 @@
+generated: '2026-08-06'
+method: searched
+source:
+- https://status.appfire.com/
+- https://status.appfire.com/api/v2/summary.json
+- openapi/appfire-7pace-timetracker-v1-openapi-original.yml
+- openapi/appfire-7pace-timetracker-v2-openapi-original.yml
+- openapi/appfire-okr-openapi-original.json
+- https://appfire.atlassian.net/wiki/spaces/DLP/pages/810221895/BigPicture+Jira+Cloud+Release+Notes+8.30.0
+versioning:
+  scheme: uri-path
+  detail: >-
+    Versioning is per product, in the URI path. 7pace Timetracker for Jira runs v1 and v2 concurrently,
+    each with its own OpenAPI document and a Swagger UI version selector. The Appfire OKR public API is
+    at /api/v2. BigPicture Cloud is at /public/{product}/rest and additionally reports
+    currentVersion/latestVersion in every response envelope so clients can detect a newer version.
+  current:
+    7pace-timetracker-for-jira: v2 (v1 still served)
+    appfire-okr: v2
+    bigpicture-cloud: 1 (envelope currentVersion)
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  detail: >-
+    No published API deprecation or sunset policy was found for any Appfire product, and no operation in
+    any harvested spec carries `deprecated: true`. 7pace v1 remains served alongside v2 with no stated
+    end-of-life date. RFC 8594 Sunset/Deprecation headers are not documented. No `Deprecation` pointer
+    is wired into apis.yml because there is no policy to point at.
+deprecated_operations: []
+sla:
+  url: null
+  uptime_target: null
+  note: >-
+    No public uptime SLA figure was found on the status page or the developer portals. SLA commitments
+    appear to sit inside the Appfire Trust Center / customer agreements rather than on a public page.
+status_page:
+  url: https://status.appfire.com/
+  provider: Atlassian Statuspage
+  page_name: Appfire Cloud Apps
+  api: https://status.appfire.com/api/v2/summary.json
+  components_monitored: 44
+  history: https://status.appfire.com/history
+  probed: '2026-08-06'
+  http_status: 200
+  note: >-
+    Per-app component status for 44 Appfire cloud apps (Comala, Dashboard Hub, Canned Responses, Agile
+    Poker, Connector for Salesforce, and so on), with a machine-readable Statuspage v2 API.
+release_notes:
+  scheme: per-product Confluence spaces
+  detail: >-
+    Appfire publishes dated release notes per product in its public Confluence documentation site
+    rather than one company-wide changelog. See changelog/appfire-changelog.yml.
+  see_also: changelog/appfire-changelog.yml
+support:
+  help_center: https://support.appfire.com/
+  okr_service_desk: https://appfire.atlassian.net/servicedesk/customer/portal/11/group/1237
+  note: The OKR service-desk URL is published as the contact in the OKR OpenAPI info block.

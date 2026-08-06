@@ -1,0 +1,124 @@
+generated: '2026-08-06'
+method: derived
+source:
+- openapi/appfire-okr-openapi-original.json
+- openapi/appfire-7pace-timetracker-v2-openapi-original.yml
+- https://developer.bigpicture.one/llms.txt
+summary: >-
+  Two independent entity graphs, one per public API — there is no shared Appfire data model. The OKR
+  graph is a goal hierarchy (objectives contain key results, both carry check-in updates) anchored to
+  Jira accountIds and issue ids. The 7pace graph is a single fact table (worklog) plus account-level
+  custom-field configuration. BigPicture's entities are named on its developer portal (boxes, box
+  types, tasks, teams, resources, skills, absences, scope definitions) but its schemas are not
+  anonymously downloadable, so its relationships are listed as documented-only, not derived.
+domains:
+- domain: okr
+  api: Appfire OKR API
+  root_response: ApiExportData
+  note: >-
+    Every export response returns a bundle — okrs, krs, teams, periods, labels, okrTypes, customFields —
+    so lookup tables come back alongside the objects that reference them by id.
+  entities:
+  - name: Objective
+    schema: ApiExportObjective
+    id: id
+    business_key: key
+    relationships:
+    - {type: has_many, target: KeyResult, via: krIds}
+    - {type: has_many, target: Objective, via: childObjectiveIds}
+    - {type: belongs_to, target: Objective, via: parentObjectiveId}
+    - {type: belongs_to, target: OkrType, via: okrTypeId}
+    - {type: has_many, target: Label, via: labelIds}
+    - {type: has_many, target: Team, via: teamIds}
+    - {type: belongs_to, target: PeriodAlias, via: periodAliasId}
+    - {type: has_one, target: Update, via: latestUpdate}
+    - {type: belongs_to, target: JiraAccount, via: ownerAccountId, external: true}
+    - {type: has_many, target: JiraAccount, via: collaboratorAccountIds, external: true}
+  - name: KeyResult
+    schema: ApiExportKeyResult
+    id: id
+    business_key: key
+    relationships:
+    - {type: belongs_to, target: Objective, via: parentObjectiveId}
+    - {type: belongs_to, target: OkrType, via: typeId}
+    - {type: has_many, target: Label, via: labelIds}
+    - {type: has_many, target: Team, via: teamIds}
+    - {type: belongs_to, target: PeriodAlias, via: periodAliasId}
+    - {type: has_one, target: Update, via: latestUpdate}
+    - {type: has_one, target: ProgressDefinition, via: currentProgressDefinition}
+    - {type: has_one, target: Unit, via: unit}
+    - {type: has_many, target: CustomField, via: customFields}
+    - {type: has_many, target: JiraIssue, via: issueIds, external: true}
+  - name: Update
+    schema: ApiExportUpdate
+    id: updateId
+    relationships:
+    - {type: belongs_to, target: Objective, via: entityId, note: polymorphic — entityId is an objective or key result id}
+    - {type: belongs_to, target: KeyResult, via: entityId, note: polymorphic}
+    - {type: has_many, target: UpdateComment, via: updateId (reverse)}
+  - name: UpdateComment
+    schema: ApiExportUpdateComment
+    id: commentId
+    relationships:
+    - {type: belongs_to, target: Update, via: updateId}
+    - {type: belongs_to, target: UpdateComment, via: replyToCommentId}
+    - {type: belongs_to, target: JiraAccount, via: authorAccountId, external: true}
+  - {name: Team, schema: ApiExportTeam, id: id}
+  - {name: Label, schema: ApiExportLabel, id: id}
+  - {name: OkrType, schema: ApiExportOkrType, id: id}
+  - {name: PeriodAlias, schema: ApiExportPeriodAlias, id: id}
+  - {name: CustomField, schema: ApiExportCustomField, id: id}
+  - {name: ProgressDefinition, schema: ApiExportProgressDefinition, note: 'carries a jql field — progress can be driven by a Jira query'}
+  - {name: Unit, schema: ApiExportUnit}
+- domain: time-tracking
+  api: 7pace Timetracker for Jira REST API
+  entities:
+  - name: Worklog
+    schema: Worklog
+    id: id
+    relationships:
+    - {type: belongs_to, target: JiraWorkItem, via: externalItemId, external: true}
+    - {type: belongs_to, target: JiraAccount, via: assigneeId, external: true}
+    - {type: belongs_to, target: JiraAccount, via: authorId, external: true}
+    - {type: belongs_to, target: JiraAccount, via: editorId, external: true}
+    - {type: belongs_to, target: Account, via: accountId}
+    - {type: has_many, target: CustomFieldValue, via: customFields}
+  - name: ChangedWorklog
+    schema: ChangedWorklog
+    note: >-
+      Same shape as Worklog plus isDeleted — the incremental-changes projection used for sync, not a
+      separate entity.
+  - name: CustomFieldSetting
+    schema: CustomFieldSetting
+    id: id
+    relationships:
+    - {type: has_many, target: CustomFieldDefinition, via: customFields}
+    - {type: has_many, target: Space, via: spaceIds}
+  - name: CustomFieldDefinition
+    schema: DropdownSettings / ToggleSettings
+    id: id
+    relationships:
+    - {type: has_many, target: DropdownOption, via: options}
+  - {name: DropdownOption, schema: DropdownOptionSettings, id: id}
+- domain: portfolio-management
+  api: BigPicture Cloud Public API
+  derived: false
+  note: >-
+    Entities are named on the public developer portal but no downloadable schema exists, so no
+    relationships are asserted here. Documented entities: Box, Box type, Task, Team, Global team,
+    Team membership, Resource, Skill, Resource absence, Scope definition, Sub-scope definition,
+    Resource task assignment. Boxes are hierarchical (box-hierarchy returns nested boxChildren) and
+    box ids are prefixed strings (ROOT, PROG-3045).
+  source: https://developer.bigpicture.one/llms.txt
+id_conventions:
+- api: Appfire OKR
+  detail: >-
+    Objectives and key results carry both an opaque `id` and a human `key`. People are Jira Cloud
+    accountIds, not OKR-local users — joining to a person requires the Jira API.
+- api: 7pace Timetracker
+  detail: >-
+    Worklogs reference the Jira work item through `externalItemId`, making Jira the system of record
+    for what was worked on. Paging is cursor-based via PageInfo.startCursor/endCursor.
+- api: BigPicture Cloud
+  detail: 'Box ids are prefixed strings, e.g. ROOT and PROG-3045.'
+render: null

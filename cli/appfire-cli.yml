@@ -1,0 +1,77 @@
+generated: '2026-08-06'
+method: searched
+source:
+- https://appfire.atlassian.net/wiki/spaces/ACLI
+- https://appfire.atlassian.net/wiki/spaces/ACLI/pages/2049769822/Quick+start+guide
+- https://appfire.atlassian.net/wiki/spaces/ACLI/pages/60562515/Atlassian+CLI+General+Documentation
+- https://appfire.atlassian.net/wiki/spaces/ACLI/pages/1930002457/Installation+and+configuration
+- https://marketplace.atlassian.com/apps/10886/atlassian-command-line-interface-cli
+name: Appfire Command Line Interface (ACLI)
+also_known_as:
+- Atlassian Command Line Interface (CLI)
+- Bob Swift Atlassian CLI
+product_page: https://appfire.com/products/acli
+docs: https://appfire.atlassian.net/wiki/spaces/ACLI
+summary: >-
+  ACLI is Appfire's first-party, cross-product command line client — an integrated family of CLIs for
+  Atlassian and adjacent systems, originally the Bob Swift Atlassian CLI and now maintained by Appfire.
+  One distribution ships several clients, one per target product, each exposing that product's actions
+  through the same `--action` interface. It is a distinct product from Atlassian's own `acli`; this
+  entry describes the Appfire one.
+disambiguation: >-
+  Atlassian shipped its own CLI also named `acli` in 2024. The Appfire product predates it, is sold on
+  the Atlassian Marketplace, and is documented in the ACLI Confluence space referenced above.
+clients:
+- name: jira
+  target: Jira (Cloud, Server, Data Center)
+- name: confluence
+  target: Confluence (Cloud, Server, Data Center)
+- name: bitbucket
+  target: Bitbucket
+- name: bamboo
+  target: Bamboo
+  note: Named in the general documentation page (marked archived); verify against the current Action Reference.
+additional_targets:
+- monday.com
+- Oracle
+- MySQL
+install:
+- method: marketplace-app
+  detail: Install as an app on your Atlassian instance (requires instance administrator access).
+  url: https://marketplace.atlassian.com/apps/10886/atlassian-command-line-interface-cli
+- method: platform-installer
+  detail: Windows, macOS and Linux platform installers.
+  docs: https://appfire.atlassian.net/wiki/spaces/ACLI/pages/60556507/Installing+on+Windows,+MacOS,+and+Linux+-+10.x
+- method: zip-distribution
+  detail: Download the distribution zip, extract locally, run the bundled startup scripts.
+- method: docker
+  detail: Docker images are published for ACLI.
+- method: npm
+  detail: Not applicable — ACLI is not distributed on npm.
+interface:
+  form: "<client> --action <actionName> [action parameters]"
+  help: "<client> --help"
+  examples:
+  - command: jira --action getProject --project TEST
+    description: Retrieve a Jira project.
+  - command: 'jira --action runFromList --list PROJECTA,PROJECTB --common "--action getProject --project @entry@"'
+    description: Run one action across a list, substituting @entry@ per item — the batch/looping idiom.
+  action_reference: https://appfire.atlassian.net/wiki/spaces/ACLI
+  note: >-
+    ACLI is action-oriented rather than resource-subcommand oriented: the verb is a value passed to
+    `--action`, not a subcommand. Hundreds of actions exist per client; the authoritative list is the
+    per-client Action Reference in the ACLI space.
+key_flows:
+- Bulk create, update and transition Jira issues from a list or file.
+- Import and export data between Atlassian apps, databases (Oracle, MySQL) and flat files.
+- Instance administration and user management from scripts.
+- Cross-application automation bridging Jira, Confluence and monday.com.
+shell:
+  name: ACLI Shell
+  docs: https://appfire.atlassian.net/wiki/spaces/ACLI/pages/60565771
+release_notes: https://appfire.atlassian.net/wiki/spaces/ACLI/pages/60555910
+version_archive: https://appfire.atlassian.net/wiki/spaces/ACLI/pages/60560274/Atlassian+CLI+Version+Archive
+binary_catalogued_in: packages/appfire-packages.yml
+limits:
+- Authentication parameters were not captured — the quick start guide defers them to the CLI Client Installation and Use guide, which was not transcribed here.
+- No complete machine-readable action list is published; the reference is HTML per client.

@@ -1,0 +1,53 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the 7pace Timetracker for Jira REST API v2
+  version: 1.0.0
+x-generated: '2026-08-06'
+x-method: generated
+x-source: openapi/appfire-7pace-timetracker-v2-openapi-original.yml
+extends: openapi/appfire-7pace-timetracker-v2-openapi-original.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: appfire
+    x-apievangelist-product: 7pace Timetracker for Jira
+    x-apievangelist-spec-source: https://timehubjra.7pace.com/swagger/v2.yml
+    x-apievangelist-harvested: '2026-08-06'
+- target: $.info
+  update:
+    x-authentication: authentication/appfire-authentication.yml
+    x-conventions: conventions/appfire-conventions.yml
+    x-errors: errors/appfire-problem-types.yml
+    x-lifecycle: lifecycle/appfire-lifecycle.yml
+    x-data-model: data-model/appfire-data-model.yml
+- target: $.servers
+  update:
+    x-apievangelist-note: >-
+      The document declares `url: /` (relative). The production host for 7pace Timetracker for Jira is
+      https://timehubjra.7pace.com, which is what apis.yml records as the baseURL.
+- target: $.info
+  update:
+    x-missing-operation-ids: true
+    x-apievangelist-note: >-
+      No operation in this document declares an operationId. Generated clients and MCP tool bindings
+      therefore have no stable handle per operation and must key off METHOD + path. Adding operationIds
+      is the single highest-value contract fix in this spec.
+    x-idempotency: none
+- target: $.components.schemas.ProblemDetails
+  update:
+    x-apievangelist-note: >-
+      This schema is declared but referenced by no response in the document. Wiring it into the 4xx/5xx
+      responses (with media type application/problem+json) would make this API RFC 9457 conformant.
+- target: $.paths['/api/v2/worklogs'].get
+  update:
+    x-pagination: {style: cursor, request: [before, after], response: pageInfo}
+- target: $.paths['/api/v2/worklogs/views/incrementalChanges'].get
+  update:
+    x-apievangelist-note: >-
+      The sync endpoint — returns deleted worklogs too (ChangedWorklog.isDeleted). This is the correct
+      source for keeping an external system in step, not the plain worklogs list.
+- target: $.paths['/api/v2/worklogs'].post
+  update:
+    x-apievangelist-note: >-
+      Write operation with no idempotency key; a retried create after a network timeout can double-log
+      time. Reconcile with the incrementalChanges feed rather than blind-retrying.

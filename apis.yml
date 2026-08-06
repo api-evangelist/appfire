@@ -1,23 +1,178 @@
 aid: appfire
 name: Appfire
-description: 'Appfire is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  Appfire is a global software company that builds, acquires, and operates a large portfolio of apps
+  that enhance, extend, and connect the platforms enterprise teams already run on — principally
+  Atlassian Jira, Confluence and Jira Service Management (Cloud and Data Center), plus Microsoft Azure
+  DevOps, monday.com and Salesforce. Its product families cover portfolio and project management
+  (BigPicture, BigGantt, BigTemplate), goal setting (OKR for Jira), time tracking (7pace Timetracker
+  for Jira and for Azure DevOps), document workflow and approvals (Comala Document Management),
+  workflow automation and scripting (Jira Misc Workflow Extensions, Power Scripts), and administration
+  tooling (the Appfire/Atlassian Command Line Interface). Public, machine-readable API surface is
+  per-product rather than company-wide: 7pace Timetracker for Jira publishes OpenAPI 3.0 for its v1
+  and v2 REST APIs, the OKR app serves an OpenAPI 3.1 document for its public export/update API, and
+  BigPicture publishes a hosted API reference for its Cloud and Data Center REST APIs.
 url: https://raw.githubusercontent.com/api-evangelist/appfire/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
-specificationVersion: '0.20'
+specificationVersion: '0.21'
 created: '2026-08-06'
 modified: '2026-08-06'
 tags:
-- Company
-apis: []
+- atlassian
+- jira
+- confluence
+- project-portfolio-management
+- work-management
+- time-tracking
+- okr
+- workflow-automation
+- azure-devops
+- marketplace-apps
+- document-workflow
+- enterprise-software
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- name: 7pace Timetracker for Jira REST API
+  description: >-
+    Worklog and account-settings API for 7pace Timetracker for Jira (an Appfire product). Two versions
+    are published side by side — v1 and v2 — each described by its own OpenAPI 3.0 document served from
+    the Timetracker host. Covers listing, creating, updating and deleting worklogs, incremental change
+    feeds for sync, migrated-worklog handling, custom field definitions (dropdown and toggle) and Jira
+    notification settings. Authenticated with a JWT bearer API token generated in Timetracker settings.
+  humanURL: https://appfire.atlassian.net/wiki/spaces/7TFJ/pages/1987510406/API+documentation+version+1.0
+  baseURL: https://timehubjra.7pace.com
+  tags:
+  - time-tracking
+  - worklogs
+  - jira
+  properties:
+  - type: OpenAPI
+    name: 7pace REST API v2 (OpenAPI 3.0)
+    url: openapi/appfire-7pace-timetracker-v2-openapi-original.yml
+  - type: OpenAPI
+    name: 7pace REST API v1 (OpenAPI 3.0)
+    url: openapi/appfire-7pace-timetracker-v1-openapi-original.yml
+  - type: APIReference
+    url: https://timehubjra.7pace.com/swagger/index.html?urls.primaryName=7pace+REST+API+v2
+  - type: Documentation
+    url: https://appfire.atlassian.net/wiki/spaces/7TFJ/pages/1987510406
+- name: Appfire OKR API
+  description: >-
+    Public export and update API for the Appfire OKR (Objectives and Key Results) app for Jira Cloud.
+    OpenAPI 3.1 document served anonymously from the OKR service. Provides cursor-paginated export of
+    objectives, key results, check-in updates and update comments by id or by date window, plus
+    endpoints to push objective and key-result progress back in. Authenticated with an API-Token header
+    generated from the OKR module settings; regional hosts are published for EU, AU and CA data
+    residency.
+  humanURL: https://developer.bigpicture.one/reference/okr-authentication
+  baseURL: https://okr-ppm-prod.appfire.com
+  tags:
+  - okr
+  - goals
+  - jira
+  properties:
+  - type: OpenAPI
+    name: OKR API v2 (OpenAPI 3.1)
+    url: openapi/appfire-okr-openapi-original.json
+  - type: APIReference
+    url: https://developer.bigpicture.one/reference/fetchobjectives
+- name: BigPicture Cloud Public API
+  description: >-
+    Public REST API for BigPicture, BigGantt and BigTemplate on Atlassian Cloud (Appfire's portfolio and
+    project-management suite). Exposes boxes, box types, tasks, teams, team memberships, resources,
+    skills, absences, scope definitions and task assignments. Authenticated with a bearer API token
+    issued from the BigPicture UI. The reference is published on a hosted developer portal; the
+    underlying OpenAPI documents are rendered there but are not offered as an anonymous download.
+  humanURL: https://developer.bigpicture.one/reference/whatisbigpicture
+  baseURL: https://api.bigpicture.one/public/bigpicture/rest
+  tags:
+  - project-portfolio-management
+  - resource-management
+  - jira
+  properties:
+  - type: APIReference
+    url: https://developer.bigpicture.one/reference/whatisbigpicture
+  - type: Authentication
+    url: https://developer.bigpicture.one/reference/apitokens
 common:
+- type: AgenticAccess
+  url: agentic-access/appfire-agentic-access.yml
+- type: TrustCenter
+  url: security/appfire-trust-center.yml
+- type: DomainSecurity
+  url: security/appfire-domain-security.yml
+- type: Authentication
+  url: authentication/appfire-authentication.yml
 - type: Website
-  url: https://forgeglobal.com/appfire_stock/
+  url: https://appfire.com
+- type: DeveloperPortal
+  url: https://developer.bigpicture.one/
+- type: Documentation
+  url: https://appfire.atlassian.net/wiki/spaces/APPFIRE/overview
+- type: APIReference
+  url: https://developer.bigpicture.one/reference/whatisbigpicture
+- type: Support
+  url: https://support.appfire.com/
+- type: StatusPage
+  url: https://status.appfire.com/
+- type: Blog
+  url: https://appfire.com/resources/blog
+- type: PrivacyPolicy
+  url: https://appfire.com/privacy-policy
+- type: TermsOfService
+  url: https://appfire.com/eula
+- type: Compliance
+  url: https://trust.appfire.com/
+- type: Packages
+  url: packages/appfire-packages.yml
+- type: SDKs
+  url: packages/appfire-packages.yml
+- type: CLI
+  url: cli/appfire-cli.yml
+- type: Conventions
+  url: conventions/appfire-conventions.yml
+- type: ErrorCatalog
+  url: errors/appfire-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/appfire-lifecycle.yml
+- type: ChangeLog
+  url: changelog/appfire-changelog.yml
+- type: Conformance
+  url: conformance/appfire-conformance.yml
+- type: DataModel
+  url: data-model/appfire-data-model.yml
+- type: LLMsTxt
+  url: llms/appfire-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Overlay
+  name: Appfire OKR API overlay
+  url: overlays/appfire-okr-overlay.yaml
+- type: Overlay
+  name: 7pace Timetracker v2 overlay
+  url: overlays/appfire-7pace-timetracker-v2-overlay.yaml
+- type: Overlay
+  name: 7pace Timetracker v1 overlay
+  url: overlays/appfire-7pace-timetracker-v1-overlay.yaml
+x-enrichment:
+  date: '2026-08-06'
+  status: enriched
+  artifacts_added: 25
+  pass: local-v1
+x-notes:
+  appfire_com_bot_wall: >-
+    appfire.com returns HTTP 429 to every automated request (curl and WebFetch alike), so the marketing
+    and legal pages could not be probed directly. The PrivacyPolicy, TermsOfService and Blog URLs above
+    are the published paths surfaced by search with their live page titles; every other pointer in this
+    file was fetched and its status recorded. All API, docs and status hosts responded normally.
+  internal_spec_not_harvested: >-
+    okr-ppm-prod.appfire.com also serves an unauthenticated default springdoc document at /v3/api-docs
+    (222 paths / 277 operations) that includes internal, migration, mail-test and queue-consumer
+    endpoints. Only the curated public document at /v3/api-docs/public was harvested. The unrestricted
+    internal one looks like an unintended exposure and is worth reporting to Appfire.
+

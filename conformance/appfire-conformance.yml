@@ -1,0 +1,97 @@
+generated: '2026-08-06'
+method: derived
+source:
+- openapi/appfire-okr-openapi-original.json
+- openapi/appfire-7pace-timetracker-v1-openapi-original.yml
+- openapi/appfire-7pace-timetracker-v2-openapi-original.yml
+- security/appfire-trust-center.yml
+- security/appfire-domain-security.yml
+- https://developer.bigpicture.one/reference/statuscodes
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: >-
+    7pace Timetracker v1 and v2 are both `openapi: 3.0.0` documents served from
+    timehubjra.7pace.com/swagger/.
+- id: openapi-3.1
+  conforms: true
+  evidence: >-
+    The Appfire OKR public API is served as `openapi: 3.1.0` at
+    okr-ppm-prod.appfire.com/v3/api-docs/public.
+- id: rfc9110-http-semantics
+  conforms: true
+  evidence: BigPicture's status-code page states it uses standard HTTP status codes and links RFC 9110 directly.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    No application/problem+json media type on any operation in any spec. 7pace v2 declares a
+    ProblemDetails component (type/title/detail/traceId) but never references it from a response.
+- id: oauth2
+  conforms: false
+  evidence: No oauth2 security scheme in any Appfire OpenAPI; all three public APIs use static bearer or header tokens.
+- id: oidc
+  conforms: false
+  evidence: No openIdConnect scheme; no /.well-known/openid-configuration on any host probed.
+- id: rfc6750-bearer-token
+  conforms: partial
+  evidence: >-
+    7pace and BigPicture use `Authorization: Bearer <token>`; Appfire OKR deliberately does not, using a
+    custom `API-Token` header and documenting that `Authorization` must NOT be used.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: No /.well-known/security.txt on appfire.com or any product host (see well-known/appfire-well-known.yml).
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No Sunset/Deprecation header support and no deprecation policy published.
+- id: rfc8615-well-known
+  conforms: false
+  evidence: No well-known URI is served by any Appfire host.
+- id: a2a-agent-card
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json return 404 on appfire.com,
+    api.bigpicture.one and okr-ppm-prod.appfire.com; timehubjra.7pace.com soft-404s them with an HTML shell.
+- id: mcp
+  conforms: false
+  evidence: No first-party MCP server published for any Appfire product.
+- id: asyncapi
+  conforms: not-applicable
+  evidence: >-
+    No public event, streaming or consumer webhook surface exists on any Appfire API, so there is nothing
+    for AsyncAPI to describe. Not a gap.
+- id: idempotency-key
+  conforms: false
+  evidence: No idempotency key contract on any write operation (see conventions/appfire-conventions.yml).
+- id: cursor-pagination
+  conforms: true
+  evidence: >-
+    OKR exposes cursor/pageSize with nextCursor in the response; 7pace exposes before/after with a
+    PageInfo object (hasNextPage/hasPreviousPage/startCursor/endCursor).
+- id: tls-1.3
+  conforms: true
+  evidence: appfire.com, appfire.atlassian.net and timehubjra.7pace.com all negotiate TLSv1.3.
+- id: hsts
+  conforms: partial
+  evidence: >-
+    appfire.atlassian.net (max-age 63072000) and timehubjra.7pace.com (31536000) send HSTS; appfire.com
+    does not.
+- id: dnssec
+  conforms: false
+  evidence: DNSSEC is not enabled on appfire.com.
+- id: dmarc
+  conforms: partial
+  evidence: appfire.com publishes SPF and DMARC with policy `quarantine` (not `reject`).
+- id: caa
+  conforms: true
+  evidence: 'appfire.com publishes CAA records: amazon.com, godaddy.com, pki.goog, letsencrypt.org.'
+compliance_program:
+  published: true
+  url: https://trust.appfire.com/
+  provider: SafeBase
+  certifications:
+  - SOC 2 Type II
+  - ISO/IEC 27001:2022
+  - ISO/IEC 27017
+  - HIPAA
+  - GDPR
+  evidence: security/appfire-trust-center.yml

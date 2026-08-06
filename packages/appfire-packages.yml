@@ -1,0 +1,86 @@
+generated: '2026-08-06'
+method: searched
+source: https://registry.npmjs.org/-/v1/search
+notes: >-
+  Appfire ships its apps through the Atlassian Marketplace rather than as language SDKs, so there is no
+  general-purpose Appfire API client library on npm/PyPI/Maven. What is published first-party is (a) the
+  7pace worklog import CLI, and (b) the @appfire-ux scope, which carries Appfire's internal design-system
+  and AI-agent tooling for teams building Appfire apps. No first-party client library was found for the
+  7pace Timetracker REST API, the OKR API, or the BigPicture public API on any registry probed
+  (npm, PyPI, Maven Central, NuGet, pkg.go.dev, RubyGems, Packagist, crates.io).
+packages:
+- language: javascript
+  registry: npm
+  name: timetracker-npm-import
+  url: https://www.npmjs.com/package/timetracker-npm-import
+  install: npm install -g timetracker-npm-import
+  publisher: 7pace
+  official: true
+  description: >-
+    Node.js CLI for importing worklogs (CSV/Excel) into 7pace Timetracker. Published by the 7pace npm
+    account (7pace is an Appfire product).
+- language: javascript
+  registry: npm
+  name: "@appfire-ux/guidelines"
+  url: https://www.npmjs.com/package/@appfire-ux/guidelines
+  install: npm install @appfire-ux/guidelines
+  publisher: mnowakappfire
+  official: true
+  description: UX design-system guidelines for AI coding assistants building Appfire apps.
+- language: javascript
+  registry: npm
+  name: "@appfire-ux/audit-agent"
+  url: https://www.npmjs.com/package/@appfire-ux/audit-agent
+  install: npm install @appfire-ux/audit-agent
+  publisher: mnowakappfire
+  official: true
+  description: Claude Code audit agents (ux-auditor, ui-auditor) for Appfire apps.
+- language: javascript
+  registry: npm
+  name: "@appfire-ux/vpat-agent"
+  url: https://www.npmjs.com/package/@appfire-ux/vpat-agent
+  install: npm install @appfire-ux/vpat-agent
+  publisher: mnowakappfire
+  official: true
+  description: Claude Code VPAT/ACR accessibility-audit agents for Appfire apps.
+- language: javascript
+  registry: npm
+  name: "@appfire-ux/fonts"
+  url: https://www.npmjs.com/package/@appfire-ux/fonts
+  install: npm install @appfire-ux/fonts
+  publisher: mnowakappfire
+  official: true
+  description: Atlassian Sans/Mono and Font Awesome font packaging for Appfire prototyping repos.
+- language: java
+  registry: vendor-download
+  name: Appfire Command Line Interface (ACLI)
+  url: https://marketplace.atlassian.com/apps/10886/atlassian-command-line-interface-cli
+  docs: https://appfire.atlassian.net/wiki/spaces/ACLI/pages/60562515/Atlassian+CLI+General+Documentation
+  install: Download the ACLI distribution from the Atlassian Marketplace listing and unpack it.
+  official: true
+  description: >-
+    First-party cross-product command line client for Jira, Confluence, Bitbucket, Bamboo and other
+    Atlassian products (originally the Bob Swift Atlassian CLI, now maintained by Appfire). See
+    cli/appfire-cli.yml for the command surface.
+excluded:
+- name: appfire
+  registry: pypi
+  url: https://pypi.org/project/appfire/
+  publisher: Niklas Rosenstein
+  official: false
+  reason: Name-squat placeholder (version 0.0.0, summary "Placeholder"); not published by Appfire.
+- name: 7pace-mcp-server
+  registry: npm
+  url: https://www.npmjs.com/package/7pace-mcp-server
+  publisher: taajirah
+  official: false
+  reason: Third-party community MCP server for 7pace Timetracker; not published by Appfire or 7pace.
+registries_probed:
+- npm
+- pypi
+- maven-central
+- nuget
+- pkg.go.dev
+- rubygems
+- packagist
+- crates.io

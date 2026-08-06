@@ -1,0 +1,34 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the 7pace Timetracker for Jira REST API v1
+  version: 1.0.0
+x-generated: '2026-08-06'
+x-method: generated
+x-source: openapi/appfire-7pace-timetracker-v1-openapi-original.yml
+extends: openapi/appfire-7pace-timetracker-v1-openapi-original.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: appfire
+    x-apievangelist-product: 7pace Timetracker for Jira
+    x-apievangelist-spec-source: https://timehubjra.7pace.com/swagger/v1.yml
+    x-apievangelist-harvested: '2026-08-06'
+    x-apievangelist-status: >-
+      Superseded by v2 but still served. No sunset date or deprecation policy has been published for
+      v1 — see lifecycle/appfire-lifecycle.yml.
+- target: $.info
+  update:
+    x-authentication: authentication/appfire-authentication.yml
+    x-conventions: conventions/appfire-conventions.yml
+    x-errors: errors/appfire-problem-types.yml
+    x-missing-operation-ids: true
+    x-idempotency: none
+- target: $.servers
+  update:
+    x-apievangelist-note: >-
+      Declares `url: /` (relative); the production host is https://timehubjra.7pace.com.
+- target: $.paths['/api/v1/worklogs/changes'].get
+  update:
+    x-apievangelist-note: >-
+      Renamed in v2 to /api/v2/worklogs/views/incrementalChanges. This path change is the main
+      migration break between v1 and v2 and is not documented in any changelog.

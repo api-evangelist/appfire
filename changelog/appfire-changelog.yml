@@ -1,0 +1,39 @@
+generated: '2026-08-06'
+method: searched
+source:
+- https://appfire.atlassian.net/wiki/spaces/DLP/pages/810221895/BigPicture+Jira+Cloud+Release+Notes+8.30.0
+- https://appfire.atlassian.net/wiki/spaces/ACLI/pages/60555910
+- https://status.appfire.com/history
+scheme: per-product-release-notes
+summary: >-
+  Appfire has no single company-wide changelog. Each product publishes dated release notes in its own
+  public Confluence space on appfire.atlassian.net, and the Statuspage carries a separate incident
+  history. There is no API-level changelog: none of the three public APIs publishes a versioned record
+  of endpoint additions, field changes or breaking changes — 7pace ships v1 and v2 specs with no diff,
+  and OKR's OpenAPI carries no revision history. Recent entries are deliberately NOT transcribed here;
+  the live release-notes spaces are the source of truth.
+surfaces:
+- product: BigPicture / BigGantt / BigTemplate
+  space: https://appfire.atlassian.net/wiki/spaces/DLP/overview
+  release_notes: https://appfire.atlassian.net/wiki/spaces/DLP/pages/810221895/BigPicture+Jira+Cloud+Release+Notes+8.30.0
+  http_status: 200
+  cadence: per-release, versioned (8.x)
+- product: BigPicture Enterprise Cloud
+  space: https://appfire.atlassian.net/wiki/spaces/SPM/overview
+  cadence: dated release notes
+- product: Appfire Command Line Interface (ACLI)
+  space: https://appfire.atlassian.net/wiki/spaces/ACLI/overview
+  release_notes: https://appfire.atlassian.net/wiki/spaces/ACLI/pages/60555910
+  http_status: 200
+  cadence: per-release, versioned (10.x)
+  archive: https://appfire.atlassian.net/wiki/spaces/ACLI/pages/60560274/Atlassian+CLI+Version+Archive
+- product: 7pace Timetracker for Jira
+  space: https://appfire.atlassian.net/wiki/spaces/7TFJ/overview
+  http_status: 200
+- product: All Appfire cloud apps (incidents, not releases)
+  url: https://status.appfire.com/history
+  http_status: 200
+entries: []
+gaps:
+- No company-wide changelog index; a consumer of three Appfire APIs must watch three Confluence spaces.
+- No API changelog. Neither the 7pace v1 -> v2 transition nor OKR API changes are documented as a dated, versioned record.

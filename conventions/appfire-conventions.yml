@@ -1,0 +1,133 @@
+generated: '2026-08-06'
+method: searched
+source:
+- openapi/appfire-okr-openapi-original.json
+- openapi/appfire-7pace-timetracker-v2-openapi-original.yml
+- https://developer.bigpicture.one/reference/apiresponsestructure
+- https://developer.bigpicture.one/reference/apitokens
+- https://developer.bigpicture.one/reference/okr-authentication
+- https://developer.bigpicture.one/reference/statuscodes
+summary: >-
+  Appfire has no company-wide API convention. Each acquired product brought its own, and the three
+  public surfaces disagree on the two things that matter most to a client: how you authenticate and what
+  a response looks like. OKR uses a bespoke `API-Token` header and explicitly tells you NOT to use
+  `Authorization`; 7pace Timetracker uses `Authorization: Bearer`; BigPicture uses `Authorization:
+  Bearer` but wraps every payload in a `currentVersion`/`latestVersion`/`cargo` envelope that the other
+  two do not use. Treat each product as a separate API.
+authentication:
+  style: per-product
+  products:
+  - product: Appfire OKR
+    scheme: apiKey
+    location: header
+    parameter: API-Token
+    note: >-
+      "Please make sure you use the `API-Token` header, not the `Authentication` header." A missing
+      header returns 400, not 401. Tokens are generated in OKR Settings > API and cannot be retrieved
+      after creation; org admins with API_ADMIN_TABLE_ACCESS can list, rename and revoke any token.
+    docs: https://developer.bigpicture.one/reference/okr-authentication
+  - product: 7pace Timetracker for Jira
+    scheme: http
+    http_scheme: bearer
+    format: JWT
+    note: Tokens created in Timetracker Settings > API Tokens with a required expiration date.
+    docs: https://appfire.atlassian.net/wiki/spaces/7TFJ/pages/1253539983
+  - product: BigPicture Cloud
+    scheme: http
+    http_scheme: bearer
+    note: Token issued from the BigPicture UI; no scopes or granular permissions are documented.
+    docs: https://developer.bigpicture.one/reference/apitokens
+  see_also: authentication/appfire-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  evidence: >-
+    No idempotency key header, parameter or retry contract is documented or present in any Appfire
+    OpenAPI. The single occurrence of the word "idempotent" in the corpus is a prose note on
+    DELETE /api/v2/settings/customFields/settings/{settingId} in the 7pace v2 spec describing HTTP
+    DELETE semantics — it is not a client-supplied idempotency key. No `Idempotency` pointer is wired
+    into apis.yml. This is a real gap for agent use: creating a worklog or posting an OKR update is not
+    safely retryable.
+pagination:
+  style: per-product
+  products:
+  - product: Appfire OKR
+    style: cursor
+    request_params: [cursor, pageSize]
+    filter_params: [laterThan, earlierThan]
+    applies_to: [fetchUpdatesByEntityId, fetchCommentsByUpdateIds]
+    note: >-
+      The bulk export endpoints (objectives/keyResults byIds and byDate) are NOT paginated — they take
+      an id list or a date window and return the whole set.
+  - product: 7pace Timetracker
+    style: cursor
+    request_params: [before, after]
+    response_field: pageInfo
+    schema: PageInfo
+    applies_to: [GET /api/v2/worklogs, GET /api/v2/worklogs/views/incrementalChanges]
+  - product: BigPicture Cloud
+    style: undocumented
+    note: No pagination contract is described on the public developer portal.
+field_expansion:
+  supported: true
+  products:
+  - product: Appfire OKR
+    param: expand
+    applies_to: [fetchObjectives, fetchObjectivesByIds, fetchKeyResults, fetchKeyResultsByIds]
+    note: Comma-separated expand options; an unrecognised option returns 400.
+response_envelope:
+  products:
+  - product: BigPicture Cloud
+    enveloped: true
+    fields: [currentVersion, latestVersion, cargo]
+    payload_field: cargo
+    example: '{"currentVersion":1,"latestVersion":1,"cargo":{"createdBoxId":"PROG-3045"}}'
+    docs: https://developer.bigpicture.one/reference/apiresponsestructure
+  - product: Appfire OKR
+    enveloped: false
+    note: Returns the resource schema (ApiExportData and friends) directly.
+  - product: 7pace Timetracker
+    enveloped: false
+    note: Returns the resource schema directly; list responses carry a sibling pageInfo object.
+error_envelope:
+  status: weak
+  detail: >-
+    No RFC 9457 problem+json anywhere in the corpus. 7pace v2 declares a `ProblemDetails` schema in
+    components but does not reference it from any response, and serves errors as `application/json`
+    with a free-form body. OKR types every 4xx body as a bare `type: object` with no properties.
+    BigPicture says only "we use standard HTTP status codes" and links RFC 9110. See
+    errors/appfire-problem-types.yml.
+rate_limiting:
+  signalled: partial
+  products:
+  - product: Appfire OKR
+    documented: true
+    quote: 'Requests may be throttled. On 429, wait before retrying.'
+    source: openapi/appfire-okr-openapi-original.json (info.description)
+    headers_documented: false
+    note: No Retry-After, X-RateLimit-* or quota figure is published — only "wait before retrying".
+  - product: 7pace Timetracker
+    documented: false
+  - product: BigPicture Cloud
+    documented: false
+versioning:
+  scheme: uri-path
+  detail: >-
+    Every product versions in the path. 7pace runs /api/v1 and /api/v2 side by side with separate
+    OpenAPI documents and a Swagger UI selector. OKR is at /api/v2. BigPicture Cloud is at
+    /public/{product}/rest and additionally returns currentVersion/latestVersion in the envelope so a
+    client can detect that a newer API version exists.
+  see_also: lifecycle/appfire-lifecycle.yml
+request_tracing:
+  request_id_header: null
+  documented: false
+metadata:
+  supported: false
+  note: >-
+    No free-form metadata bag on any resource. 7pace does offer account-level custom field definitions
+    (dropdown/toggle) that attach to worklogs, which is the closest equivalent.
+cross_links:
+  errors: errors/appfire-problem-types.yml
+  authentication: authentication/appfire-authentication.yml
+  lifecycle: lifecycle/appfire-lifecycle.yml
+  data_model: data-model/appfire-data-model.yml

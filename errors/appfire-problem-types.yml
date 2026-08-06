@@ -1,0 +1,109 @@
+generated: '2026-08-06'
+method: derived
+source:
+- openapi/appfire-okr-openapi-original.json
+- openapi/appfire-7pace-timetracker-v2-openapi-original.yml
+- openapi/appfire-7pace-timetracker-v1-openapi-original.yml
+- https://developer.bigpicture.one/reference/statuscodes
+format: http-status
+rfc9457: false
+summary: >-
+  Appfire publishes no machine-readable error catalog and no RFC 9457 problem+json media type on any of
+  its public APIs. Errors are plain HTTP status codes with a prose description on the operation. The
+  problems below are DERIVED from the 4xx/5xx responses actually declared in the two downloadable
+  OpenAPI documents; the `title` text is the spec's own response description, not our invention. Named
+  error identifiers appear only twice in the whole corpus, both in 7pace v2 validation prose
+  (CUSTOM_FIELDS_SETTING_CONFLICT, CUSTOM_FIELDS_SETTING_NOT_FOUND).
+envelope:
+  media_type: application/json
+  schema: undeclared
+  note: >-
+    7pace v2 defines a `ProblemDetails` component schema but never $refs it from a response, so no
+    operation actually promises that shape. OKR types every 4xx body as an empty `type: object`.
+    BigPicture states only that it uses standard HTTP status codes (RFC 9110).
+problems:
+- status: 400
+  title: Invalid expand options provided
+  api: Appfire OKR
+  source_operation: openapi/appfire-okr-openapi-original.json#fetchObjectives
+  also: [fetchObjectivesByIds, fetchKeyResults, fetchKeyResultsByIds, fetchUpdatesByEntityId, fetchCommentsByUpdateIds]
+  remediation: Pass only expand options the endpoint documents.
+- status: 400
+  title: Missing API-Token header or malformed request body
+  api: Appfire OKR
+  source_operation: openapi/appfire-okr-openapi-original.json#updateObjective
+  remediation: >-
+    Send the token in the `API-Token` header. OKR returns 400 (not 401) when the header is absent
+    entirely.
+- status: 401
+  title: Invalid or missing API token
+  api: Appfire OKR
+  source_operation: openapi/appfire-okr-openapi-original.json#fetchObjectives
+- status: 403
+  title: Caller lacks permission on the objective or key result
+  api: Appfire OKR
+  source_operation: openapi/appfire-okr-openapi-original.json#updateObjective
+- status: 404
+  title: Objective or key result not found
+  api: Appfire OKR
+  source_operation: openapi/appfire-okr-openapi-original.json#updateObjective
+- status: 400
+  title: Error response for invalid filters
+  api: 7pace Timetracker
+  source_operation: openapi/appfire-7pace-timetracker-v2-openapi-original.yml#GET /api/v2/worklogs
+- status: 400
+  title: Worklog cannot be created, invalid request body
+  api: 7pace Timetracker
+  source_operation: openapi/appfire-7pace-timetracker-v2-openapi-original.yml#POST /api/v2/worklogs
+- status: 400
+  title: The worklog is not migrated
+  api: 7pace Timetracker
+  source_operation: openapi/appfire-7pace-timetracker-v2-openapi-original.yml#DELETE /api/v2/worklogs/migrated/{worklogId}
+- status: 400
+  title: Validation error (CUSTOM_FIELDS_SETTING_CONFLICT)
+  api: 7pace Timetracker
+  code: CUSTOM_FIELDS_SETTING_CONFLICT
+  source_operation: openapi/appfire-7pace-timetracker-v2-openapi-original.yml#POST /api/v2/settings/customFields/settings
+- status: 400
+  title: Validation error (CUSTOM_FIELDS_SETTING_NOT_FOUND)
+  api: 7pace Timetracker
+  code: CUSTOM_FIELDS_SETTING_NOT_FOUND
+  source_operation: openapi/appfire-7pace-timetracker-v2-openapi-original.yml#PUT /api/v2/settings/customFields/settings/{settingId}
+- status: 401
+  title: Unauthorized access. This indicates a problem with the supplied API token.
+  api: 7pace Timetracker
+  source_operation: openapi/appfire-7pace-timetracker-v2-openapi-original.yml#POST /api/v2/worklogs
+  note: Declared with no response body.
+- status: 403
+  title: The user associated with the api token does not have permission for this operation
+  api: 7pace Timetracker
+  source_operation: openapi/appfire-7pace-timetracker-v2-openapi-original.yml#PUT /api/v2/worklogs/{worklogId}
+- status: 404
+  title: Worklog not found
+  api: 7pace Timetracker
+  source_operation: openapi/appfire-7pace-timetracker-v2-openapi-original.yml#PUT /api/v2/worklogs/{worklogId}
+- status: 404
+  title: The referenced worklog or assignee was not found
+  api: 7pace Timetracker
+  source_operation: openapi/appfire-7pace-timetracker-v2-openapi-original.yml#POST /api/v2/worklogs
+- status: 404
+  title: Custom field not found
+  api: 7pace Timetracker
+  source_operation: openapi/appfire-7pace-timetracker-v2-openapi-original.yml#PUT /api/v2/settings/customFields/dropdown/{customFieldId}
+- status: 500
+  title: Internal server error
+  api: 7pace Timetracker
+  source_operation: openapi/appfire-7pace-timetracker-v2-openapi-original.yml#POST /api/v2/worklogs
+- status: 429
+  title: Throttled
+  api: Appfire OKR
+  source: openapi/appfire-okr-openapi-original.json (info.description)
+  note: >-
+    Documented in prose only ("Requests may be throttled. On 429, wait before retrying.") and declared
+    on no operation. No Retry-After contract.
+  remediation: Back off and retry; no published quota or reset header.
+gaps:
+- No application/problem+json anywhere; adopting RFC 9457 would give every product one machine-readable error shape.
+- 7pace ships a ProblemDetails schema that no response references — wiring it up is a one-line change per response.
+- OKR types all error bodies as an empty object, so a generated client gets no error model at all.
+- No stable error codes/identifiers a client can branch on, except the two 7pace CUSTOM_FIELDS_SETTING_* strings.

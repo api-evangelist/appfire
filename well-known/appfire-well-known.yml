@@ -1,0 +1,61 @@
+generated: '2026-08-06'
+method: probed
+source: live GET of /.well-known/* on every Appfire API, docs and marketing host
+summary: >-
+  No RFC 8615 well-known document is published on any Appfire host. Nothing was saved because nothing
+  real was returned: appfire.com and api.bigpicture.one answer honest 404s, and timehubjra.7pace.com
+  answers HTTP 200 with the application's HTML shell for EVERY /.well-known/* path — a single-page-app
+  catch-all, not a document. Those 200s are recorded here as soft-404s so a later run does not mistake
+  them for a hit. No pointer of type WellKnown or SecurityTxt is wired into apis.yml, because no such
+  document exists.
+hosts:
+- host: https://appfire.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+- host: https://api.bigpicture.one
+  documents:
+  - {path: /.well-known/agent-card.json, status: 404, body: '{"error_msg":"404 Route Not Found"}'}
+  - {path: /.well-known/agent.json, status: 404, body: '{"error_msg":"404 Route Not Found"}'}
+- host: https://okr-ppm-prod.appfire.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+- host: https://timehubjra.7pace.com
+  soft_404: true
+  note: >-
+    Returns 200 text/html (the Timetracker SPA shell) for every /.well-known/* path probed. Treated as
+    absent, not present.
+  documents:
+  - {path: /.well-known/security.txt, status: 200, content_type: text/html, verdict: soft-404}
+  - {path: /.well-known/agent-card.json, status: 200, content_type: text/html, verdict: soft-404}
+  - {path: /.well-known/agent.json, status: 200, content_type: text/html, verdict: soft-404}
+  - {path: /.well-known/openid-configuration, status: 200, content_type: text/html, verdict: soft-404}
+  - {path: /.well-known/oauth-authorization-server, status: 200, content_type: text/html, verdict: soft-404}
+  - {path: /.well-known/api-catalog, status: 200, content_type: text/html, verdict: soft-404}
+- host: https://developer.bigpicture.one
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+- host: https://support.appfire.com
+  documents:
+  - {path: /.well-known/security.txt, status: 403}
+  - {path: /.well-known/agent-card.json, status: 403}
+- host: https://trust.appfire.com
+  documents:
+  - {path: /.well-known/security.txt, status: 403}
+  - {path: /.well-known/agent-card.json, status: 403}
+gap:
+  security_txt: >-
+    Appfire runs a SafeBase Trust Center with SOC 2 Type II, ISO 27001:2022, ISO 27017, HIPAA and GDPR
+    posture published, but publishes no /.well-known/security.txt naming a security contact or
+    disclosure policy. A one-file RFC 9116 addition on appfire.com would close it.
+  agent_card: No A2A agent card on any host (see the a2a/ recipe — nothing was written, by design).

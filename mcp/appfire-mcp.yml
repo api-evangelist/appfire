@@ -1,0 +1,72 @@
+generated: '2026-08-06'
+method: derived
+source: openapi/appfire-okr-openapi-original.json, openapi/appfire-7pace-timetracker-v2-openapi-original.yml
+status: candidate
+summary: >-
+  No official hosted or remote Model Context Protocol (MCP) server was found for Appfire or for any of
+  its products (7pace Timetracker, OKR, BigPicture, Comala, ACLI). The npm package `7pace-mcp-server` is
+  a third-party community build (publisher `taajirah`), not an Appfire release. The tool set below is
+  DERIVED from the operations in the two downloadable Appfire OpenAPI documents as a proposal for an
+  agent-facing surface. It is NOT published by Appfire, and no `MCPServer` pointer is wired into
+  apis.yml, because no MCP server genuinely exists.
+server:
+  name: appfire
+  published: false
+  transport: null
+  url: null
+probes:
+- {url: 'https://api.bigpicture.one/.well-known/agent-card.json', status: 404}
+- {url: 'https://okr-ppm-prod.appfire.com/.well-known/agent-card.json', status: 404}
+- {url: 'https://appfire.com/.well-known/ai-plugin.json', status: 404}
+tools:
+- name: okr_fetch_objectives
+  description: Query OKR objectives that fall inside a start-date / deadline window.
+  source_operation: openapi/appfire-okr-openapi-original.json#fetchObjectives
+- name: okr_fetch_objectives_by_ids
+  description: Fetch specific OKR objectives by id.
+  source_operation: openapi/appfire-okr-openapi-original.json#fetchObjectivesByIds
+- name: okr_fetch_key_results
+  description: Query key results that fall inside a start-date / deadline window.
+  source_operation: openapi/appfire-okr-openapi-original.json#fetchKeyResults
+- name: okr_fetch_key_results_by_ids
+  description: Fetch specific key results by id.
+  source_operation: openapi/appfire-okr-openapi-original.json#fetchKeyResultsByIds
+- name: okr_fetch_updates
+  description: Page through check-in updates for an objective or key result.
+  source_operation: openapi/appfire-okr-openapi-original.json#fetchUpdatesByEntityId
+- name: okr_fetch_update_comments
+  description: Page through comments left on OKR check-in updates.
+  source_operation: openapi/appfire-okr-openapi-original.json#fetchCommentsByUpdateIds
+- name: okr_update_objective
+  description: Post a progress update against an objective.
+  source_operation: openapi/appfire-okr-openapi-original.json#updateObjective
+  write: true
+- name: okr_update_key_result
+  description: Post a progress update against a key result.
+  source_operation: openapi/appfire-okr-openapi-original.json#updateKeyResult
+  write: true
+- name: timetracker_list_worklogs
+  description: List 7pace Timetracker worklogs with author/assignee/date filters and cursor paging.
+  source_operation: openapi/appfire-7pace-timetracker-v2-openapi-original.yml#GET /api/v2/worklogs
+- name: timetracker_list_worklog_changes
+  description: Incremental change feed of worklogs, including deletions, for sync.
+  source_operation: openapi/appfire-7pace-timetracker-v2-openapi-original.yml#GET /api/v2/worklogs/views/incrementalChanges
+- name: timetracker_create_worklog
+  description: Log time against a Jira work item.
+  source_operation: openapi/appfire-7pace-timetracker-v2-openapi-original.yml#POST /api/v2/worklogs
+  write: true
+- name: timetracker_update_worklog
+  description: Update an existing worklog.
+  source_operation: openapi/appfire-7pace-timetracker-v2-openapi-original.yml#PUT /api/v2/worklogs/{worklogId}
+  write: true
+- name: timetracker_delete_worklog
+  description: Delete a worklog.
+  source_operation: openapi/appfire-7pace-timetracker-v2-openapi-original.yml#DELETE /api/v2/worklogs/{worklogId}
+  write: true
+- name: timetracker_list_custom_fields
+  description: Read the Timetracker custom-field definitions available on the account.
+  source_operation: openapi/appfire-7pace-timetracker-v2-openapi-original.yml#GET /api/v2/settings/customFields
+note_on_source_operations: >-
+  The 7pace OpenAPI documents declare no operationId on any operation, so the 7pace tools above are
+  bound to METHOD + path instead. That missing operationId is a real contract-quality gap in the 7pace
+  spec, not an omission on our side.

@@ -1,0 +1,47 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Appfire OKR API
+  version: 1.0.0
+x-generated: '2026-08-06'
+x-method: generated
+x-source: openapi/appfire-okr-openapi-original.json
+extends: openapi/appfire-okr-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: appfire
+    x-apievangelist-product: Appfire OKR for Jira
+    x-apievangelist-spec-source: https://okr-ppm-prod.appfire.com/v3/api-docs/public
+    x-apievangelist-harvested: '2026-08-06'
+- target: $.info
+  update:
+    x-authentication: authentication/appfire-authentication.yml
+    x-conventions: conventions/appfire-conventions.yml
+    x-errors: errors/appfire-problem-types.yml
+    x-lifecycle: lifecycle/appfire-lifecycle.yml
+    x-data-model: data-model/appfire-data-model.yml
+- target: $.info
+  update:
+    x-rate-limit-note: >-
+      The provider documents throttling in prose only ("Requests may be throttled. On 429, wait before
+      retrying."). No 429 response is declared on any operation and no Retry-After or X-RateLimit-*
+      header contract is published.
+    x-idempotency: none
+- target: $.paths['/api/v2/api-update/objectives'].post
+  update:
+    x-apievangelist-note: >-
+      Write operation with no idempotency key. A retried call after a timeout may post a duplicate
+      progress update against the objective.
+- target: $.paths['/api/v2/api-update/keyResults'].post
+  update:
+    x-apievangelist-note: >-
+      Write operation with no idempotency key. A retried call after a timeout may post a duplicate
+      progress update against the key result.
+- target: $.paths['/api/v2/api-export/objectives/byDate'].get
+  update:
+    x-apievangelist-note: >-
+      Not paginated. Returns the full ApiExportData bundle for the date window, including the teams,
+      periods, labels, okrTypes and customFields lookup tables.
+- target: $.paths['/api/v2/api-export/keyResults/byDate'].get
+  update:
+    x-apievangelist-note: Not paginated — same full-bundle behaviour as objectives/byDate.

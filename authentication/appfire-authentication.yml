@@ -1,0 +1,66 @@
+generated: '2026-08-06'
+method: searched
+source: openapi/appfire-7pace-timetracker-v1-openapi-original.yml, openapi/appfire-7pace-timetracker-v2-openapi-original.yml,
+  openapi/appfire-okr-openapi-original.json
+docs:
+- https://developer.bigpicture.one/reference/okr-authentication
+- https://developer.bigpicture.one/reference/apitokens
+- https://appfire.atlassian.net/wiki/spaces/7TFJ/pages/1253539983
+warning: >-
+  Appfire's three public APIs use three different token conventions and two mutually exclusive header
+  names. Appfire OKR requires `API-Token` and explicitly forbids `Authorization`; 7pace Timetracker and
+  BigPicture both require `Authorization: Bearer`. A client written against one will not work against
+  another. No OAuth, no OIDC, and no scopes exist anywhere in the Appfire public API surface — every
+  token carries the full permissions of the user who minted it.
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+  oauth2_flows: []
+  scopes: none
+schemes:
+- name: bearer
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  product: 7pace Timetracker for Jira
+  token_creation: Timetracker → Settings → API Tokens → + Create token (name + mandatory expiration date)
+  docs: https://appfire.atlassian.net/wiki/spaces/7TFJ/pages/1253539983
+  sources:
+  - openapi/appfire-7pace-timetracker-v1-openapi-original.yml
+  - openapi/appfire-7pace-timetracker-v2-openapi-original.yml
+- name: API-Token
+  type: apiKey
+  in: header
+  parameter: API-Token
+  product: Appfire OKR for Jira
+  description: >-
+    API authentication token generated from OKR module settings. Send only this header name
+    (`API-Token`), not `Authorization` or `Authentication`.
+  token_creation: Jira → Apps → OKR for Jira → Settings → API → Generate new token
+  token_retrievable_later: false
+  admin_surface: >-
+    Users with the API_ADMIN_TABLE_ACCESS permission see an API administrator table and can list,
+    rename and revoke any token in the organization.
+  missing_header_status: 400
+  invalid_token_status: 401
+  docs: https://developer.bigpicture.one/reference/okr-authentication
+  sources:
+  - openapi/appfire-okr-openapi-original.json
+- name: bearer
+  type: http
+  scheme: bearer
+  product: BigPicture Cloud Public API
+  description: 'Authorization: Bearer <api token>, issued from the BigPicture UI. No scopes or granular permissions are documented.'
+  token_creation: BigPicture → API tokens (create, view, copy, revoke)
+  docs: https://developer.bigpicture.one/reference/apitokens
+  sources:
+  - docs
+  spec_available: false
+gaps:
+- No OAuth 2.0 or OpenID Connect on any Appfire API — no delegated authorization, no consent, no third-party app model.
+- No scopes on any token; least-privilege is not expressible.
+- Token rotation is documented only for 7pace (mandatory expiry). OKR and BigPicture tokens have no stated lifetime.
+- No /.well-known/oauth-authorization-server or /.well-known/openid-configuration on any host.

@@ -1,0 +1,27 @@
+generated: '2026-08-06'
+method: generated
+source: openapi/appfire-okr-openapi-original.json, openapi/appfire-7pace-timetracker-v2-openapi-original.yml
+note: >-
+  Skills are grounded only in the two Appfire OpenAPI documents that are anonymously downloadable. No
+  skill was written for the BigPicture Cloud API: its reference is published but its OpenAPI is not
+  offered as a download, so there is no spec to ground operations in.
+skills:
+- file: appfire-okr-export-progress.md
+  name: Export Appfire OKR objectives, key results and check-ins
+  api: openapi/appfire-okr-openapi-original.json
+  operations: [fetchObjectives, fetchObjectivesByIds, fetchKeyResults, fetchKeyResultsByIds, fetchUpdatesByEntityId, fetchCommentsByUpdateIds]
+- file: appfire-okr-post-checkin.md
+  name: Post an OKR check-in to Appfire OKR for Jira
+  api: openapi/appfire-okr-openapi-original.json
+  operations: [updateObjective, updateKeyResult, fetchObjectivesByIds, fetchKeyResultsByIds, fetchUpdatesByEntityId]
+- file: appfire-7pace-worklog-sync.md
+  name: Sync 7pace Timetracker worklogs
+  api: openapi/appfire-7pace-timetracker-v2-openapi-original.yml
+  operations:
+  - GET /api/v2/worklogs
+  - GET /api/v2/worklogs/views/incrementalChanges
+  - POST /api/v2/worklogs
+  - PUT /api/v2/worklogs/{worklogId}
+  - DELETE /api/v2/worklogs/{worklogId}
+  - GET /api/v2/settings/customFields
+  note: The 7pace spec declares no operationIds; operations are referenced by METHOD + path.
