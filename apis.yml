@@ -37,57 +37,13 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 apis:
-- name: 7pace Timetracker for Jira REST API
-  description: >-
-    Worklog and account-settings API for 7pace Timetracker for Jira (an Appfire product). Two versions
-    are published side by side — v1 and v2 — each described by its own OpenAPI 3.0 document served from
-    the Timetracker host. Covers listing, creating, updating and deleting worklogs, incremental change
-    feeds for sync, migrated-worklog handling, custom field definitions (dropdown and toggle) and Jira
-    notification settings. Authenticated with a JWT bearer API token generated in Timetracker settings.
-  humanURL: https://appfire.atlassian.net/wiki/spaces/7TFJ/pages/1987510406/API+documentation+version+1.0
-  baseURL: https://timehubjra.7pace.com
-  tags:
-  - time-tracking
-  - worklogs
-  - jira
-  properties:
-  - type: OpenAPI
-    name: 7pace REST API v2 (OpenAPI 3.0)
-    url: openapi/appfire-7pace-timetracker-v2-openapi-original.yml
-  - type: OpenAPI
-    name: 7pace REST API v1 (OpenAPI 3.0)
-    url: openapi/appfire-7pace-timetracker-v1-openapi-original.yml
-  - type: APIReference
-    url: https://timehubjra.7pace.com/swagger/index.html?urls.primaryName=7pace+REST+API+v2
-  - type: Documentation
-    url: https://appfire.atlassian.net/wiki/spaces/7TFJ/pages/1987510406
-- name: Appfire OKR API
-  description: >-
-    Public export and update API for the Appfire OKR (Objectives and Key Results) app for Jira Cloud.
-    OpenAPI 3.1 document served anonymously from the OKR service. Provides cursor-paginated export of
-    objectives, key results, check-in updates and update comments by id or by date window, plus
-    endpoints to push objective and key-result progress back in. Authenticated with an API-Token header
-    generated from the OKR module settings; regional hosts are published for EU, AU and CA data
-    residency.
-  humanURL: https://developer.bigpicture.one/reference/okr-authentication
-  baseURL: https://okr-ppm-prod.appfire.com
-  tags:
-  - okr
-  - goals
-  - jira
-  properties:
-  - type: OpenAPI
-    name: OKR API v2 (OpenAPI 3.1)
-    url: openapi/appfire-okr-openapi-original.json
-  - type: APIReference
-    url: https://developer.bigpicture.one/reference/fetchobjectives
 - name: BigPicture Cloud Public API
   description: >-
     Public REST API for BigPicture, BigGantt and BigTemplate on Atlassian Cloud (Appfire's portfolio and
-    project-management suite). Exposes boxes, box types, tasks, teams, team memberships, resources,
-    skills, absences, scope definitions and task assignments. Authenticated with a bearer API token
-    issued from the BigPicture UI. The reference is published on a hosted developer portal; the
-    underlying OpenAPI documents are rendered there but are not offered as an anonymous download.
+    project-management suite). Exposes boxes, box types, tasks, teams, team memberships, resources, skills,
+    absences, scope definitions and task assignments. Authenticated with a bearer API token issued from
+    the BigPicture UI. The reference is published on a hosted developer portal; the underlying OpenAPI
+    documents are rendered there but are not offered as an anonymous download.
   humanURL: https://developer.bigpicture.one/reference/whatisbigpicture
   baseURL: https://api.bigpicture.one/public/bigpicture/rest
   tags:
@@ -99,7 +55,82 @@ apis:
     url: https://developer.bigpicture.one/reference/whatisbigpicture
   - type: Authentication
     url: https://developer.bigpicture.one/reference/apitokens
+- aid: appfire:appfire-api-query-methods-api
+  name: Appfire API query methods API
+  description: >-
+    Retrieve objectives, key results, updates, and comments. Use **expand** to include related entities
+    (teams, periods, labels, etc.) instead of IDs only. Authenticate with the **API-Token** header. For
+    team identifiers and the **Teams** API, see **Teams** in the API overview.
+  humanURL: >-
+    https://appfire.atlassian.net/wiki/spaces/7TFJ/pages/1987510406/API+documentation+version+1.0
+  baseURL: https://timehubjra.7pace.com
+  tags:
+  - API query methods
+  properties:
+  - type: OpenAPI
+    url: openapi/appfire-api-query-methods-api-openapi.yml
+  - type: APIReference
+    url: https://timehubjra.7pace.com/swagger/index.html?urls.primaryName=7pace+REST+API+v2
+  - type: Documentation
+    url: https://appfire.atlassian.net/wiki/spaces/7TFJ/pages/1987510406
+  - type: APIReference
+    url: https://developer.bigpicture.one/reference/fetchobjectives
+- aid: appfire:appfire-api-update-methods-api
+  name: Appfire API update methods API
+  description: >-
+    **POST** with a JSON body. Send **Content-Type: application/json** and the **API-Token** header. Creates
+    update records that set current status (and key-result progress where applicable).
+  humanURL: >-
+    https://appfire.atlassian.net/wiki/spaces/7TFJ/pages/1987510406/API+documentation+version+1.0
+  baseURL: https://timehubjra.7pace.com
+  tags:
+  - API update methods
+  properties:
+  - type: OpenAPI
+    url: openapi/appfire-api-update-methods-api-openapi.yml
+  - type: APIReference
+    url: https://timehubjra.7pace.com/swagger/index.html?urls.primaryName=7pace+REST+API+v2
+  - type: Documentation
+    url: https://appfire.atlassian.net/wiki/spaces/7TFJ/pages/1987510406
+  - type: APIReference
+    url: https://developer.bigpicture.one/reference/fetchobjectives
+- aid: appfire:appfire-settings-api
+  name: Appfire Settings API
+  description: The Settings API from Appfire — 16 operation(s) for settings.
+  humanURL: >-
+    https://appfire.atlassian.net/wiki/spaces/7TFJ/pages/1987510406/API+documentation+version+1.0
+  baseURL: https://timehubjra.7pace.com
+  tags:
+  - Settings
+  properties:
+  - type: OpenAPI
+    url: openapi/appfire-settings-api-openapi.yml
+  - type: APIReference
+    url: https://timehubjra.7pace.com/swagger/index.html?urls.primaryName=7pace+REST+API+v2
+  - type: Documentation
+    url: https://appfire.atlassian.net/wiki/spaces/7TFJ/pages/1987510406
+  - type: APIReference
+    url: https://developer.bigpicture.one/reference/fetchobjectives
+- aid: appfire:appfire-worklogs-api
+  name: Appfire Worklogs API
+  description: The Worklogs API from Appfire — 10 operation(s) for worklogs.
+  humanURL: >-
+    https://appfire.atlassian.net/wiki/spaces/7TFJ/pages/1987510406/API+documentation+version+1.0
+  baseURL: https://timehubjra.7pace.com
+  tags:
+  - Worklogs
+  properties:
+  - type: OpenAPI
+    url: openapi/appfire-worklogs-api-openapi.yml
+  - type: APIReference
+    url: https://timehubjra.7pace.com/swagger/index.html?urls.primaryName=7pace+REST+API+v2
+  - type: Documentation
+    url: https://appfire.atlassian.net/wiki/spaces/7TFJ/pages/1987510406
+  - type: APIReference
+    url: https://developer.bigpicture.one/reference/fetchobjectives
 common:
+- type: MCPServer
+  url: mcp/appfire-mcp.yml
 - type: AgenticAccess
   url: agentic-access/appfire-agentic-access.yml
 - type: TrustCenter
