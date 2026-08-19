@@ -1,0 +1,1559 @@
+{
+  "item": [
+    {
+      "id": "0c1b4568-c729-4443-883b-7e2189f9f0b0",
+      "name": "API query methods",
+      "description": {
+        "content": "Retrieve objectives, key results, updates, and comments. Use **expand** to include related entities (teams, periods, labels, etc.) instead of IDs only. Authenticate with the **API-Token** header. For team identifiers and the **Teams** API, see **Teams** in the API overview.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e5c55651-51a2-4421-a529-38cedfacbbbe",
+          "name": "Query updates by entity",
+          "request": {
+            "name": "Query updates by entity",
+            "description": {
+              "content": "## Base URL for this request\n\nSelect the server matching your Jira Cloud data residency from the **Servers** drop-down before making requests:\n\n- **Europe region:** https://eu.okr-ppm-prod.appfire.com\n- **Australia region:** https://au.okr-ppm-prod.appfire.com\n- **Canada region:** https://ca.okr-ppm-prod.appfire.com\n- **US / Everywhere else:** https://okr-ppm-prod.appfire.com\n\nUpdates for objectives or key results, **newest first**. Omit **entityId** to return updates across all entities.\n\n**Progress:** Prefer **`percentDone`** on objectives and key results for the latest progress — not every change produces an update row. Objective updates always have **value** null (objective progress is derived from key results). For **manual** key results, updates can carry **startValue**, **value**, and **desiredValue** to show progress over time. **Auto** key results: system updates when linked issues change may include progress values; manual text-only updates on auto KRs may omit editable progress on the returned update object. **source:** MANUAL (UI), API (public update API), or AUTO (system/linked issues).\n\n**Pagination:** Cursor-based; **nextCursor** in the response means more pages. Absent **nextCursor**, there is no further page.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "api-export",
+                "updates"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "entityId",
+                  "value": "<string>",
+                  "description": "ID of a single objective or key result to return updates for. If not provided, updates for all entities will be returned, newest first."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Cursor for pagination. Use the value of nextCursor from previous response to get the next page."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "1000",
+                  "description": "Number of updates to return per page. Takes values from 1 to 1000. Default is 1000."
+                },
+                {
+                  "disabled": false,
+                  "key": "laterThan",
+                  "value": "<long>",
+                  "description": "Only return updates later than this date (open interval), in UNIX Epoch milliseconds"
+                },
+                {
+                  "disabled": false,
+                  "key": "earlierThan",
+                  "value": "<long>",
+                  "description": "Only return updates earlier than this date (open interval), in UNIX Epoch milliseconds"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2659dc12-2c24-40cf-a745-afb575dfaa04",
+              "name": "Successful retrieval of updates",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "api-export",
+                    "updates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "entityId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "laterThan",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "earlierThan",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "API-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"updates\": [\n    {\n      \"updateId\": \"string\",\n      \"entityId\": \"string\",\n      \"status\": \"ACTION_REQUIRED\",\n      \"displayedStatus\": \"string\",\n      \"created\": \"1990-01-13T14:01:57.702Z\",\n      \"value\": 6913.860105902921,\n      \"description\": \"string\",\n      \"startValue\": 9439.045967980734,\n      \"desiredValue\": 1850.0807751383986,\n      \"source\": \"AUTO\"\n    },\n    {\n      \"updateId\": \"string\",\n      \"entityId\": \"string\",\n      \"status\": \"UNDEFINED\",\n      \"displayedStatus\": \"string\",\n      \"created\": \"1947-02-02T18:47:41.593Z\",\n      \"value\": 8532.827283633193,\n      \"description\": \"string\",\n      \"startValue\": 3717.4033744064163,\n      \"desiredValue\": 8426.545564837588,\n      \"source\": \"API\"\n    }\n  ],\n  \"nextCursor\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "093f6676-e39f-4cd9-a2ea-213296d48188",
+              "name": "Invalid pagination parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "api-export",
+                    "updates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "entityId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "laterThan",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "earlierThan",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "API-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8ccfdc99-8dca-4f80-8518-54ac55ad396c",
+              "name": "Invalid or missing API token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "api-export",
+                    "updates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "entityId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "laterThan",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "earlierThan",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "API-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4b4c20d5-8b36-478a-94ad-0dec1b651531",
+          "name": "Query comments on updates",
+          "request": {
+            "name": "Query comments on updates",
+            "description": {
+              "content": "## Base URL for this request\n\nSelect the server matching your Jira Cloud data residency from the **Servers** drop-down before making requests:\n\n- **Europe region:** https://eu.okr-ppm-prod.appfire.com\n- **Australia region:** https://au.okr-ppm-prod.appfire.com\n- **Canada region:** https://ca.okr-ppm-prod.appfire.com\n- **US / Everywhere else:** https://okr-ppm-prod.appfire.com\n\nPaged comments on updates — all updates or filtered by **updateId**. Newest first. **nextCursor** requests the next page; no **nextCursor** when exhausted.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "api-export",
+                "updateComments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "updateId",
+                  "value": "<string>",
+                  "description": "IDs of updates to retrieve comments for. If not provided, comments for all updates will be returned, newest first."
+                },
+                {
+                  "disabled": false,
+                  "key": "updateId",
+                  "value": "<string>",
+                  "description": "IDs of updates to retrieve comments for. If not provided, comments for all updates will be returned, newest first."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Cursor for pagination. Use the value of nextCursor from previous response to get the next page."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "1000",
+                  "description": "Number of comments to return per page. Takes values from 1 to 1000. Default is 1000."
+                },
+                {
+                  "disabled": false,
+                  "key": "laterThan",
+                  "value": "<long>",
+                  "description": "Only return comments later than this date (open interval), in UNIX Epoch milliseconds"
+                },
+                {
+                  "disabled": false,
+                  "key": "earlierThan",
+                  "value": "<long>",
+                  "description": "Only return comments earlier than this date (open interval), in UNIX Epoch milliseconds"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8cf0f33b-3f87-4dfc-be64-0e20aad3ca34",
+              "name": "Successful retrieval of comments",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "api-export",
+                    "updateComments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "updateId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updateId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "laterThan",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "earlierThan",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "API-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"comments\": [\n    {\n      \"commentId\": \"string\",\n      \"updateId\": \"string\",\n      \"text\": \"string\",\n      \"authorAccountId\": \"string\",\n      \"replyToCommentId\": \"string\",\n      \"created\": \"1981-07-01T01:28:49.580Z\",\n      \"lastEdited\": \"1972-07-29T23:55:53.766Z\"\n    },\n    {\n      \"commentId\": \"string\",\n      \"updateId\": \"string\",\n      \"text\": \"string\",\n      \"authorAccountId\": \"string\",\n      \"replyToCommentId\": \"string\",\n      \"created\": \"1988-11-06T18:48:06.456Z\",\n      \"lastEdited\": \"2004-06-14T13:09:58.675Z\"\n    }\n  ],\n  \"nextCursor\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "487347ad-e59f-4c44-bb97-a71b6ad159cf",
+              "name": "Invalid pagination parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "api-export",
+                    "updateComments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "updateId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updateId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "laterThan",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "earlierThan",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "API-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8dc5d773-74e4-4c0b-89b9-dde217d1b664",
+              "name": "Invalid or missing API token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "api-export",
+                    "updateComments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "updateId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updateId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "laterThan",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "earlierThan",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "API-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e6e570b4-5593-48e0-a345-37f10ae05ce9",
+          "name": "Query objectives by IDs",
+          "request": {
+            "name": "Query objectives by IDs",
+            "description": {
+              "content": "## Base URL for this request\n\nSelect the server matching your Jira Cloud data residency from the **Servers** drop-down before making requests:\n\n- **Europe region:** https://eu.okr-ppm-prod.appfire.com\n- **Australia region:** https://au.okr-ppm-prod.appfire.com\n- **Canada region:** https://ca.okr-ppm-prod.appfire.com\n- **US / Everywhere else:** https://okr-ppm-prod.appfire.com\n\nLists objectives for the given IDs. **expand** controls which related objects are inlined (KEY_RESULTS, TEAMS, PERIODS, LABELS, TYPES, CUSTOM_FIELDS); otherwise you receive IDs only.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "api-export",
+                "objectives",
+                "byIds"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "objectiveIds",
+                  "value": "<string>",
+                  "description": "(Required) Objective IDs to retrieve (repeat param or comma-separated, depending on client)."
+                },
+                {
+                  "disabled": false,
+                  "key": "objectiveIds",
+                  "value": "<string>",
+                  "description": "(Required) Objective IDs to retrieve (repeat param or comma-separated, depending on client)."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand",
+                  "value": "<string>,<string>",
+                  "description": "Related data to expand. KEY_RESULTS, TEAMS, PERIODS, LABELS, TYPES, CUSTOM_FIELDS."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9c7d1a2a-7f0c-4011-aa1b-eebb205589e8",
+              "name": "Successful retrieval of objectives",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "api-export",
+                    "objectives",
+                    "byIds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "objectiveIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "objectiveIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "API-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"okrs\": [\n    {\n      \"id\": \"string\",\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"link\": \"string\",\n      \"description\": \"string\",\n      \"parentObjectiveId\": \"string\",\n      \"okrTypeId\": \"string\",\n      \"okrTypeName\": \"string\",\n      \"ownerAccountId\": \"string\",\n      \"collaboratorAccountIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"percentDone\": 7957.979944657794,\n      \"created\": \"1957-05-03T18:35:44.530Z\",\n      \"startDate\": \"1950-05-28T17:50:29.115Z\",\n      \"deadline\": \"2015-03-16T15:41:06.435Z\",\n      \"expectedEndDate\": \"1958-06-16T02:02:33.031Z\",\n      \"labelIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"teamIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"krIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"childObjectiveIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"latestUpdate\": {\n        \"updateId\": \"string\",\n        \"entityId\": \"string\",\n        \"status\": \"DELAYED\",\n        \"displayedStatus\": \"string\",\n        \"created\": \"1990-07-30T08:23:39.234Z\",\n        \"value\": 3964.5162329489513,\n        \"description\": \"string\",\n        \"startValue\": 5845.994044584386,\n        \"desiredValue\": 8383.450542707244,\n        \"source\": \"API\"\n      },\n      \"periodAliasId\": \"string\",\n      \"weight\": 1252,\n      \"finalGrade\": 8110.406813551615,\n      \"iconBackgroundColor\": \"string\",\n      \"iconTextColor\": \"string\",\n      \"customFields\": {\n        \"key_0\": {}\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"link\": \"string\",\n      \"description\": \"string\",\n      \"parentObjectiveId\": \"string\",\n      \"okrTypeId\": \"string\",\n      \"okrTypeName\": \"string\",\n      \"ownerAccountId\": \"string\",\n      \"collaboratorAccountIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"percentDone\": 7775.980324450299,\n      \"created\": \"1988-07-22T14:48:22.348Z\",\n      \"startDate\": \"1964-09-01T15:41:41.002Z\",\n      \"deadline\": \"1971-01-12T11:27:07.908Z\",\n      \"expectedEndDate\": \"2000-05-08T02:29:55.070Z\",\n      \"labelIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"teamIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"krIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"childObjectiveIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"latestUpdate\": {\n        \"updateId\": \"string\",\n        \"entityId\": \"string\",\n        \"status\": \"CANCELED\",\n        \"displayedStatus\": \"string\",\n        \"created\": \"2016-08-06T22:12:45.486Z\",\n        \"value\": 1813.9008096695197,\n        \"description\": \"string\",\n        \"startValue\": 2646.798803043752,\n        \"desiredValue\": 7794.286912149386,\n        \"source\": \"AUTO\"\n      },\n      \"periodAliasId\": \"string\",\n      \"weight\": 5935,\n      \"finalGrade\": 2789.28810321613,\n      \"iconBackgroundColor\": \"string\",\n      \"iconTextColor\": \"string\",\n      \"customFields\": {\n        \"key_0\": {},\n        \"key_1\": {}\n      }\n    }\n  ],\n  \"krs\": [\n    {\n      \"id\": \"string\",\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"link\": \"string\",\n      \"description\": \"string\",\n      \"parentObjectiveId\": \"string\",\n      \"issueIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"typeId\": \"string\",\n      \"typeName\": \"string\",\n      \"ownerAccountId\": \"string\",\n      \"collaboratorAccountIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"percentDone\": 5049.838196531572,\n      \"created\": \"2014-06-13T12:10:51.469Z\",\n      \"startDate\": \"1947-09-26T11:22:01.133Z\",\n      \"deadline\": \"2016-11-24T21:35:44.240Z\",\n      \"expectedEndDate\": \"2015-11-02T17:14:17.376Z\",\n      \"labelIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"teamIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"periodAliasId\": \"string\",\n      \"latestUpdate\": {\n        \"updateId\": \"string\",\n        \"entityId\": \"string\",\n        \"status\": \"UNDEFINED\",\n        \"displayedStatus\": \"string\",\n        \"created\": \"1963-01-27T19:24:24.275Z\",\n        \"value\": 1199.3509392387614,\n        \"description\": \"string\",\n        \"startValue\": 390.60676618936975,\n        \"desiredValue\": 9480.169419036185,\n        \"source\": \"MANUAL\"\n      },\n      \"unit\": {\n        \"name\": \"string\",\n        \"symbol\": \"string\"\n      },\n      \"currentProgressDefinition\": {\n        \"type\": \"AUTO\",\n        \"startValue\": 5610.046525223091,\n        \"desiredValue\": 5233.8593509738985,\n        \"jql\": \"string\"\n      },\n      \"weight\": 8672,\n      \"finalGrade\": 2028.8113137316689,\n      \"customFields\": {\n        \"key_0\": {},\n        \"key_1\": {}\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"link\": \"string\",\n      \"description\": \"string\",\n      \"parentObjectiveId\": \"string\",\n      \"issueIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"typeId\": \"string\",\n      \"typeName\": \"string\",\n      \"ownerAccountId\": \"string\",\n      \"collaboratorAccountIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"percentDone\": 8970.251860094902,\n      \"created\": \"1999-11-14T06:33:06.578Z\",\n      \"startDate\": \"2020-05-09T23:40:32.746Z\",\n      \"deadline\": \"2004-09-24T12:14:16.929Z\",\n      \"expectedEndDate\": \"1989-11-12T16:58:09.390Z\",\n      \"labelIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"teamIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"periodAliasId\": \"string\",\n      \"latestUpdate\": {\n        \"updateId\": \"string\",\n        \"entityId\": \"string\",\n        \"status\": \"ACTION_REQUIRED\",\n        \"displayedStatus\": \"string\",\n        \"created\": \"1956-06-01T09:17:14.571Z\",\n        \"value\": 1495.9149379025648,\n        \"description\": \"string\",\n        \"startValue\": 6652.31791965446,\n        \"desiredValue\": 8670.894837936834,\n        \"source\": \"AUTO\"\n      },\n      \"unit\": {\n        \"name\": \"string\",\n        \"symbol\": \"string\"\n      },\n      \"currentProgressDefinition\": {\n        \"type\": \"AUTO\",\n        \"startValue\": 8289.477634636918,\n        \"desiredValue\": 7479.839117847271,\n        \"jql\": \"string\"\n      },\n      \"weight\": 3758,\n      \"finalGrade\": 4244.152773692683,\n      \"customFields\": {\n        \"key_0\": {},\n        \"key_1\": {}\n      }\n    }\n  ],\n  \"teams\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    }\n  ],\n  \"periods\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"startDate\": \"1987-07-20T16:21:41.968Z\",\n      \"deadline\": \"1976-05-23T10:27:56.542Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"startDate\": \"2005-12-29T05:53:12.414Z\",\n      \"deadline\": \"1992-11-24T10:28:10.011Z\"\n    }\n  ],\n  \"labels\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    }\n  ],\n  \"okrTypes\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"backgroundColor\": \"string\",\n      \"textColor\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"backgroundColor\": \"string\",\n      \"textColor\": \"string\"\n    }\n  ],\n  \"customFields\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"SELECT\",\n      \"applicableGoalTypes\": [\n        \"OBJECTIVE\",\n        \"KEY_RESULT\"\n      ],\n      \"description\": \"string\",\n      \"selectOptions\": [\n        \"string\",\n        \"string\"\n      ],\n      \"multipleUsers\": false,\n      \"maxLength\": 5241,\n      \"displayOrder\": 8834\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"HYPERLINK\",\n      \"applicableGoalTypes\": [\n        \"OBJECTIVE\",\n        \"KEY_RESULT\"\n      ],\n      \"description\": \"string\",\n      \"selectOptions\": [\n        \"string\",\n        \"string\"\n      ],\n      \"multipleUsers\": false,\n      \"maxLength\": 6292,\n      \"displayOrder\": 7127\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3ee82e9e-65c8-4517-acd3-26f328580c33",
+              "name": "Invalid expand options provided",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "api-export",
+                    "objectives",
+                    "byIds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "objectiveIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "objectiveIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "API-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b0fbc2de-685a-41e2-b259-6cadb36168c2",
+              "name": "Invalid or missing API token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "api-export",
+                    "objectives",
+                    "byIds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "objectiveIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "objectiveIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "API-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b39c4e5c-63a2-4ea2-85a6-db5ba38e2a99",
+          "name": "Query objectives by date range",
+          "request": {
+            "name": "Query objectives by date range",
+            "description": {
+              "content": "## Base URL for this request\n\nSelect the server matching your Jira Cloud data residency from the **Servers** drop-down before making requests:\n\n- **Europe region:** https://eu.okr-ppm-prod.appfire.com\n- **Australia region:** https://au.okr-ppm-prod.appfire.com\n- **Canada region:** https://ca.okr-ppm-prod.appfire.com\n- **US / Everywhere else:** https://okr-ppm-prod.appfire.com\n\nLists objectives whose **start date** and/or **due date** fall within the query window (epoch milliseconds). Without **expand**, connected entities appear as IDs only. **Permitted expand values:** KEY_RESULTS, TEAMS, PERIODS, LABELS, TYPES, CUSTOM_FIELDS.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "api-export",
+                "objectives",
+                "byDate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "startDateEpochMilli",
+                  "value": "<long>",
+                  "description": "(Required) Start date of query time window, in UNIX Epoch time format, in milliseconds"
+                },
+                {
+                  "disabled": false,
+                  "key": "deadlineEpochMilli",
+                  "value": "<long>",
+                  "description": "(Required) End date of query time window, in UNIX Epoch time format, in milliseconds"
+                },
+                {
+                  "disabled": false,
+                  "key": "expand",
+                  "value": "<string>,<string>",
+                  "description": "Related data to expand (comma-separated in HTTP). KEY_RESULTS, TEAMS, PERIODS, LABELS, TYPES, CUSTOM_FIELDS. Omit for IDs only."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f6ef4d62-0ea8-4615-aa88-7caadebc8529",
+              "name": "Successful retrieval of objectives",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "api-export",
+                    "objectives",
+                    "byDate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDateEpochMilli",
+                      "value": "1609459200000"
+                    },
+                    {
+                      "key": "deadlineEpochMilli",
+                      "value": "1748647410000"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "API-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"okrs\": [\n    {\n      \"id\": \"string\",\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"link\": \"string\",\n      \"description\": \"string\",\n      \"parentObjectiveId\": \"string\",\n      \"okrTypeId\": \"string\",\n      \"okrTypeName\": \"string\",\n      \"ownerAccountId\": \"string\",\n      \"collaboratorAccountIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"percentDone\": 4403.10624077812,\n      \"created\": \"1996-01-06T03:07:19.883Z\",\n      \"startDate\": \"1984-02-26T21:40:13.072Z\",\n      \"deadline\": \"2016-05-21T07:42:42.296Z\",\n      \"expectedEndDate\": \"1985-08-05T10:05:28.251Z\",\n      \"labelIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"teamIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"krIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"childObjectiveIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"latestUpdate\": {\n        \"updateId\": \"string\",\n        \"entityId\": \"string\",\n        \"status\": \"FAILED\",\n        \"displayedStatus\": \"string\",\n        \"created\": \"1970-12-20T18:18:59.285Z\",\n        \"value\": 8819.704035458832,\n        \"description\": \"string\",\n        \"startValue\": 1560.8775340326374,\n        \"desiredValue\": 6257.853579133699,\n        \"source\": \"MANUAL\"\n      },\n      \"periodAliasId\": \"string\",\n      \"weight\": 7923,\n      \"finalGrade\": 7531.319959466815,\n      \"iconBackgroundColor\": \"string\",\n      \"iconTextColor\": \"string\",\n      \"customFields\": {\n        \"key_0\": {}\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"link\": \"string\",\n      \"description\": \"string\",\n      \"parentObjectiveId\": \"string\",\n      \"okrTypeId\": \"string\",\n      \"okrTypeName\": \"string\",\n      \"ownerAccountId\": \"string\",\n      \"collaboratorAccountIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"percentDone\": 4473.624818428423,\n      \"created\": \"1968-09-29T00:23:07.803Z\",\n      \"startDate\": \"1947-08-15T20:35:05.408Z\",\n      \"deadline\": \"1986-05-17T20:16:23.853Z\",\n      \"expectedEndDate\": \"1968-05-11T06:22:39.974Z\",\n      \"labelIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"teamIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"krIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"childObjectiveIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"latestUpdate\": {\n        \"updateId\": \"string\",\n        \"entityId\": \"string\",\n        \"status\": \"AT_RISK\",\n        \"displayedStatus\": \"string\",\n        \"created\": \"1964-09-30T21:36:04.116Z\",\n        \"value\": 621.7434853778159,\n        \"description\": \"string\",\n        \"startValue\": 8592.107354911808,\n        \"desiredValue\": 7479.385754032121,\n        \"source\": \"API\"\n      },\n      \"periodAliasId\": \"string\",\n      \"weight\": 6355,\n      \"finalGrade\": 7264.10930694333,\n      \"iconBackgroundColor\": \"string\",\n      \"iconTextColor\": \"string\",\n      \"customFields\": {\n        \"key_0\": {}\n      }\n    }\n  ],\n  \"krs\": [\n    {\n      \"id\": \"string\",\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"link\": \"string\",\n      \"description\": \"string\",\n      \"parentObjectiveId\": \"string\",\n      \"issueIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"typeId\": \"string\",\n      \"typeName\": \"string\",\n      \"ownerAccountId\": \"string\",\n      \"collaboratorAccountIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"percentDone\": 3082.775850075824,\n      \"created\": \"1953-03-27T05:49:52.700Z\",\n      \"startDate\": \"1999-02-08T19:40:59.230Z\",\n      \"deadline\": \"2023-07-09T21:19:21.049Z\",\n      \"expectedEndDate\": \"1977-12-13T01:03:55.419Z\",\n      \"labelIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"teamIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"periodAliasId\": \"string\",\n      \"latestUpdate\": {\n        \"updateId\": \"string\",\n        \"entityId\": \"string\",\n        \"status\": \"SUCCESS\",\n        \"displayedStatus\": \"string\",\n        \"created\": \"2022-02-02T12:28:14.096Z\",\n        \"value\": 1462.4503682232303,\n        \"description\": \"string\",\n        \"startValue\": 4730.755647867686,\n        \"desiredValue\": 2940.2795411272855,\n        \"source\": \"API\"\n      },\n      \"unit\": {\n        \"name\": \"string\",\n        \"symbol\": \"string\"\n      },\n      \"currentProgressDefinition\": {\n        \"type\": \"STANDARD\",\n        \"startValue\": 6010.672353798477,\n        \"desiredValue\": 6711.248412363498,\n        \"jql\": \"string\"\n      },\n      \"weight\": 6401,\n      \"finalGrade\": 9036.278332405227,\n      \"customFields\": {\n        \"key_0\": {}\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"link\": \"string\",\n      \"description\": \"string\",\n      \"parentObjectiveId\": \"string\",\n      \"issueIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"typeId\": \"string\",\n      \"typeName\": \"string\",\n      \"ownerAccountId\": \"string\",\n      \"collaboratorAccountIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"percentDone\": 225.47050724241902,\n      \"created\": \"1960-09-12T00:56:53.438Z\",\n      \"startDate\": \"1950-07-16T23:43:37.163Z\",\n      \"deadline\": \"1949-01-08T22:37:08.299Z\",\n      \"expectedEndDate\": \"1978-10-15T08:26:04.505Z\",\n      \"labelIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"teamIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"periodAliasId\": \"string\",\n      \"latestUpdate\": {\n        \"updateId\": \"string\",\n        \"entityId\": \"string\",\n        \"status\": \"NOT_STARTED\",\n        \"displayedStatus\": \"string\",\n        \"created\": \"2019-12-02T10:21:57.133Z\",\n        \"value\": 2328.43583799196,\n        \"description\": \"string\",\n        \"startValue\": 752.7166397911956,\n        \"desiredValue\": 2048.450423847267,\n        \"source\": \"API\"\n      },\n      \"unit\": {\n        \"name\": \"string\",\n        \"symbol\": \"string\"\n      },\n      \"currentProgressDefinition\": {\n        \"type\": \"AUTO\",\n        \"startValue\": 7649.332413328105,\n        \"desiredValue\": 9014.249246515665,\n        \"jql\": \"string\"\n      },\n      \"weight\": 2995,\n      \"finalGrade\": 6397.5281784454755,\n      \"customFields\": {\n        \"key_0\": {},\n        \"key_1\": {}\n      }\n    }\n  ],\n  \"teams\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    }\n  ],\n  \"periods\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"startDate\": \"2021-01-26T22:53:47.803Z\",\n      \"deadline\": \"1957-11-23T09:54:20.590Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"startDate\": \"1954-11-06T08:53:58.242Z\",\n      \"deadline\": \"2023-05-27T03:51:57.087Z\"\n    }\n  ],\n  \"labels\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    }\n  ],\n  \"okrTypes\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"backgroundColor\": \"string\",\n      \"textColor\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"backgroundColor\": \"string\",\n      \"textColor\": \"string\"\n    }\n  ],\n  \"customFields\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"MULTI_SELECT\",\n      \"applicableGoalTypes\": [\n        \"KEY_RESULT\",\n        \"OBJECTIVE\"\n      ],\n      \"description\": \"string\",\n      \"selectOptions\": [\n        \"string\",\n        \"string\"\n      ],\n      \"multipleUsers\": false,\n      \"maxLength\": 8259,\n      \"displayOrder\": 4534\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"HYPERLINK\",\n      \"applicableGoalTypes\": [\n        \"KEY_RESULT\",\n        \"OBJECTIVE\"\n      ],\n      \"description\": \"string\",\n      \"selectOptions\": [\n        \"string\",\n        \"string\"\n      ],\n      \"multipleUsers\": true,\n      \"maxLength\": 9640,\n      \"displayOrder\": 5530\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a442c609-5d6b-433b-bf6d-96102319458d",
+              "name": "Invalid expand options provided",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "api-export",
+                    "objectives",
+                    "byDate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDateEpochMilli",
+                      "value": "1609459200000"
+                    },
+                    {
+                      "key": "deadlineEpochMilli",
+                      "value": "1748647410000"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "API-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "62048e7c-a314-44aa-92d2-6be7e486c48f",
+              "name": "Invalid or missing API token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "api-export",
+                    "objectives",
+                    "byDate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDateEpochMilli",
+                      "value": "1609459200000"
+                    },
+                    {
+                      "key": "deadlineEpochMilli",
+                      "value": "1748647410000"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "API-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d95a3138-5a26-4a4f-af8b-13ea93c90d81",
+          "name": "Query key results by IDs",
+          "request": {
+            "name": "Query key results by IDs",
+            "description": {
+              "content": "## Base URL for this request\n\nSelect the server matching your Jira Cloud data residency from the **Servers** drop-down before making requests:\n\n- **Europe region:** https://eu.okr-ppm-prod.appfire.com\n- **Australia region:** https://au.okr-ppm-prod.appfire.com\n- **Canada region:** https://ca.okr-ppm-prod.appfire.com\n- **US / Everywhere else:** https://okr-ppm-prod.appfire.com\n\nLists key results for the given IDs. **expand:** OBJECTIVES, TEAMS, PERIODS, LABELS, TYPES, CUSTOM_FIELDS.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "api-export",
+                "keyResults",
+                "byIds"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "keyResultIds",
+                  "value": "<string>",
+                  "description": "(Required) Key result IDs to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "keyResultIds",
+                  "value": "<string>",
+                  "description": "(Required) Key result IDs to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand",
+                  "value": "<string>,<string>",
+                  "description": "Related data to expand. OBJECTIVES, TEAMS, PERIODS, LABELS, TYPES, CUSTOM_FIELDS."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1be2a9e9-7b90-4e34-aa2e-4879ff7ef08c",
+              "name": "Successful retrieval of key results",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "api-export",
+                    "keyResults",
+                    "byIds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "keyResultIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "keyResultIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "API-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"okrs\": [\n    {\n      \"id\": \"string\",\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"link\": \"string\",\n      \"description\": \"string\",\n      \"parentObjectiveId\": \"string\",\n      \"okrTypeId\": \"string\",\n      \"okrTypeName\": \"string\",\n      \"ownerAccountId\": \"string\",\n      \"collaboratorAccountIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"percentDone\": 4403.10624077812,\n      \"created\": \"1996-01-06T03:07:19.883Z\",\n      \"startDate\": \"1984-02-26T21:40:13.072Z\",\n      \"deadline\": \"2016-05-21T07:42:42.296Z\",\n      \"expectedEndDate\": \"1985-08-05T10:05:28.251Z\",\n      \"labelIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"teamIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"krIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"childObjectiveIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"latestUpdate\": {\n        \"updateId\": \"string\",\n        \"entityId\": \"string\",\n        \"status\": \"FAILED\",\n        \"displayedStatus\": \"string\",\n        \"created\": \"1970-12-20T18:18:59.285Z\",\n        \"value\": 8819.704035458832,\n        \"description\": \"string\",\n        \"startValue\": 1560.8775340326374,\n        \"desiredValue\": 6257.853579133699,\n        \"source\": \"MANUAL\"\n      },\n      \"periodAliasId\": \"string\",\n      \"weight\": 7923,\n      \"finalGrade\": 7531.319959466815,\n      \"iconBackgroundColor\": \"string\",\n      \"iconTextColor\": \"string\",\n      \"customFields\": {\n        \"key_0\": {}\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"link\": \"string\",\n      \"description\": \"string\",\n      \"parentObjectiveId\": \"string\",\n      \"okrTypeId\": \"string\",\n      \"okrTypeName\": \"string\",\n      \"ownerAccountId\": \"string\",\n      \"collaboratorAccountIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"percentDone\": 4473.624818428423,\n      \"created\": \"1968-09-29T00:23:07.803Z\",\n      \"startDate\": \"1947-08-15T20:35:05.408Z\",\n      \"deadline\": \"1986-05-17T20:16:23.853Z\",\n      \"expectedEndDate\": \"1968-05-11T06:22:39.974Z\",\n      \"labelIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"teamIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"krIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"childObjectiveIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"latestUpdate\": {\n        \"updateId\": \"string\",\n        \"entityId\": \"string\",\n        \"status\": \"AT_RISK\",\n        \"displayedStatus\": \"string\",\n        \"created\": \"1964-09-30T21:36:04.116Z\",\n        \"value\": 621.7434853778159,\n        \"description\": \"string\",\n        \"startValue\": 8592.107354911808,\n        \"desiredValue\": 7479.385754032121,\n        \"source\": \"API\"\n      },\n      \"periodAliasId\": \"string\",\n      \"weight\": 6355,\n      \"finalGrade\": 7264.10930694333,\n      \"iconBackgroundColor\": \"string\",\n      \"iconTextColor\": \"string\",\n      \"customFields\": {\n        \"key_0\": {}\n      }\n    }\n  ],\n  \"krs\": [\n    {\n      \"id\": \"string\",\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"link\": \"string\",\n      \"description\": \"string\",\n      \"parentObjectiveId\": \"string\",\n      \"issueIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"typeId\": \"string\",\n      \"typeName\": \"string\",\n      \"ownerAccountId\": \"string\",\n      \"collaboratorAccountIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"percentDone\": 3082.775850075824,\n      \"created\": \"1953-03-27T05:49:52.700Z\",\n      \"startDate\": \"1999-02-08T19:40:59.230Z\",\n      \"deadline\": \"2023-07-09T21:19:21.049Z\",\n      \"expectedEndDate\": \"1977-12-13T01:03:55.419Z\",\n      \"labelIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"teamIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"periodAliasId\": \"string\",\n      \"latestUpdate\": {\n        \"updateId\": \"string\",\n        \"entityId\": \"string\",\n        \"status\": \"SUCCESS\",\n        \"displayedStatus\": \"string\",\n        \"created\": \"2022-02-02T12:28:14.096Z\",\n        \"value\": 1462.4503682232303,\n        \"description\": \"string\",\n        \"startValue\": 4730.755647867686,\n        \"desiredValue\": 2940.2795411272855,\n        \"source\": \"API\"\n      },\n      \"unit\": {\n        \"name\": \"string\",\n        \"symbol\": \"string\"\n      },\n      \"currentProgressDefinition\": {\n        \"type\": \"STANDARD\",\n        \"startValue\": 6010.672353798477,\n        \"desiredValue\": 6711.248412363498,\n        \"jql\": \"string\"\n      },\n      \"weight\": 6401,\n      \"finalGrade\": 9036.278332405227,\n      \"customFields\": {\n        \"key_0\": {}\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"link\": \"string\",\n      \"description\": \"string\",\n      \"parentObjectiveId\": \"string\",\n      \"issueIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"typeId\": \"string\",\n      \"typeName\": \"string\",\n      \"ownerAccountId\": \"string\",\n      \"collaboratorAccountIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"percentDone\": 225.47050724241902,\n      \"created\": \"1960-09-12T00:56:53.438Z\",\n      \"startDate\": \"1950-07-16T23:43:37.163Z\",\n      \"deadline\": \"1949-01-08T22:37:08.299Z\",\n      \"expectedEndDate\": \"1978-10-15T08:26:04.505Z\",\n      \"labelIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"teamIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"periodAliasId\": \"string\",\n      \"latestUpdate\": {\n        \"updateId\": \"string\",\n        \"entityId\": \"string\",\n        \"status\": \"NOT_STARTED\",\n        \"displayedStatus\": \"string\",\n        \"created\": \"2019-12-02T10:21:57.133Z\",\n        \"value\": 2328.43583799196,\n        \"description\": \"string\",\n        \"startValue\": 752.7166397911956,\n        \"desiredValue\": 2048.450423847267,\n        \"source\": \"API\"\n      },\n      \"unit\": {\n        \"name\": \"string\",\n        \"symbol\": \"string\"\n      },\n      \"currentProgressDefinition\": {\n        \"type\": \"AUTO\",\n        \"startValue\": 7649.332413328105,\n        \"desiredValue\": 9014.249246515665,\n        \"jql\": \"string\"\n      },\n      \"weight\": 2995,\n      \"finalGrade\": 6397.5281784454755,\n      \"customFields\": {\n        \"key_0\": {},\n        \"key_1\": {}\n      }\n    }\n  ],\n  \"teams\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    }\n  ],\n  \"periods\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"startDate\": \"2021-01-26T22:53:47.803Z\",\n      \"deadline\": \"1957-11-23T09:54:20.590Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"startDate\": \"1954-11-06T08:53:58.242Z\",\n      \"deadline\": \"2023-05-27T03:51:57.087Z\"\n    }\n  ],\n  \"labels\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    }\n  ],\n  \"okrTypes\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"backgroundColor\": \"string\",\n      \"textColor\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"backgroundColor\": \"string\",\n      \"textColor\": \"string\"\n    }\n  ],\n  \"customFields\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"MULTI_SELECT\",\n      \"applicableGoalTypes\": [\n        \"KEY_RESULT\",\n        \"OBJECTIVE\"\n      ],\n      \"description\": \"string\",\n      \"selectOptions\": [\n        \"string\",\n        \"string\"\n      ],\n      \"multipleUsers\": false,\n      \"maxLength\": 8259,\n      \"displayOrder\": 4534\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"HYPERLINK\",\n      \"applicableGoalTypes\": [\n        \"KEY_RESULT\",\n        \"OBJECTIVE\"\n      ],\n      \"description\": \"string\",\n      \"selectOptions\": [\n        \"string\",\n        \"string\"\n      ],\n      \"multipleUsers\": true,\n      \"maxLength\": 9640,\n      \"displayOrder\": 5530\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cd511a22-51e6-4bb8-b23c-c0a09733134b",
+              "name": "Invalid expand options provided",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "api-export",
+                    "keyResults",
+                    "byIds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "keyResultIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "keyResultIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "API-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4370a11f-1094-4fe9-9571-00e7bd84dc6f",
+              "name": "Invalid or missing API token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "api-export",
+                    "keyResults",
+                    "byIds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "keyResultIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "keyResultIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "API-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c84747a3-8d73-4b2e-b95b-e9863cc910c8",
+          "name": "Query key results by date range",
+          "request": {
+            "name": "Query key results by date range",
+            "description": {
+              "content": "## Base URL for this request\n\nSelect the server matching your Jira Cloud data residency from the **Servers** drop-down before making requests:\n\n- **Europe region:** https://eu.okr-ppm-prod.appfire.com\n- **Australia region:** https://au.okr-ppm-prod.appfire.com\n- **Canada region:** https://ca.okr-ppm-prod.appfire.com\n- **US / Everywhere else:** https://okr-ppm-prod.appfire.com\n\nLists key results whose **start** and/or **due date** fall within the window. **Permitted expand values:** OBJECTIVES, TEAMS, PERIODS, LABELS, TYPES, CUSTOM_FIELDS.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "api-export",
+                "keyResults",
+                "byDate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "startDateEpochMilli",
+                  "value": "<long>",
+                  "description": "(Required) Start date of query time window, in UNIX Epoch time format, in milliseconds"
+                },
+                {
+                  "disabled": false,
+                  "key": "deadlineEpochMilli",
+                  "value": "<long>",
+                  "description": "(Required) End date of query time window, in UNIX Epoch time format, in milliseconds"
+                },
+                {
+                  "disabled": false,
+                  "key": "expand",
+                  "value": "<string>,<string>",
+                  "description": "Related data to expand. OBJECTIVES, TEAMS, PERIODS, LABELS, TYPES, CUSTOM_FIELDS."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "05daac31-47c1-4ca9-9ef0-8acf231af973",
+              "name": "Successful retrieval of key results",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "api-export",
+                    "keyResults",
+                    "byDate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDateEpochMilli",
+                      "value": "1509459200000"
+                    },
+                    {
+                      "key": "deadlineEpochMilli",
+                      "value": "1748647410000"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "API-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"okrs\": [\n    {\n      \"id\": \"string\",\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"link\": \"string\",\n      \"description\": \"string\",\n      \"parentObjectiveId\": \"string\",\n      \"okrTypeId\": \"string\",\n      \"okrTypeName\": \"string\",\n      \"ownerAccountId\": \"string\",\n      \"collaboratorAccountIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"percentDone\": 4403.10624077812,\n      \"created\": \"1996-01-06T03:07:19.883Z\",\n      \"startDate\": \"1984-02-26T21:40:13.072Z\",\n      \"deadline\": \"2016-05-21T07:42:42.296Z\",\n      \"expectedEndDate\": \"1985-08-05T10:05:28.251Z\",\n      \"labelIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"teamIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"krIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"childObjectiveIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"latestUpdate\": {\n        \"updateId\": \"string\",\n        \"entityId\": \"string\",\n        \"status\": \"FAILED\",\n        \"displayedStatus\": \"string\",\n        \"created\": \"1970-12-20T18:18:59.285Z\",\n        \"value\": 8819.704035458832,\n        \"description\": \"string\",\n        \"startValue\": 1560.8775340326374,\n        \"desiredValue\": 6257.853579133699,\n        \"source\": \"MANUAL\"\n      },\n      \"periodAliasId\": \"string\",\n      \"weight\": 7923,\n      \"finalGrade\": 7531.319959466815,\n      \"iconBackgroundColor\": \"string\",\n      \"iconTextColor\": \"string\",\n      \"customFields\": {\n        \"key_0\": {}\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"link\": \"string\",\n      \"description\": \"string\",\n      \"parentObjectiveId\": \"string\",\n      \"okrTypeId\": \"string\",\n      \"okrTypeName\": \"string\",\n      \"ownerAccountId\": \"string\",\n      \"collaboratorAccountIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"percentDone\": 4473.624818428423,\n      \"created\": \"1968-09-29T00:23:07.803Z\",\n      \"startDate\": \"1947-08-15T20:35:05.408Z\",\n      \"deadline\": \"1986-05-17T20:16:23.853Z\",\n      \"expectedEndDate\": \"1968-05-11T06:22:39.974Z\",\n      \"labelIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"teamIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"krIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"childObjectiveIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"latestUpdate\": {\n        \"updateId\": \"string\",\n        \"entityId\": \"string\",\n        \"status\": \"AT_RISK\",\n        \"displayedStatus\": \"string\",\n        \"created\": \"1964-09-30T21:36:04.116Z\",\n        \"value\": 621.7434853778159,\n        \"description\": \"string\",\n        \"startValue\": 8592.107354911808,\n        \"desiredValue\": 7479.385754032121,\n        \"source\": \"API\"\n      },\n      \"periodAliasId\": \"string\",\n      \"weight\": 6355,\n      \"finalGrade\": 7264.10930694333,\n      \"iconBackgroundColor\": \"string\",\n      \"iconTextColor\": \"string\",\n      \"customFields\": {\n        \"key_0\": {}\n      }\n    }\n  ],\n  \"krs\": [\n    {\n      \"id\": \"string\",\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"link\": \"string\",\n      \"description\": \"string\",\n      \"parentObjectiveId\": \"string\",\n      \"issueIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"typeId\": \"string\",\n      \"typeName\": \"string\",\n      \"ownerAccountId\": \"string\",\n      \"collaboratorAccountIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"percentDone\": 3082.775850075824,\n      \"created\": \"1953-03-27T05:49:52.700Z\",\n      \"startDate\": \"1999-02-08T19:40:59.230Z\",\n      \"deadline\": \"2023-07-09T21:19:21.049Z\",\n      \"expectedEndDate\": \"1977-12-13T01:03:55.419Z\",\n      \"labelIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"teamIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"periodAliasId\": \"string\",\n      \"latestUpdate\": {\n        \"updateId\": \"string\",\n        \"entityId\": \"string\",\n        \"status\": \"SUCCESS\",\n        \"displayedStatus\": \"string\",\n        \"created\": \"2022-02-02T12:28:14.096Z\",\n        \"value\": 1462.4503682232303,\n        \"description\": \"string\",\n        \"startValue\": 4730.755647867686,\n        \"desiredValue\": 2940.2795411272855,\n        \"source\": \"API\"\n      },\n      \"unit\": {\n        \"name\": \"string\",\n        \"symbol\": \"string\"\n      },\n      \"currentProgressDefinition\": {\n        \"type\": \"STANDARD\",\n        \"startValue\": 6010.672353798477,\n        \"desiredValue\": 6711.248412363498,\n        \"jql\": \"string\"\n      },\n      \"weight\": 6401,\n      \"finalGrade\": 9036.278332405227,\n      \"customFields\": {\n        \"key_0\": {}\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"link\": \"string\",\n      \"description\": \"string\",\n      \"parentObjectiveId\": \"string\",\n      \"issueIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"typeId\": \"string\",\n      \"typeName\": \"string\",\n      \"ownerAccountId\": \"string\",\n      \"collaboratorAccountIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"percentDone\": 225.47050724241902,\n      \"created\": \"1960-09-12T00:56:53.438Z\",\n      \"startDate\": \"1950-07-16T23:43:37.163Z\",\n      \"deadline\": \"1949-01-08T22:37:08.299Z\",\n      \"expectedEndDate\": \"1978-10-15T08:26:04.505Z\",\n      \"labelIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"teamIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"periodAliasId\": \"string\",\n      \"latestUpdate\": {\n        \"updateId\": \"string\",\n        \"entityId\": \"string\",\n        \"status\": \"NOT_STARTED\",\n        \"displayedStatus\": \"string\",\n        \"created\": \"2019-12-02T10:21:57.133Z\",\n        \"value\": 2328.43583799196,\n        \"description\": \"string\",\n        \"startValue\": 752.7166397911956,\n        \"desiredValue\": 2048.450423847267,\n        \"source\": \"API\"\n      },\n      \"unit\": {\n        \"name\": \"string\",\n        \"symbol\": \"string\"\n      },\n      \"currentProgressDefinition\": {\n        \"type\": \"AUTO\",\n        \"startValue\": 7649.332413328105,\n        \"desiredValue\": 9014.249246515665,\n        \"jql\": \"string\"\n      },\n      \"weight\": 2995,\n      \"finalGrade\": 6397.5281784454755,\n      \"customFields\": {\n        \"key_0\": {},\n        \"key_1\": {}\n      }\n    }\n  ],\n  \"teams\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    }\n  ],\n  \"periods\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"startDate\": \"2021-01-26T22:53:47.803Z\",\n      \"deadline\": \"1957-11-23T09:54:20.590Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"startDate\": \"1954-11-06T08:53:58.242Z\",\n      \"deadline\": \"2023-05-27T03:51:57.087Z\"\n    }\n  ],\n  \"labels\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    }\n  ],\n  \"okrTypes\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"backgroundColor\": \"string\",\n      \"textColor\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"backgroundColor\": \"string\",\n      \"textColor\": \"string\"\n    }\n  ],\n  \"customFields\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"MULTI_SELECT\",\n      \"applicableGoalTypes\": [\n        \"KEY_RESULT\",\n        \"OBJECTIVE\"\n      ],\n      \"description\": \"string\",\n      \"selectOptions\": [\n        \"string\",\n        \"string\"\n      ],\n      \"multipleUsers\": false,\n      \"maxLength\": 8259,\n      \"displayOrder\": 4534\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"HYPERLINK\",\n      \"applicableGoalTypes\": [\n        \"KEY_RESULT\",\n        \"OBJECTIVE\"\n      ],\n      \"description\": \"string\",\n      \"selectOptions\": [\n        \"string\",\n        \"string\"\n      ],\n      \"multipleUsers\": true,\n      \"maxLength\": 9640,\n      \"displayOrder\": 5530\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0f86b761-0939-4da7-a6a6-9a94c7447d51",
+              "name": "Invalid expand options provided",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "api-export",
+                    "keyResults",
+                    "byDate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDateEpochMilli",
+                      "value": "1509459200000"
+                    },
+                    {
+                      "key": "deadlineEpochMilli",
+                      "value": "1748647410000"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "API-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fa9d9868-a77c-4588-9ed2-925e8803515e",
+              "name": "Invalid or missing API token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "api-export",
+                    "keyResults",
+                    "byDate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDateEpochMilli",
+                      "value": "1509459200000"
+                    },
+                    {
+                      "key": "deadlineEpochMilli",
+                      "value": "1748647410000"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "API-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://okr-ppm-prod.appfire.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "API-Token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "32dde87f-efb8-45c3-b0cb-e3a1a0123521",
+    "name": "OKR API query methods API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for integrating your OKR data (Objectives and Key Results) with external tools and workflows.\n\n## Region (base URL)\n\nUse the server URL that matches your Jira Cloud data residency. The **Servers** list below includes regional endpoints when configured. If unsure, check Jira admin settings or contact support.\n\n## Authentication\n\nEvery request must send your token in the **`API-Token`** header. Do **not** use `Authorization` or `Authentication` for this API.\n\nGenerate a token in Jira: **Apps** → **OKR for Jira** → **Settings** → **API** → **Generate new token**. Name the token, create it, then copy and store it securely — it cannot be retrieved again later. Users with **API_ADMIN_TABLE_ACCESS** can see, rename, or revoke any organization token on that same **API** settings page.\n\n## Responses\n\nFetch (query) methods return a common JSON shape; which arrays and fields appear depends on your query parameters (for example **expand**).\n\n## Teams\n\nObjectives and key results include **`teamIds`**: identifiers of teams linked to each entity. When **`expand`** includes **`TEAMS`**, the response also includes a **`teams`** array with **`id`** and **`name`** for each referenced team.\n\nThe same identifier appears in **`teamIds`**, in **`teams[].id`**, and when matching expanded rows.\n\nFor team fields beyond **`id`** and **`name`**, use the **Teams** endpoints documented in the BigPicture developer documentation alongside this API reference.\n\n## Status values\n\nThe Jira app shows user-friendly status labels.                         **Update** requests must use **displayed** in-progress strings: **NOT STARTED**, **ON TRACK**, **AT RISK**, **OFF TRACK** (the UI label for action required). Completed statuses (e.g. SUCCESS, CANCELED, RESCHEDULED) are not accepted here. Some query responses may still expose internal enum names in places; prefer **displayed** fields where both appear.\n\n## Progress\n\nFor the latest progress, rely on **`percentDone`** on objectives and key results rather than inferring it only from update history.\n\n## Rate limiting\n\nRequests may be throttled. On **429**, wait before retrying.\n\n\nContact Support:\n Name: OKR for Jira Support",
+      "type": "text/plain"
+    }
+  }
+}

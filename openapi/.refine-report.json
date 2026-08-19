@@ -1,0 +1,26 @@
+{
+  "provider": "appfire",
+  "sources": [
+    "appfire-api-query-methods-api-openapi.yml",
+    "appfire-api-update-methods-api-openapi.yml",
+    "appfire-settings-api-openapi.yml",
+    "appfire-worklogs-api-openapi.yml"
+  ],
+  "outputs": [
+    "appfire-api-query-methods-api-openapi.yml",
+    "appfire-api-update-methods-api-openapi.yml",
+    "appfire-settings-api-openapi.yml",
+    "appfire-worklogs-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "appfire-api-query-methods-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "appfire-api-update-methods-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "appfire-settings-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "appfire-worklogs-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": []
+}

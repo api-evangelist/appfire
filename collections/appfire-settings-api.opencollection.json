@@ -1,0 +1,371 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Appfire Settings API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Settings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns Jira notifications settings.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/settings/accountSettings/jiraNotifications"
+          },
+          "docs": "Returns Jira notifications settings.\n\nNotifications are sent in Jira due to 7pace Timetracker exporting worklogs to Jira-native time tracking. Notifications are sent for the following operations: create, update, or delete worklog.\n"
+        },
+        {
+          "info": {
+            "name": "Enables or disables Jira notifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/settings/accountSettings/jiraNotifications",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Enables or disables Jira notifications. It may take a couple of minutes for a configuration change to fully take effect.\n\nNotifications are sent in Jira due to 7pace Timetracker exporting worklogs to Jira-native time tracking. Notifications are sent for the following operations: create, update, or delete worklog.\n"
+        },
+        {
+          "info": {
+            "name": "Get account settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/settings/customFields"
+          },
+          "docs": "Returns the custom fields settings for the current account."
+        },
+        {
+          "info": {
+            "name": "Create a dropdown custom field",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/settings/customFields/dropdown",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a dropdown custom field definition."
+        },
+        {
+          "info": {
+            "name": "Update a dropdown custom field",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/settings/customFields/dropdown/:customFieldId",
+            "params": [
+              {
+                "name": "customFieldId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a dropdown custom field definition."
+        },
+        {
+          "info": {
+            "name": "Create a toggle custom field",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/settings/customFields/toggle",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a toggle custom field definition."
+        },
+        {
+          "info": {
+            "name": "Update a toggle custom field",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/settings/customFields/toggle/:customFieldId",
+            "params": [
+              {
+                "name": "customFieldId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a toggle custom field definition."
+        },
+        {
+          "info": {
+            "name": "Delete a custom field",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/settings/customFields/:customFieldId",
+            "params": [
+              {
+                "name": "customFieldId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes a custom field definition by id."
+        },
+        {
+          "info": {
+            "name": "Returns Jira notifications settings.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/settings/accountSettings/jiraNotifications"
+          },
+          "docs": "Returns Jira notifications settings.\n\nNotifications are sent in Jira due to 7pace Timetracker exporting worklogs to Jira-native time tracking. Notifications are sent for the following operations: create, update, or delete worklog.\n"
+        },
+        {
+          "info": {
+            "name": "Enables or disables Jira notifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/settings/accountSettings/jiraNotifications",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Enables or disables Jira notifications. It may take a couple of minutes for a configuration change to fully take effect.\n\nNotifications are sent in Jira due to 7pace Timetracker exporting worklogs to Jira-native time tracking. Notifications are sent for the following operations: create, update, or delete worklog.\n"
+        },
+        {
+          "info": {
+            "name": "Get account settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/settings/customFields"
+          },
+          "docs": "Returns the global custom fields plus per-space settings for the current account."
+        },
+        {
+          "info": {
+            "name": "Create a dropdown custom field",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/settings/customFields/dropdown",
+            "params": [
+              {
+                "name": "settingId",
+                "value": "",
+                "type": "query",
+                "description": "Setting id to scope the custom field to. Omit for global."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a dropdown custom field definition in the specified setting if settingId is provided, or in the global scope otherwise."
+        },
+        {
+          "info": {
+            "name": "Update a dropdown custom field",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/settings/customFields/dropdown/:customFieldId",
+            "params": [
+              {
+                "name": "customFieldId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "settingId",
+                "value": "",
+                "type": "query",
+                "description": "Setting id the custom field belongs to. Omit for global."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a dropdown custom field definition in the specified setting if settingId is provided, or in the global scope otherwise."
+        },
+        {
+          "info": {
+            "name": "Create a toggle custom field",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/settings/customFields/toggle",
+            "params": [
+              {
+                "name": "settingId",
+                "value": "",
+                "type": "query",
+                "description": "Setting id to scope the custom field to. Omit for global."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a toggle custom field definition in the specified setting if settingId is provided, or in the global scope otherwise."
+        },
+        {
+          "info": {
+            "name": "Update a toggle custom field",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/settings/customFields/toggle/:customFieldId",
+            "params": [
+              {
+                "name": "customFieldId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "settingId",
+                "value": "",
+                "type": "query",
+                "description": "Setting id the custom field belongs to. Omit for global."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a toggle custom field definition in the specified setting if settingId is provided, or in the global scope otherwise."
+        },
+        {
+          "info": {
+            "name": "Delete a custom field",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v2/settings/customFields/:customFieldId",
+            "params": [
+              {
+                "name": "customFieldId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "settingId",
+                "value": "",
+                "type": "query",
+                "description": "Setting id the custom field belongs to. Omit for global."
+              }
+            ]
+          },
+          "docs": "Deletes a custom field definition by id in the specified setting if settingId is provided, or in the global scope otherwise."
+        },
+        {
+          "info": {
+            "name": "Create a custom fields setting",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/settings/customFields/settings",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a custom fields setting bound to one or more spaces (Jira project ids)."
+        },
+        {
+          "info": {
+            "name": "Update a custom fields setting",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/settings/customFields/settings/:settingId",
+            "params": [
+              {
+                "name": "settingId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a setting name and/or its bound spaces. At least one of name or spaceIds must be provided."
+        },
+        {
+          "info": {
+            "name": "Delete a custom fields setting",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v2/settings/customFields/settings/:settingId",
+            "params": [
+              {
+                "name": "settingId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes a custom fields setting by id. Idempotent."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

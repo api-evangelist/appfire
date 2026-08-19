@@ -1,0 +1,56 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OKR API update methods API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "API-Token",
+      "value": "{{API-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "API update methods",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Update objective (create update)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://okr-ppm-prod.appfire.com/api/v2/api-update/objectives",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "## Base URL for this request\n\nSelect the server matching your Jira Cloud data residency from the **Servers** drop-down before making requests:\n\n- **Europe region:** https://eu.okr-ppm-prod.appfire.com\n- **Australia region:** https://au.okr-ppm-prod.appfire.com\n- **Canada region:** https://ca.okr-ppm-prod.appfire.com\n- **US / Everywhere else:** https://okr-ppm-prod.appfire.com\n\nCreates an update for the specified objective. **status** uses the same **displayed** labels as in the app: **NOT STARTE"
+        },
+        {
+          "info": {
+            "name": "Update key result (create update)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://okr-ppm-prod.appfire.com/api/v2/api-update/keyResults",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "## Base URL for this request\n\nSelect the server matching your Jira Cloud data residency from the **Servers** drop-down before making requests:\n\n- **Europe region:** https://eu.okr-ppm-prod.appfire.com\n- **Australia region:** https://au.okr-ppm-prod.appfire.com\n- **Canada region:** https://ca.okr-ppm-prod.appfire.com\n- **US / Everywhere else:** https://okr-ppm-prod.appfire.com\n\nCreates an update for the specified key result. **status:** displayed values **NOT STARTED**, **ON TRACK**, **AT RISK**,"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

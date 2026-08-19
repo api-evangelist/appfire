@@ -1,0 +1,1073 @@
+openapi: 3.2.0
+info:
+  title: Appfire Settings API
+  version: '1.0'
+  description: 'Operations tagged Settings across 2 of this provider''s published API definitions: appfire-7pace-timetracker-v1-openapi-original.yml, appfire-7pace-timetracker-v2-openapi-original.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /
+  description: Production API
+security:
+- bearer: []
+tags:
+- name: Settings
+paths:
+  /api/v1/settings/accountSettings/jiraNotifications:
+    servers:
+    - url: /
+      description: Production API
+    get:
+      summary: Returns Jira notifications settings.
+      description: 'Returns Jira notifications settings.
+
+
+        Notifications are sent in Jira due to 7pace Timetracker exporting worklogs to Jira-native time tracking. Notifications are sent for the following operations: create, update, or delete worklog.
+
+        '
+      responses:
+        '200':
+          description: Jira notifications setting returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JiraNotificationsSettingsResponse'
+      tags:
+      - Settings
+    put:
+      summary: Enables or disables Jira notifications
+      description: 'Enables or disables Jira notifications. It may take a couple of minutes for a configuration change to fully take effect.
+
+
+        Notifications are sent in Jira due to 7pace Timetracker exporting worklogs to Jira-native time tracking. Notifications are sent for the following operations: create, update, or delete worklog.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JiraNotificationsSettingsRequest'
+      responses:
+        '200':
+          description: Jira notifications setting updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JiraNotificationsSettingsResponse'
+      tags:
+      - Settings
+  /api/v1/settings/customFields:
+    servers:
+    - url: /
+      description: Production API
+    get:
+      summary: Get account settings
+      description: Returns the custom fields settings for the current account.
+      responses:
+        '200':
+          description: Account settings data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+                    properties:
+                      customFields:
+                        type: object
+                        $ref: '#/components/schemas/AccountSettings'
+      tags:
+      - Settings
+  /api/v1/settings/customFields/dropdown:
+    servers:
+    - url: /
+      description: Production API
+    post:
+      summary: Create a dropdown custom field
+      description: Creates a dropdown custom field definition.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDropdownCustomFieldRequest'
+      responses:
+        '200':
+          description: Custom field definition created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DropdownSettings'
+        '400':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '401':
+          description: Unauthorized access. This indicates a problem with Authorization. Ensure apitoken is valid, and you are setting Authorization header to Bearer {apitoken}
+        '403':
+          description: Forbidden. The user associated with the apitoken does not have permission to create this custom field.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '500':
+          description: Internal server error.
+      tags:
+      - Settings
+  /api/v1/settings/customFields/dropdown/{customFieldId}:
+    servers:
+    - url: /
+      description: Production API
+    put:
+      summary: Update a dropdown custom field
+      description: Updates a dropdown custom field definition.
+      parameters:
+      - in: path
+        name: customFieldId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDropdownCustomFieldRequest'
+      responses:
+        '200':
+          description: Custom field definition updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DropdownSettings'
+        '400':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '401':
+          description: Unauthorized access. This indicates a problem with Authorization. Ensure apitoken is valid, and you are setting Authorization header to Bearer {apitoken}
+        '403':
+          description: Forbidden. The user associated with the apitoken does not have permission to update this custom field.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '404':
+          description: Custom field not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '500':
+          description: Internal server error.
+      tags:
+      - Settings
+  /api/v1/settings/customFields/toggle:
+    servers:
+    - url: /
+      description: Production API
+    post:
+      summary: Create a toggle custom field
+      description: Creates a toggle custom field definition.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateToggleCustomFieldRequest'
+      responses:
+        '200':
+          description: Custom field definition created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToggleSettings'
+        '400':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '401':
+          description: Unauthorized access. This indicates a problem with Authorization. Ensure apitoken is valid, and you are setting Authorization header to Bearer {apitoken}
+        '403':
+          description: Forbidden. The user associated with the apitoken does not have permission to create this custom field.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '500':
+          description: Internal server error.
+      tags:
+      - Settings
+  /api/v1/settings/customFields/toggle/{customFieldId}:
+    servers:
+    - url: /
+      description: Production API
+    put:
+      summary: Update a toggle custom field
+      description: Updates a toggle custom field definition.
+      parameters:
+      - in: path
+        name: customFieldId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateToggleCustomFieldRequest'
+      responses:
+        '200':
+          description: Custom field definition updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToggleSettings'
+        '400':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '401':
+          description: Unauthorized access. This indicates a problem with Authorization. Ensure apitoken is valid, and you are setting Authorization header to Bearer {apitoken}
+        '403':
+          description: Forbidden. The user associated with the apitoken does not have permission to update this custom field.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '404':
+          description: Custom field not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '500':
+          description: Internal server error.
+      tags:
+      - Settings
+  /api/v1/settings/customFields/{customFieldId}:
+    servers:
+    - url: /
+      description: Production API
+    delete:
+      summary: Delete a custom field
+      description: Deletes a custom field definition by id.
+      parameters:
+      - in: path
+        name: customFieldId
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Custom field deleted successfully, or it did not exist prior to the request.
+        '401':
+          description: Unauthorized access. This indicates a problem with Authorization. Ensure apitoken is valid, and you are setting Authorization header to Bearer {apitoken}
+        '500':
+          description: Internal server error.
+      tags:
+      - Settings
+  /api/v2/settings/accountSettings/jiraNotifications:
+    servers:
+    - url: /
+      description: Production API
+    get:
+      summary: Returns Jira notifications settings.
+      description: 'Returns Jira notifications settings.
+
+
+        Notifications are sent in Jira due to 7pace Timetracker exporting worklogs to Jira-native time tracking. Notifications are sent for the following operations: create, update, or delete worklog.
+
+        '
+      responses:
+        '200':
+          description: Jira notifications setting returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JiraNotificationsSettingsResponse'
+      tags:
+      - Settings
+    put:
+      summary: Enables or disables Jira notifications
+      description: 'Enables or disables Jira notifications. It may take a couple of minutes for a configuration change to fully take effect.
+
+
+        Notifications are sent in Jira due to 7pace Timetracker exporting worklogs to Jira-native time tracking. Notifications are sent for the following operations: create, update, or delete worklog.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JiraNotificationsSettingsRequest'
+      responses:
+        '200':
+          description: Jira notifications setting updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JiraNotificationsSettingsResponse'
+      tags:
+      - Settings
+  /api/v2/settings/customFields:
+    servers:
+    - url: /
+      description: Production API
+    get:
+      summary: Get account settings
+      description: Returns the global custom fields plus per-space settings for the current account.
+      responses:
+        '200':
+          description: Account settings data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+                    properties:
+                      customFields:
+                        $ref: '#/components/schemas/AccountSettings'
+                      settings:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/CustomFieldSetting'
+      tags:
+      - Settings
+  /api/v2/settings/customFields/dropdown:
+    servers:
+    - url: /
+      description: Production API
+    post:
+      summary: Create a dropdown custom field
+      description: Creates a dropdown custom field definition in the specified setting if settingId is provided, or in the global scope otherwise.
+      parameters:
+      - in: query
+        name: settingId
+        required: false
+        description: Setting id to scope the custom field to. Omit for global.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDropdownCustomFieldRequest'
+      responses:
+        '200':
+          description: Custom field definition created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DropdownSettings'
+        '400':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '401':
+          description: Unauthorized access. This indicates a problem with Authorization. Ensure apitoken is valid, and you are setting Authorization header to Bearer {apitoken}
+        '403':
+          description: Forbidden. The user associated with the apitoken does not have permission to create this custom field.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '500':
+          description: Internal server error.
+      tags:
+      - Settings
+  /api/v2/settings/customFields/dropdown/{customFieldId}:
+    servers:
+    - url: /
+      description: Production API
+    put:
+      summary: Update a dropdown custom field
+      description: Updates a dropdown custom field definition in the specified setting if settingId is provided, or in the global scope otherwise.
+      parameters:
+      - in: path
+        name: customFieldId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: settingId
+        required: false
+        description: Setting id the custom field belongs to. Omit for global.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDropdownCustomFieldRequest'
+      responses:
+        '200':
+          description: Custom field definition updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DropdownSettings'
+        '400':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '401':
+          description: Unauthorized access. This indicates a problem with Authorization. Ensure apitoken is valid, and you are setting Authorization header to Bearer {apitoken}
+        '403':
+          description: Forbidden. The user associated with the apitoken does not have permission to update this custom field.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '404':
+          description: Custom field not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '500':
+          description: Internal server error.
+      tags:
+      - Settings
+  /api/v2/settings/customFields/toggle:
+    servers:
+    - url: /
+      description: Production API
+    post:
+      summary: Create a toggle custom field
+      description: Creates a toggle custom field definition in the specified setting if settingId is provided, or in the global scope otherwise.
+      parameters:
+      - in: query
+        name: settingId
+        required: false
+        description: Setting id to scope the custom field to. Omit for global.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateToggleCustomFieldRequest'
+      responses:
+        '200':
+          description: Custom field definition created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToggleSettings'
+        '400':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '401':
+          description: Unauthorized access. This indicates a problem with Authorization. Ensure apitoken is valid, and you are setting Authorization header to Bearer {apitoken}
+        '403':
+          description: Forbidden. The user associated with the apitoken does not have permission to create this custom field.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '500':
+          description: Internal server error.
+      tags:
+      - Settings
+  /api/v2/settings/customFields/toggle/{customFieldId}:
+    servers:
+    - url: /
+      description: Production API
+    put:
+      summary: Update a toggle custom field
+      description: Updates a toggle custom field definition in the specified setting if settingId is provided, or in the global scope otherwise.
+      parameters:
+      - in: path
+        name: customFieldId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: settingId
+        required: false
+        description: Setting id the custom field belongs to. Omit for global.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateToggleCustomFieldRequest'
+      responses:
+        '200':
+          description: Custom field definition updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToggleSettings'
+        '400':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '401':
+          description: Unauthorized access. This indicates a problem with Authorization. Ensure apitoken is valid, and you are setting Authorization header to Bearer {apitoken}
+        '403':
+          description: Forbidden. The user associated with the apitoken does not have permission to update this custom field.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '404':
+          description: Custom field not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  traceId:
+                    type: string
+        '500':
+          description: Internal server error.
+      tags:
+      - Settings
+  /api/v2/settings/customFields/{customFieldId}:
+    servers:
+    - url: /
+      description: Production API
+    delete:
+      summary: Delete a custom field
+      description: Deletes a custom field definition by id in the specified setting if settingId is provided, or in the global scope otherwise.
+      parameters:
+      - in: path
+        name: customFieldId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: settingId
+        required: false
+        description: Setting id the custom field belongs to. Omit for global.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Custom field deleted successfully, or it did not exist prior to the request.
+        '401':
+          description: Unauthorized access. This indicates a problem with Authorization. Ensure apitoken is valid, and you are setting Authorization header to Bearer {apitoken}
+        '500':
+          description: Internal server error.
+      tags:
+      - Settings
+  /api/v2/settings/customFields/settings:
+    servers:
+    - url: /
+      description: Production API
+    post:
+      summary: Create a custom fields setting
+      description: Creates a custom fields setting bound to one or more spaces (Jira project ids).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomFieldSettingRequest'
+      responses:
+        '200':
+          description: Setting created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomFieldSetting'
+        '400':
+          description: Validation error. CUSTOM_FIELDS_SETTING_CONFLICT is returned when the name is already in use or a space is already bound to another setting.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: Unauthorized access. This indicates a problem with Authorization. Ensure apitoken is valid, and you are setting Authorization header to Bearer {apitoken}
+        '403':
+          description: Forbidden. The user associated with the apitoken does not have permission to manage settings.
+        '500':
+          description: Internal server error.
+      tags:
+      - Settings
+  /api/v2/settings/customFields/settings/{settingId}:
+    servers:
+    - url: /
+      description: Production API
+    put:
+      summary: Update a custom fields setting
+      description: Updates a setting name and/or its bound spaces. At least one of name or spaceIds must be provided.
+      parameters:
+      - in: path
+        name: settingId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCustomFieldSettingRequest'
+      responses:
+        '200':
+          description: Setting updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomFieldSetting'
+        '400':
+          description: Validation error. CUSTOM_FIELDS_SETTING_NOT_FOUND when the setting does not exist; CUSTOM_FIELDS_SETTING_CONFLICT on name or space uniqueness violations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: Unauthorized access. This indicates a problem with Authorization. Ensure apitoken is valid, and you are setting Authorization header to Bearer {apitoken}
+        '403':
+          description: Forbidden. The user associated with the apitoken does not have permission to manage settings.
+        '500':
+          description: Internal server error.
+      tags:
+      - Settings
+    delete:
+      summary: Delete a custom fields setting
+      description: Deletes a custom fields setting by id. Idempotent.
+      parameters:
+      - in: path
+        name: settingId
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Setting deleted successfully, or it did not exist prior to the request.
+        '401':
+          description: Unauthorized access. This indicates a problem with Authorization. Ensure apitoken is valid, and you are setting Authorization header to Bearer {apitoken}
+        '403':
+          description: Forbidden. The user associated with the apitoken does not have permission to manage settings.
+        '500':
+          description: Internal server error.
+      tags:
+      - Settings
+components:
+  schemas:
+    JiraNotificationsSettingsRequest:
+      type: object
+      required:
+      - enabled
+      properties:
+        enabled:
+          type: boolean
+    CreateDropdownOptionRequest:
+      type: object
+      required:
+      - value
+      - color
+      properties:
+        value:
+          type: string
+          minLength: 1
+          maxLength: 50
+        color:
+          type: string
+          pattern: ^#([0-9a-fA-F]{6})$
+    CreateCustomFieldSettingRequest:
+      type: object
+      required:
+      - name
+      - spaceIds
+      properties:
+        name:
+          type: string
+          minLength: 1
+        spaceIds:
+          type: array
+          items:
+            type: string
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        detail:
+          type: string
+        traceId:
+          type: string
+    CreateToggleCustomFieldRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 50
+        enabled:
+          type: boolean
+        mandatory:
+          type: boolean
+        description:
+          type: string
+          maxLength: 150
+        default:
+          type: boolean
+    UpdateDropdownCustomFieldRequest:
+      type: object
+      required:
+      - name
+      - options
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 50
+        enabled:
+          type: boolean
+        mandatory:
+          type: boolean
+        description:
+          type: string
+          maxLength: 150
+        options:
+          type: array
+          minItems: 1
+          maxItems: 199
+          items:
+            $ref: '#/components/schemas/UpdateDropdownOptionRequest'
+    ToggleSettings:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        enabled:
+          type: boolean
+        mandatory:
+          type: boolean
+        description:
+          type: string
+        default:
+          type: boolean
+    CreateDropdownCustomFieldRequest:
+      type: object
+      required:
+      - name
+      - options
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 50
+        enabled:
+          type: boolean
+        mandatory:
+          type: boolean
+        description:
+          type: string
+          maxLength: 150
+        options:
+          type: array
+          minItems: 1
+          maxItems: 199
+          items:
+            $ref: '#/components/schemas/CreateDropdownOptionRequest'
+    DropdownOptionSettings:
+      type: object
+      properties:
+        id:
+          type: string
+        value:
+          type: string
+        color:
+          type: string
+        used:
+          type: integer
+    DropdownSettings:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        enabled:
+          type: boolean
+        mandatory:
+          type: boolean
+        description:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/DropdownOptionSettings'
+    UpdateCustomFieldSettingRequest:
+      type: object
+      description: At least one of name or spaceIds must be provided.
+      properties:
+        name:
+          type: string
+          minLength: 1
+        spaceIds:
+          type: array
+          items:
+            type: string
+    UpdateToggleCustomFieldRequest:
+      allOf:
+      - $ref: '#/components/schemas/CreateToggleCustomFieldRequest'
+    JiraNotificationsSettingsResponse:
+      type: object
+      required:
+      - enabled
+      properties:
+        enabled:
+          type: boolean
+    AccountSettings:
+      type: object
+      properties:
+        dropdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/DropdownSettings'
+        toggle:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToggleSettings'
+    CustomFieldSetting:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        spaceIds:
+          type: array
+          items:
+            type: string
+        customFields:
+          $ref: '#/components/schemas/AccountSettings'
+    UpdateDropdownOptionRequest:
+      type: object
+      required:
+      - value
+      - color
+      properties:
+        id:
+          type: string
+          minLength: 1
+        value:
+          type: string
+          minLength: 1
+          maxLength: 50
+        color:
+          type: string
+          pattern: ^#([0-9a-fA-F]{6})$
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+x-refined-from:
+- appfire-7pace-timetracker-v1-openapi-original.yml
+- appfire-7pace-timetracker-v2-openapi-original.yml

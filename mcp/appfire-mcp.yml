@@ -2,22 +2,24 @@ generated: '2026-08-06'
 method: derived
 source: openapi/appfire-okr-openapi-original.json, openapi/appfire-7pace-timetracker-v2-openapi-original.yml
 status: candidate
-summary: >-
-  No official hosted or remote Model Context Protocol (MCP) server was found for Appfire or for any of
-  its products (7pace Timetracker, OKR, BigPicture, Comala, ACLI). The npm package `7pace-mcp-server` is
-  a third-party community build (publisher `taajirah`), not an Appfire release. The tool set below is
-  DERIVED from the operations in the two downloadable Appfire OpenAPI documents as a proposal for an
-  agent-facing surface. It is NOT published by Appfire, and no `MCPServer` pointer is wired into
-  apis.yml, because no MCP server genuinely exists.
+summary: No official hosted or remote Model Context Protocol (MCP) server was found for Appfire or for
+  any of its products (7pace Timetracker, OKR, BigPicture, Comala, ACLI). The npm package `7pace-mcp-server`
+  is a third-party community build (publisher `taajirah`), not an Appfire release. The tool set below
+  is DERIVED from the operations in the two downloadable Appfire OpenAPI documents as a proposal for an
+  agent-facing surface. It is NOT published by Appfire, and no `MCPServer` pointer is wired into apis.yml,
+  because no MCP server genuinely exists.
 server:
   name: appfire
   published: false
   transport: null
   url: null
 probes:
-- {url: 'https://api.bigpicture.one/.well-known/agent-card.json', status: 404}
-- {url: 'https://okr-ppm-prod.appfire.com/.well-known/agent-card.json', status: 404}
-- {url: 'https://appfire.com/.well-known/ai-plugin.json', status: 404}
+- url: https://api.bigpicture.one/.well-known/agent-card.json
+  status: 404
+- url: https://okr-ppm-prod.appfire.com/.well-known/agent-card.json
+  status: 404
+- url: https://appfire.com/.well-known/ai-plugin.json
+  status: 404
 tools:
 - name: okr_fetch_objectives
   description: Query OKR objectives that fall inside a start-date / deadline window.
@@ -66,7 +68,12 @@ tools:
 - name: timetracker_list_custom_fields
   description: Read the Timetracker custom-field definitions available on the account.
   source_operation: openapi/appfire-7pace-timetracker-v2-openapi-original.yml#GET /api/v2/settings/customFields
-note_on_source_operations: >-
-  The 7pace OpenAPI documents declare no operationId on any operation, so the 7pace tools above are
-  bound to METHOD + path instead. That missing operationId is a real contract-quality gap in the 7pace
-  spec, not an omission on our side.
+note_on_source_operations: The 7pace OpenAPI documents declare no operationId on any operation, so the
+  7pace tools above are bound to METHOD + path instead. That missing operationId is a real contract-quality
+  gap in the 7pace spec, not an omission on our side.
+deployment:
+  mode: none
+  verified: derived
+  tools: 14
+  checked: '2026-08-12'
+  source: catalog MCP census

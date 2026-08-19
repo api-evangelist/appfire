@@ -1,0 +1,522 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Appfire Worklogs API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Worklogs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of worklogs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/worklogs",
+            "params": [
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for pagination. Returns results before the specified cursor."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for pagination. Returns results after the specified cursor."
+              },
+              {
+                "name": "externalItemId",
+                "value": "",
+                "type": "query",
+                "description": "Accepts a single string or array."
+              },
+              {
+                "name": "assigneeId",
+                "value": "",
+                "type": "query",
+                "description": "Accepts a single string or array."
+              },
+              {
+                "name": "authorId",
+                "value": "",
+                "type": "query",
+                "description": "Accepts a single string or array."
+              },
+              {
+                "name": "startedAt.start",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that logged time starting after the specified date."
+              },
+              {
+                "name": "startedAt.end",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that logged time starting before the specified date."
+              },
+              {
+                "name": "editedAt.start",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that were updated after the specified date."
+              },
+              {
+                "name": "editedAt.end",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that were updated before the specified date."
+              },
+              {
+                "name": "createdAt.start",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that were created after the specified date."
+              },
+              {
+                "name": "createdAt.end",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that were created before the specified date."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of worklogs with filters."
+        },
+        {
+          "info": {
+            "name": "Create a worklog",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/worklogs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a worklog."
+        },
+        {
+          "info": {
+            "name": "Update a worklog",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/worklogs/:worklogId",
+            "params": [
+              {
+                "name": "worklogId",
+                "value": "",
+                "type": "path",
+                "description": "The Id of the worklog to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a worklog by its Id."
+        },
+        {
+          "info": {
+            "name": "Delete a worklog",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/worklogs/:worklogId",
+            "params": [
+              {
+                "name": "worklogId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the worklog to delete."
+              }
+            ]
+          },
+          "docs": "Deletes a worklog by its ID."
+        },
+        {
+          "info": {
+            "name": "Get a list of all worklogs, including deleted worklogs.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/worklogs/changes",
+            "params": [
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for pagination. Returns results before the specified cursor."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for pagination. Returns results after the specified cursor."
+              },
+              {
+                "name": "externalItemId",
+                "value": "",
+                "type": "query",
+                "description": "Accepts a single string or array."
+              },
+              {
+                "name": "assigneeId",
+                "value": "",
+                "type": "query",
+                "description": "Accepts a single string or array."
+              },
+              {
+                "name": "authorId",
+                "value": "",
+                "type": "query",
+                "description": "Accepts a single string or array."
+              },
+              {
+                "name": "startedAt.start",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that logged time starting after the specified date."
+              },
+              {
+                "name": "startedAt.end",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that logged time starting before the specified date."
+              },
+              {
+                "name": "editedAt.start",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that were updated after the specified date."
+              },
+              {
+                "name": "editedAt.end",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that were updated before the specified date."
+              },
+              {
+                "name": "createdAt.start",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that were created after the specified date."
+              },
+              {
+                "name": "createdAt.end",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that were created before the specified date."
+              }
+            ]
+          },
+          "docs": "To get a change list, use parameters editedAt.start and editedAt.end to return a list of all changes during the specified timeframe. All other filters can be used in combination. Use returned worklog field isDeleted to identify deleted worklogs."
+        },
+        {
+          "info": {
+            "name": "Create a migrated worklog",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/worklogs/migrated",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a migrated worklog. Requires ADMIN permission (Manage 7pace settings and assign roles to users). Migrated worklogs bypass tracking-details, locked-date, and closed-item validations, and are not synchronized to Jira."
+        },
+        {
+          "info": {
+            "name": "Delete a migrated worklog",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/worklogs/migrated/:worklogId",
+            "params": [
+              {
+                "name": "worklogId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the migrated worklog to delete."
+              }
+            ]
+          },
+          "docs": "Deletes a migrated worklog by its ID. Requires ADMIN permission (Manage 7pace settings and assign roles to users)."
+        },
+        {
+          "info": {
+            "name": "Get a list of worklogs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/worklogs",
+            "params": [
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for pagination. Returns results before the specified cursor."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for pagination. Returns results after the specified cursor."
+              },
+              {
+                "name": "externalItemId",
+                "value": "",
+                "type": "query",
+                "description": "Accepts a single string or array."
+              },
+              {
+                "name": "assigneeId",
+                "value": "",
+                "type": "query",
+                "description": "Accepts a single string or array."
+              },
+              {
+                "name": "authorId",
+                "value": "",
+                "type": "query",
+                "description": "Accepts a single string or array."
+              },
+              {
+                "name": "startedAt.start",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that logged time starting after the specified date."
+              },
+              {
+                "name": "startedAt.end",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that logged time starting before the specified date."
+              },
+              {
+                "name": "editedAt.start",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that were updated after the specified date."
+              },
+              {
+                "name": "editedAt.end",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that were updated before the specified date."
+              },
+              {
+                "name": "createdAt.start",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that were created after the specified date."
+              },
+              {
+                "name": "createdAt.end",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that were created before the specified date."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of worklogs with filters."
+        },
+        {
+          "info": {
+            "name": "Create a worklog",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/worklogs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a worklog."
+        },
+        {
+          "info": {
+            "name": "Update a worklog",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v2/worklogs/:worklogId",
+            "params": [
+              {
+                "name": "worklogId",
+                "value": "",
+                "type": "path",
+                "description": "The Id of the worklog to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a worklog by its Id."
+        },
+        {
+          "info": {
+            "name": "Delete a worklog",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v2/worklogs/:worklogId",
+            "params": [
+              {
+                "name": "worklogId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the worklog to delete."
+              }
+            ]
+          },
+          "docs": "Deletes a worklog by its ID."
+        },
+        {
+          "info": {
+            "name": "Get a list of all worklogs, including deleted worklogs.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v2/worklogs/views/incrementalChanges",
+            "params": [
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for pagination. Returns results before the specified cursor."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for pagination. Returns results after the specified cursor."
+              },
+              {
+                "name": "externalItemId",
+                "value": "",
+                "type": "query",
+                "description": "Accepts a single string or array."
+              },
+              {
+                "name": "assigneeId",
+                "value": "",
+                "type": "query",
+                "description": "Accepts a single string or array."
+              },
+              {
+                "name": "authorId",
+                "value": "",
+                "type": "query",
+                "description": "Accepts a single string or array."
+              },
+              {
+                "name": "startedAt.start",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that logged time starting after the specified date."
+              },
+              {
+                "name": "startedAt.end",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that logged time starting before the specified date."
+              },
+              {
+                "name": "editedAt.start",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that were updated after the specified date."
+              },
+              {
+                "name": "editedAt.end",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that were updated before the specified date."
+              },
+              {
+                "name": "createdAt.start",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that were created after the specified date."
+              },
+              {
+                "name": "createdAt.end",
+                "value": "",
+                "type": "query",
+                "description": "Filters worklogs that were created before the specified date."
+              }
+            ]
+          },
+          "docs": "To get a change list, use parameters editedAt.start and editedAt.end to return a list of all changes during the specified timeframe. All other filters can be used in combination. Use returned worklog field isDeleted to identify deleted worklogs."
+        },
+        {
+          "info": {
+            "name": "Create a migrated worklog",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v2/worklogs/migrated",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a migrated worklog. Requires ADMIN permission (Manage 7pace settings and assign roles to users). Migrated worklogs bypass tracking-details, locked-date, and closed-item validations, and are not synchronized to Jira."
+        },
+        {
+          "info": {
+            "name": "Delete a migrated worklog",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v2/worklogs/migrated/:worklogId",
+            "params": [
+              {
+                "name": "worklogId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the migrated worklog to delete."
+              }
+            ]
+          },
+          "docs": "Deletes a migrated worklog by its ID. Requires ADMIN permission (Manage 7pace settings and assign roles to users)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

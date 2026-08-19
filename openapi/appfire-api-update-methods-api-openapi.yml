@@ -1,0 +1,336 @@
+openapi: 3.2.0
+info:
+  title: OKR API update methods API
+  description: 'REST API for integrating your OKR data (Objectives and Key Results) with external tools and workflows.
+
+
+    ## Region (base URL)
+
+
+    Use the server URL that matches your Jira Cloud data residency. The **Servers** list below includes regional endpoints when configured. If unsure, check Jira admin settings or contact support.
+
+
+    ## Authentication
+
+
+    Every request must send your token in the **`API-Token`** header. Do **not** use `Authorization` or `Authentication` for this API.
+
+
+    Generate a token in Jira: **Apps** → **OKR for Jira** → **Settings** → **API** → **Generate new token**. Name the token, create it, then copy and store it securely — it cannot be retrieved again later. Users with **API_ADMIN_TABLE_ACCESS** can see, rename, or revoke any organization token on that same **API** settings page.
+
+
+    ## Responses
+
+
+    Fetch (query) methods return a common JSON shape; which arrays and fields appear depends on your query parameters (for example **expand**).
+
+
+    ## Teams
+
+
+    Objectives and key results include **`teamIds`**: identifiers of teams linked to each entity. When **`expand`** includes **`TEAMS`**, the response also includes a **`teams`** array with **`id`** and **`name`** for each referenced team.
+
+
+    The same identifier appears in **`teamIds`**, in **`teams[].id`**, and when matching expanded rows.
+
+
+    For team fields beyond **`id`** and **`name`**, use the **Teams** endpoints documented in the BigPicture developer documentation alongside this API reference.
+
+
+    ## Status values
+
+
+    The Jira app shows user-friendly status labels.                         **Update** requests must use **displayed** in-progress strings: **NOT STARTED**, **ON TRACK**, **AT RISK**, **OFF TRACK** (the UI label for action required). Completed statuses (e.g. SUCCESS, CANCELED, RESCHEDULED) are not accepted here. Some query responses may still expose internal enum names in places; prefer **displayed** fields where both appear.
+
+
+    ## Progress
+
+
+    For the latest progress, rely on **`percentDone`** on objectives and key results rather than inferring it only from update history.
+
+
+    ## Rate limiting
+
+
+    Requests may be throttled. On **429**, wait before retrying.
+
+    '
+  contact:
+    name: OKR for Jira Support
+    url: https://appfire.atlassian.net/servicedesk/customer/portal/11/group/1237
+  version: v2
+servers:
+- url: https://okr-ppm-prod.appfire.com
+  description: Current instance
+- url: https://eu.okr-ppm-prod.appfire.com
+  description: Europe region
+- url: https://au.okr-ppm-prod.appfire.com
+  description: Australia region
+- url: https://ca.okr-ppm-prod.appfire.com
+  description: Canada region
+security:
+- API-Token: []
+tags:
+- name: API update methods
+  description: '**POST** with a JSON body. Send **Content-Type: application/json** and the **API-Token** header. Creates update records that set current status (and key-result progress where applicable).'
+paths:
+  /api/v2/api-update/objectives:
+    post:
+      tags:
+      - API update methods
+      summary: Update objective (create update)
+      description: '## Base URL for this request
+
+
+        Select the server matching your Jira Cloud data residency from the **Servers** drop-down before making requests:
+
+
+        - **Europe region:** https://eu.okr-ppm-prod.appfire.com
+
+        - **Australia region:** https://au.okr-ppm-prod.appfire.com
+
+        - **Canada region:** https://ca.okr-ppm-prod.appfire.com
+
+        - **US / Everywhere else:** https://okr-ppm-prod.appfire.com
+
+
+        Creates an update for the specified objective. **status** uses the same **displayed** labels as in the app: **NOT STARTED**, **ON TRACK**, **AT RISK**, **OFF TRACK** (action required). **description** is the text stored on that update. The new update becomes the objective''s current status (and progress when the objective is manual).'
+      operationId: updateObjective
+      requestBody:
+        description: JSON body. **objectiveId** required; **status** and **description** optional.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiUpdateObjectiveRequestSchema'
+            examples:
+              Create objective update:
+                description: Create objective update
+                value:
+                  objectiveId: 62334eac00ee2b102e34fdb7
+                  status: ON TRACK
+                  description: Spaceship assembly docks are delivering on time
+        required: true
+      responses:
+        '201':
+          description: Update record created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiExportUpdate'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Invalid or missing API token
+          content:
+            application/json:
+              schema:
+                type: object
+        '403':
+          description: App is not installed or user lacks permissions
+          content:
+            application/json:
+              schema:
+                type: object
+        '404':
+          description: Objective with specified ID not found
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/v2/api-update/keyResults:
+    post:
+      tags:
+      - API update methods
+      summary: Update key result (create update)
+      description: '## Base URL for this request
+
+
+        Select the server matching your Jira Cloud data residency from the **Servers** drop-down before making requests:
+
+
+        - **Europe region:** https://eu.okr-ppm-prod.appfire.com
+
+        - **Australia region:** https://au.okr-ppm-prod.appfire.com
+
+        - **Canada region:** https://ca.okr-ppm-prod.appfire.com
+
+        - **US / Everywhere else:** https://okr-ppm-prod.appfire.com
+
+
+        Creates an update for the specified key result. **status:** displayed values **NOT STARTED**, **ON TRACK**, **AT RISK**, **OFF TRACK**. **newValue:** progress to record on this update — not allowed for **auto** key results (progress from linked work items). For currency units, send a plain number (no currency symbol). **description** appears on the created update.'
+      operationId: updateKeyResult
+      requestBody:
+        description: JSON body. **keyResultId** required; **status**, **newValue**, **description** optional where allowed.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiUpdateKeyResultRequestSchema'
+            examples:
+              Create key result update:
+                description: Create key result update
+                value:
+                  keyResultId: 62384a6942adda046598b3bd
+                  status: AT RISK
+                  newValue: 13500.5
+                  description: Reduction in ship hull output is caused by Unobtainium supply disruptions.
+        required: true
+      responses:
+        '201':
+          description: Update record created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiExportUpdate'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Invalid or missing API token
+          content:
+            application/json:
+              schema:
+                type: object
+        '403':
+          description: App is not installed, user lacks permissions, or attempting to modify auto key result value
+          content:
+            application/json:
+              schema:
+                type: object
+        '404':
+          description: Key result with specified ID not found
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  schemas:
+    ApiUpdateObjectiveRequestSchema:
+      type: object
+      description: Objective update request. **status** values match the labels shown in Jira (in-progress set below).
+      properties:
+        objectiveId:
+          type: string
+          description: ID of the objective to add an update for
+        status:
+          type: string
+          description: 'New displayed status (in progress): NOT STARTED, ON TRACK, AT RISK, OFF TRACK'
+          enum:
+          - NOT STARTED
+          - ON TRACK
+          - AT RISK
+          - OFF TRACK
+        description:
+          type: string
+          description: Text shown on the created update
+      required:
+      - objectiveId
+    ApiExportUpdate:
+      type: object
+      description: A status update for an objective or key result
+      properties:
+        updateId:
+          type: string
+          description: Unique update identifier
+          examples:
+          - 6456a3b200ee2b102e34fdb9
+        entityId:
+          type: string
+          description: ID of the objective or key result this update belongs to
+          examples:
+          - 62334eac00ee2b102e34fdb7
+        status:
+          type: string
+          description: Status enum value
+          enum:
+          - ON_TRACK
+          - AT_RISK
+          - ACTION_REQUIRED
+          - NOT_STARTED
+          - SUCCESS
+          - FINISHED
+          - ASSUMPTIONS_CHANGED
+          - DELAYED
+          - CANCELED
+          - FAILED
+          - UNDEFINED
+          - MISSED_TARGET
+          examples:
+          - ON_TRACK
+        displayedStatus:
+          type: string
+          description: Human-readable status label
+          examples:
+          - On Track
+        created:
+          type: string
+          format: date-time
+          description: When the update was created
+          examples:
+          - 2024-02-15T14:30:00+0000
+        value:
+          type: number
+          format: double
+          description: Current progress value (key results only)
+          examples:
+          - 13500.5
+        description:
+          type: string
+          description: Update description/comment text
+        startValue:
+          type: number
+          format: double
+          description: Start value of the progress range
+          examples:
+          - 0.0
+        desiredValue:
+          type: number
+          format: double
+          description: Target/desired value of the progress range
+          examples:
+          - 20000.0
+        source:
+          type: string
+          description: 'Origin of the update: MANUAL (UI), API (public API), or AUTO (system/linked issues)'
+          enum:
+          - MANUAL
+          - API
+          - AUTO
+          examples:
+          - MANUAL
+    ApiUpdateKeyResultRequestSchema:
+      type: object
+      description: Key result update request. **status** uses displayed labels; **newValue** only for manual (non-auto) key results.
+      properties:
+        keyResultId:
+          type: string
+          description: ID of the key result to add an update for
+        status:
+          type: string
+          description: 'New displayed status: NOT STARTED, ON TRACK, AT RISK, OFF TRACK'
+          enum:
+          - NOT STARTED
+          - ON TRACK
+          - AT RISK
+          - OFF TRACK
+        newValue:
+          type: number
+          format: double
+          description: Progress value on this update (numeric). Omit for auto key results — their value comes from linked work items.
+        description:
+          type: string
+          description: Text shown on the created update
+      required:
+      - keyResultId
+  securitySchemes:
+    API-Token:
+      type: apiKey
+      description: API authentication token generated from OKR module settings. Send only this header name (`API-Token`), not `Authorization` or `Authentication`.
+      name: API-Token
+      in: header
