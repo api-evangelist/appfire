@@ -19,6 +19,19 @@ specificationVersion: '0.23'
 created: '2026-08-06'
 modified: '2026-08-06'
 tags:
+- Atlassian
+- Jira
+- Confluence
+- Project Portfolio Management
+- Work Management
+- Time Tracking
+- OKR
+- Workflow-Automation
+- Azure DevOps
+- marketplace-apps
+- Document Workflow
+- Enterprise Software
+tags_raw:
 - atlassian
 - jira
 - confluence
@@ -47,6 +60,10 @@ apis:
   humanURL: https://developer.bigpicture.one/reference/whatisbigpicture
   baseURL: https://api.bigpicture.one/public/bigpicture/rest
   tags:
+  - Project Portfolio Management
+  - Resource Management
+  - Jira
+  tags_raw:
   - project-portfolio-management
   - resource-management
   - jira
@@ -118,6 +135,8 @@ apis:
     https://appfire.atlassian.net/wiki/spaces/7TFJ/pages/1987510406/API+documentation+version+1.0
   baseURL: https://timehubjra.7pace.com
   tags:
+  - Work Logs
+  tags_raw:
   - Worklogs
   properties:
   - type: OpenAPI
