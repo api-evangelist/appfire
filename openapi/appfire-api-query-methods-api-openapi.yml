@@ -1,60 +1,7 @@
 openapi: 3.2.0
 info:
   title: OKR API query methods API
-  description: 'REST API for integrating your OKR data (Objectives and Key Results) with external tools and workflows.
-
-
-    ## Region (base URL)
-
-
-    Use the server URL that matches your Jira Cloud data residency. The **Servers** list below includes regional endpoints when configured. If unsure, check Jira admin settings or contact support.
-
-
-    ## Authentication
-
-
-    Every request must send your token in the **`API-Token`** header. Do **not** use `Authorization` or `Authentication` for this API.
-
-
-    Generate a token in Jira: **Apps** → **OKR for Jira** → **Settings** → **API** → **Generate new token**. Name the token, create it, then copy and store it securely — it cannot be retrieved again later. Users with **API_ADMIN_TABLE_ACCESS** can see, rename, or revoke any organization token on that same **API** settings page.
-
-
-    ## Responses
-
-
-    Fetch (query) methods return a common JSON shape; which arrays and fields appear depends on your query parameters (for example **expand**).
-
-
-    ## Teams
-
-
-    Objectives and key results include **`teamIds`**: identifiers of teams linked to each entity. When **`expand`** includes **`TEAMS`**, the response also includes a **`teams`** array with **`id`** and **`name`** for each referenced team.
-
-
-    The same identifier appears in **`teamIds`**, in **`teams[].id`**, and when matching expanded rows.
-
-
-    For team fields beyond **`id`** and **`name`**, use the **Teams** endpoints documented in the BigPicture developer documentation alongside this API reference.
-
-
-    ## Status values
-
-
-    The Jira app shows user-friendly status labels.                         **Update** requests must use **displayed** in-progress strings: **NOT STARTED**, **ON TRACK**, **AT RISK**, **OFF TRACK** (the UI label for action required). Completed statuses (e.g. SUCCESS, CANCELED, RESCHEDULED) are not accepted here. Some query responses may still expose internal enum names in places; prefer **displayed** fields where both appear.
-
-
-    ## Progress
-
-
-    For the latest progress, rely on **`percentDone`** on objectives and key results rather than inferring it only from update history.
-
-
-    ## Rate limiting
-
-
-    Requests may be throttled. On **429**, wait before retrying.
-
-    '
+  description: REST API for integrating your OKR data (Objectives and Key Results) with external tools and workflows.
   contact:
     name: OKR for Jira Support
     url: https://appfire.atlassian.net/servicedesk/customer/portal/11/group/1237
@@ -520,6 +467,209 @@ paths:
                 type: object
 components:
   schemas:
+    ApiExportTeam:
+      type: object
+      description: A team linked to objectives or key results in this export payload
+      properties:
+        id:
+          type: string
+          description: Team identifier. Matches the corresponding **teamIds** entry on objectives and key results in this response. For additional team properties, use the **Teams** API documented in the BigPicture developer documentation.
+          examples:
+          - '2'
+          - '7'
+          - '11'
+        name:
+          type: string
+          description: Team name
+          examples:
+          - Engineering
+    ApiExportLabel:
+      type: object
+      description: A label used to categorize OKRs
+      properties:
+        id:
+          type: string
+          description: Unique label identifier
+          examples:
+          - 6123abc000ee2b102e34fd02
+        name:
+          type: string
+          description: Label name
+          examples:
+          - High Priority
+    ApiExportUpdateComment:
+      type: object
+      description: A comment on an update
+      properties:
+        commentId:
+          type: string
+          description: Unique comment identifier
+          examples:
+          - 6456a3b200ee2b102e34fdba
+        updateId:
+          type: string
+          description: ID of the update this comment belongs to
+          examples:
+          - 6456a3b200ee2b102e34fdb9
+        text:
+          type: string
+          description: Comment text content
+        authorAccountId:
+          type: string
+          description: Jira account ID of the comment author
+          examples:
+          - 557058:5aedf933-2312-40bc-b328-0c21314167f0
+        replyToCommentId:
+          type: string
+          description: ID of the comment this is a reply to, if threaded
+        created:
+          type: string
+          format: date-time
+          description: When the comment was created
+          examples:
+          - 2024-02-15T14:30:00+0000
+        lastEdited:
+          type: string
+          format: date-time
+          description: When the comment was last edited
+          examples:
+          - 2024-02-15T15:00:00+0000
+    ApiExportOkrType:
+      type: object
+      description: An OKR type definition
+      properties:
+        id:
+          type: string
+          description: Unique type identifier
+          examples:
+          - 6123abc000ee2b102e34fd04
+        name:
+          type: string
+          description: Type name
+          examples:
+          - Company OKR
+        backgroundColor:
+          type: string
+          description: Icon background color hex code
+          examples:
+          - '#4C9AFF'
+        textColor:
+          type: string
+          description: Icon text color hex code
+          examples:
+          - '#FFFFFF'
+    ApiExportUpdate:
+      type: object
+      description: A status update for an objective or key result
+      properties:
+        updateId:
+          type: string
+          description: Unique update identifier
+          examples:
+          - 6456a3b200ee2b102e34fdb9
+        entityId:
+          type: string
+          description: ID of the objective or key result this update belongs to
+          examples:
+          - 62334eac00ee2b102e34fdb7
+        status:
+          type: string
+          description: Status enum value
+          enum:
+          - ON_TRACK
+          - AT_RISK
+          - ACTION_REQUIRED
+          - NOT_STARTED
+          - SUCCESS
+          - FINISHED
+          - ASSUMPTIONS_CHANGED
+          - DELAYED
+          - CANCELED
+          - FAILED
+          - UNDEFINED
+          - MISSED_TARGET
+          examples:
+          - ON_TRACK
+        displayedStatus:
+          type: string
+          description: Human-readable status label
+          examples:
+          - On Track
+        created:
+          type: string
+          format: date-time
+          description: When the update was created
+          examples:
+          - 2024-02-15T14:30:00+0000
+        value:
+          type: number
+          format: double
+          description: Current progress value (key results only)
+          examples:
+          - 13500.5
+        description:
+          type: string
+          description: Update description/comment text
+        startValue:
+          type: number
+          format: double
+          description: Start value of the progress range
+          examples:
+          - 0.0
+        desiredValue:
+          type: number
+          format: double
+          description: Target/desired value of the progress range
+          examples:
+          - 20000.0
+        source:
+          type: string
+          description: 'Origin of the update: MANUAL (UI), API (public API), or AUTO (system/linked issues)'
+          enum:
+          - MANUAL
+          - API
+          - AUTO
+          examples:
+          - MANUAL
+    ApiExportProgressDefinition:
+      type: object
+      description: Progress tracking definition for a key result
+      properties:
+        type:
+          type: string
+          description: 'Key result type: STANDARD (manual progress) or AUTO (JQL-driven)'
+          enum:
+          - STANDARD
+          - AUTO
+          examples:
+          - STANDARD
+        startValue:
+          type: number
+          format: double
+          description: Start value of the progress range
+          examples:
+          - 0.0
+        desiredValue:
+          type: number
+          format: double
+          description: Target/desired value of the progress range
+          examples:
+          - 100.0
+        jql:
+          type: string
+          description: JQL query for auto key results (null for standard key results)
+    ApiExportBulkUpdateComments:
+      type: object
+      description: Paginated list of update comments
+      properties:
+        comments:
+          type: array
+          description: List of comments, newest first
+          items:
+            $ref: '#/components/schemas/ApiExportUpdateComment'
+        nextCursor:
+          type: string
+          description: Cursor for fetching the next page. Null when there are no more results.
     ApiExportKeyResult:
       type: object
       description: A key result linked to an objective
@@ -636,171 +786,55 @@ components:
           type: object
           additionalProperties: {}
           description: Custom field values keyed by field ID. Only includes fields that are visible (not hidden or deleted). Expand CUSTOM_FIELDS to receive field definitions (id, name, type, etc.) as a lookup.
-    ApiExportUpdate:
+    ApiExportCustomField:
       type: object
-      description: A status update for an objective or key result
-      properties:
-        updateId:
-          type: string
-          description: Unique update identifier
-          examples:
-          - 6456a3b200ee2b102e34fdb9
-        entityId:
-          type: string
-          description: ID of the objective or key result this update belongs to
-          examples:
-          - 62334eac00ee2b102e34fdb7
-        status:
-          type: string
-          description: Status enum value
-          enum:
-          - ON_TRACK
-          - AT_RISK
-          - ACTION_REQUIRED
-          - NOT_STARTED
-          - SUCCESS
-          - FINISHED
-          - ASSUMPTIONS_CHANGED
-          - DELAYED
-          - CANCELED
-          - FAILED
-          - UNDEFINED
-          - MISSED_TARGET
-          examples:
-          - ON_TRACK
-        displayedStatus:
-          type: string
-          description: Human-readable status label
-          examples:
-          - On Track
-        created:
-          type: string
-          format: date-time
-          description: When the update was created
-          examples:
-          - 2024-02-15T14:30:00+0000
-        value:
-          type: number
-          format: double
-          description: Current progress value (key results only)
-          examples:
-          - 13500.5
-        description:
-          type: string
-          description: Update description/comment text
-        startValue:
-          type: number
-          format: double
-          description: Start value of the progress range
-          examples:
-          - 0.0
-        desiredValue:
-          type: number
-          format: double
-          description: Target/desired value of the progress range
-          examples:
-          - 20000.0
-        source:
-          type: string
-          description: 'Origin of the update: MANUAL (UI), API (public API), or AUTO (system/linked issues)'
-          enum:
-          - MANUAL
-          - API
-          - AUTO
-          examples:
-          - MANUAL
-    ApiExportUpdateComment:
-      type: object
-      description: A comment on an update
-      properties:
-        commentId:
-          type: string
-          description: Unique comment identifier
-          examples:
-          - 6456a3b200ee2b102e34fdba
-        updateId:
-          type: string
-          description: ID of the update this comment belongs to
-          examples:
-          - 6456a3b200ee2b102e34fdb9
-        text:
-          type: string
-          description: Comment text content
-        authorAccountId:
-          type: string
-          description: Jira account ID of the comment author
-          examples:
-          - 557058:5aedf933-2312-40bc-b328-0c21314167f0
-        replyToCommentId:
-          type: string
-          description: ID of the comment this is a reply to, if threaded
-        created:
-          type: string
-          format: date-time
-          description: When the comment was created
-          examples:
-          - 2024-02-15T14:30:00+0000
-        lastEdited:
-          type: string
-          format: date-time
-          description: When the comment was last edited
-          examples:
-          - 2024-02-15T15:00:00+0000
-    ApiExportBulkUpdate:
-      type: object
-      description: Paginated list of updates
-      properties:
-        updates:
-          type: array
-          description: List of updates, newest first
-          items:
-            $ref: '#/components/schemas/ApiExportUpdate'
-        nextCursor:
-          type: string
-          description: Cursor for fetching the next page. Null when there are no more results.
-    ApiExportTeam:
-      type: object
-      description: A team linked to objectives or key results in this export payload
+      description: Custom field definition
       properties:
         id:
           type: string
-          description: Team identifier. Matches the corresponding **teamIds** entry on objectives and key results in this response. For additional team properties, use the **Teams** API documented in the BigPicture developer documentation.
-          examples:
-          - '2'
-          - '7'
-          - '11'
+          description: Unique identifier of the custom field
         name:
           type: string
-          description: Team name
-          examples:
-          - Engineering
-    ApiExportProgressDefinition:
-      type: object
-      description: Progress tracking definition for a key result
-      properties:
+          description: User-facing label for the field
         type:
           type: string
-          description: 'Key result type: STANDARD (manual progress) or AUTO (JQL-driven)'
+          description: Data type of the custom field
           enum:
-          - STANDARD
-          - AUTO
-          examples:
-          - STANDARD
-        startValue:
-          type: number
-          format: double
-          description: Start value of the progress range
-          examples:
-          - 0.0
-        desiredValue:
-          type: number
-          format: double
-          description: Target/desired value of the progress range
-          examples:
-          - 100.0
-        jql:
+          - TEXT
+          - NUMBER
+          - HYPERLINK
+          - SELECT
+          - MULTI_SELECT
+          - USER
+          - DATE
+        applicableGoalTypes:
+          type: array
+          description: Goal types this field applies to
+          items:
+            type: string
+            enum:
+            - OBJECTIVE
+            - KEY_RESULT
+          uniqueItems: true
+        description:
           type: string
-          description: JQL query for auto key results (null for standard key results)
+          description: Description of the field's purpose
+        selectOptions:
+          type: array
+          description: Available options for SELECT and MULTI_SELECT fields
+          items:
+            type: string
+        multipleUsers:
+          type: boolean
+          description: Whether multiple users can be selected (USER type only)
+        maxLength:
+          type: integer
+          format: int32
+          description: Maximum length for TEXT fields
+        displayOrder:
+          type: integer
+          format: int32
+          description: Display order in the UI
     ApiExportData:
       type: object
       description: Response containing objectives and/or key results with optionally expanded related entities
@@ -969,81 +1003,18 @@ components:
           type: object
           additionalProperties: {}
           description: Custom field values keyed by field ID. Only includes fields that are visible (not hidden or deleted). Expand CUSTOM_FIELDS to receive field definitions (id, name, type, etc.) as a lookup.
-    ApiExportLabel:
+    ApiExportBulkUpdate:
       type: object
-      description: A label used to categorize OKRs
+      description: Paginated list of updates
       properties:
-        id:
-          type: string
-          description: Unique label identifier
-          examples:
-          - 6123abc000ee2b102e34fd02
-        name:
-          type: string
-          description: Label name
-          examples:
-          - High Priority
-    ApiExportBulkUpdateComments:
-      type: object
-      description: Paginated list of update comments
-      properties:
-        comments:
+        updates:
           type: array
-          description: List of comments, newest first
+          description: List of updates, newest first
           items:
-            $ref: '#/components/schemas/ApiExportUpdateComment'
+            $ref: '#/components/schemas/ApiExportUpdate'
         nextCursor:
           type: string
           description: Cursor for fetching the next page. Null when there are no more results.
-    ApiExportCustomField:
-      type: object
-      description: Custom field definition
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the custom field
-        name:
-          type: string
-          description: User-facing label for the field
-        type:
-          type: string
-          description: Data type of the custom field
-          enum:
-          - TEXT
-          - NUMBER
-          - HYPERLINK
-          - SELECT
-          - MULTI_SELECT
-          - USER
-          - DATE
-        applicableGoalTypes:
-          type: array
-          description: Goal types this field applies to
-          items:
-            type: string
-            enum:
-            - OBJECTIVE
-            - KEY_RESULT
-          uniqueItems: true
-        description:
-          type: string
-          description: Description of the field's purpose
-        selectOptions:
-          type: array
-          description: Available options for SELECT and MULTI_SELECT fields
-          items:
-            type: string
-        multipleUsers:
-          type: boolean
-          description: Whether multiple users can be selected (USER type only)
-        maxLength:
-          type: integer
-          format: int32
-          description: Maximum length for TEXT fields
-        displayOrder:
-          type: integer
-          format: int32
-          description: Display order in the UI
     ApiExportUnit:
       type: object
       description: Unit of measurement for key result progress
@@ -1058,30 +1029,6 @@ components:
           description: Unit symbol
           examples:
           - $
-    ApiExportOkrType:
-      type: object
-      description: An OKR type definition
-      properties:
-        id:
-          type: string
-          description: Unique type identifier
-          examples:
-          - 6123abc000ee2b102e34fd04
-        name:
-          type: string
-          description: Type name
-          examples:
-          - Company OKR
-        backgroundColor:
-          type: string
-          description: Icon background color hex code
-          examples:
-          - '#4C9AFF'
-        textColor:
-          type: string
-          description: Icon text color hex code
-          examples:
-          - '#FFFFFF'
     ApiExportPeriodAlias:
       type: object
       description: A time period for OKRs

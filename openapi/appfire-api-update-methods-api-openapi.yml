@@ -1,60 +1,7 @@
 openapi: 3.2.0
 info:
   title: OKR API update methods API
-  description: 'REST API for integrating your OKR data (Objectives and Key Results) with external tools and workflows.
-
-
-    ## Region (base URL)
-
-
-    Use the server URL that matches your Jira Cloud data residency. The **Servers** list below includes regional endpoints when configured. If unsure, check Jira admin settings or contact support.
-
-
-    ## Authentication
-
-
-    Every request must send your token in the **`API-Token`** header. Do **not** use `Authorization` or `Authentication` for this API.
-
-
-    Generate a token in Jira: **Apps** → **OKR for Jira** → **Settings** → **API** → **Generate new token**. Name the token, create it, then copy and store it securely — it cannot be retrieved again later. Users with **API_ADMIN_TABLE_ACCESS** can see, rename, or revoke any organization token on that same **API** settings page.
-
-
-    ## Responses
-
-
-    Fetch (query) methods return a common JSON shape; which arrays and fields appear depends on your query parameters (for example **expand**).
-
-
-    ## Teams
-
-
-    Objectives and key results include **`teamIds`**: identifiers of teams linked to each entity. When **`expand`** includes **`TEAMS`**, the response also includes a **`teams`** array with **`id`** and **`name`** for each referenced team.
-
-
-    The same identifier appears in **`teamIds`**, in **`teams[].id`**, and when matching expanded rows.
-
-
-    For team fields beyond **`id`** and **`name`**, use the **Teams** endpoints documented in the BigPicture developer documentation alongside this API reference.
-
-
-    ## Status values
-
-
-    The Jira app shows user-friendly status labels.                         **Update** requests must use **displayed** in-progress strings: **NOT STARTED**, **ON TRACK**, **AT RISK**, **OFF TRACK** (the UI label for action required). Completed statuses (e.g. SUCCESS, CANCELED, RESCHEDULED) are not accepted here. Some query responses may still expose internal enum names in places; prefer **displayed** fields where both appear.
-
-
-    ## Progress
-
-
-    For the latest progress, rely on **`percentDone`** on objectives and key results rather than inferring it only from update history.
-
-
-    ## Rate limiting
-
-
-    Requests may be throttled. On **429**, wait before retrying.
-
-    '
+  description: REST API for integrating your OKR data (Objectives and Key Results) with external tools and workflows.
   contact:
     name: OKR for Jira Support
     url: https://appfire.atlassian.net/servicedesk/customer/portal/11/group/1237
@@ -211,6 +158,30 @@ paths:
                 type: object
 components:
   schemas:
+    ApiUpdateKeyResultRequestSchema:
+      type: object
+      description: Key result update request. **status** uses displayed labels; **newValue** only for manual (non-auto) key results.
+      properties:
+        keyResultId:
+          type: string
+          description: ID of the key result to add an update for
+        status:
+          type: string
+          description: 'New displayed status: NOT STARTED, ON TRACK, AT RISK, OFF TRACK'
+          enum:
+          - NOT STARTED
+          - ON TRACK
+          - AT RISK
+          - OFF TRACK
+        newValue:
+          type: number
+          format: double
+          description: Progress value on this update (numeric). Omit for auto key results — their value comes from linked work items.
+        description:
+          type: string
+          description: Text shown on the created update
+      required:
+      - keyResultId
     ApiUpdateObjectiveRequestSchema:
       type: object
       description: Objective update request. **status** values match the labels shown in Jira (in-progress set below).
@@ -304,30 +275,6 @@ components:
           - AUTO
           examples:
           - MANUAL
-    ApiUpdateKeyResultRequestSchema:
-      type: object
-      description: Key result update request. **status** uses displayed labels; **newValue** only for manual (non-auto) key results.
-      properties:
-        keyResultId:
-          type: string
-          description: ID of the key result to add an update for
-        status:
-          type: string
-          description: 'New displayed status: NOT STARTED, ON TRACK, AT RISK, OFF TRACK'
-          enum:
-          - NOT STARTED
-          - ON TRACK
-          - AT RISK
-          - OFF TRACK
-        newValue:
-          type: number
-          format: double
-          description: Progress value on this update (numeric). Omit for auto key results — their value comes from linked work items.
-        description:
-          type: string
-          description: Text shown on the created update
-      required:
-      - keyResultId
   securitySchemes:
     API-Token:
       type: apiKey

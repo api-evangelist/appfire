@@ -12,9 +12,6 @@ tags:
 - name: Worklogs
 paths:
   /api/v1/worklogs:
-    servers:
-    - url: /
-      description: Production API
     get:
       summary: Get a list of worklogs
       description: Returns a paginated list of worklogs with filters.
@@ -135,6 +132,8 @@ paths:
                     type: string
       tags:
       - Worklogs
+      operationId: getApiV1Worklogs
+      x-operation-id-source: derived
     post:
       summary: Create a worklog
       description: Creates a worklog.
@@ -203,10 +202,12 @@ paths:
           description: Internal server error.
       tags:
       - Worklogs
-  /api/v1/worklogs/{worklogId}:
+      operationId: postApiV1Worklogs
+      x-operation-id-source: derived
     servers:
     - url: /
       description: Production API
+  /api/v1/worklogs/{worklogId}:
     put:
       summary: Update a worklog
       description: Updates a worklog by its Id.
@@ -282,6 +283,8 @@ paths:
           description: Internal server error.
       tags:
       - Worklogs
+      operationId: putApiV1WorklogsByWorklogId
+      x-operation-id-source: derived
     delete:
       summary: Delete a worklog
       description: Deletes a worklog by its ID.
@@ -303,12 +306,14 @@ paths:
           description: Worklog not found.
       tags:
       - Worklogs
-  /api/v1/worklogs/changes:
+      operationId: deleteApiV1WorklogsByWorklogId
+      x-operation-id-source: derived
     servers:
     - url: /
       description: Production API
+  /api/v1/worklogs/changes:
     get:
-      summary: Get a list of all worklogs, including deleted worklogs.
+      summary: Get a list of all worklogs, including deleted worklogs
       description: To get a change list, use parameters editedAt.start and editedAt.end to return a list of all changes during the specified timeframe. All other filters can be used in combination. Use returned worklog field isDeleted to identify deleted worklogs.
       parameters:
       - name: before
@@ -427,10 +432,12 @@ paths:
                     type: string
       tags:
       - Worklogs
-  /api/v1/worklogs/migrated:
+      operationId: getApiV1WorklogsChanges
+      x-operation-id-source: derived
     servers:
     - url: /
       description: Production API
+  /api/v1/worklogs/migrated:
     post:
       summary: Create a migrated worklog
       description: Creates a migrated worklog. Requires ADMIN permission (Manage 7pace settings and assign roles to users). Migrated worklogs bypass tracking-details, locked-date, and closed-item validations, and are not synchronized to Jira.
@@ -499,10 +506,12 @@ paths:
           description: Internal server error.
       tags:
       - Worklogs
-  /api/v1/worklogs/migrated/{worklogId}:
+      operationId: postApiV1WorklogsMigrated
+      x-operation-id-source: derived
     servers:
     - url: /
       description: Production API
+  /api/v1/worklogs/migrated/{worklogId}:
     delete:
       summary: Delete a migrated worklog
       description: Deletes a migrated worklog by its ID. Requires ADMIN permission (Manage 7pace settings and assign roles to users).
@@ -567,10 +576,12 @@ paths:
           description: Internal server error.
       tags:
       - Worklogs
-  /api/v2/worklogs:
+      operationId: deleteApiV1WorklogsMigratedByWorklogId
+      x-operation-id-source: derived
     servers:
     - url: /
       description: Production API
+  /api/v2/worklogs:
     get:
       summary: Get a list of worklogs
       description: Returns a paginated list of worklogs with filters.
@@ -691,6 +702,8 @@ paths:
                     type: string
       tags:
       - Worklogs
+      operationId: getApiV2Worklogs
+      x-operation-id-source: derived
     post:
       summary: Create a worklog
       description: Creates a worklog.
@@ -759,10 +772,12 @@ paths:
           description: Internal server error.
       tags:
       - Worklogs
-  /api/v2/worklogs/{worklogId}:
+      operationId: postApiV2Worklogs
+      x-operation-id-source: derived
     servers:
     - url: /
       description: Production API
+  /api/v2/worklogs/{worklogId}:
     put:
       summary: Update a worklog
       description: Updates a worklog by its Id.
@@ -838,6 +853,8 @@ paths:
           description: Internal server error.
       tags:
       - Worklogs
+      operationId: putApiV2WorklogsByWorklogId
+      x-operation-id-source: derived
     delete:
       summary: Delete a worklog
       description: Deletes a worklog by its ID.
@@ -859,12 +876,14 @@ paths:
           description: Worklog not found.
       tags:
       - Worklogs
-  /api/v2/worklogs/views/incrementalChanges:
+      operationId: deleteApiV2WorklogsByWorklogId
+      x-operation-id-source: derived
     servers:
     - url: /
       description: Production API
+  /api/v2/worklogs/views/incrementalChanges:
     get:
-      summary: Get a list of all worklogs, including deleted worklogs.
+      summary: Get a list of all worklogs, including deleted worklogs
       description: To get a change list, use parameters editedAt.start and editedAt.end to return a list of all changes during the specified timeframe. All other filters can be used in combination. Use returned worklog field isDeleted to identify deleted worklogs.
       parameters:
       - name: before
@@ -983,10 +1002,12 @@ paths:
                     type: string
       tags:
       - Worklogs
-  /api/v2/worklogs/migrated:
+      operationId: getApiV2WorklogsViewsIncrementalChanges
+      x-operation-id-source: derived
     servers:
     - url: /
       description: Production API
+  /api/v2/worklogs/migrated:
     post:
       summary: Create a migrated worklog
       description: Creates a migrated worklog. Requires ADMIN permission (Manage 7pace settings and assign roles to users). Migrated worklogs bypass tracking-details, locked-date, and closed-item validations, and are not synchronized to Jira.
@@ -1055,10 +1076,12 @@ paths:
           description: Internal server error.
       tags:
       - Worklogs
-  /api/v2/worklogs/migrated/{worklogId}:
+      operationId: postApiV2WorklogsMigrated
+      x-operation-id-source: derived
     servers:
     - url: /
       description: Production API
+  /api/v2/worklogs/migrated/{worklogId}:
     delete:
       summary: Delete a migrated worklog
       description: Deletes a migrated worklog by its ID. Requires ADMIN permission (Manage 7pace settings and assign roles to users).
@@ -1123,19 +1146,13 @@ paths:
           description: Internal server error.
       tags:
       - Worklogs
+      operationId: deleteApiV2WorklogsMigratedByWorklogId
+      x-operation-id-source: derived
+    servers:
+    - url: /
+      description: Production API
 components:
   schemas:
-    CustomFieldRequest:
-      type: object
-      description: A custom field representing a boolean toggle.
-      required:
-      - id
-      - type
-      properties:
-        id:
-          type: string
-        type:
-          type: string
     CustomFields:
       type: object
       description: Custom fields represents user-defined fields for additional worklog data, such as toggles and dropdowns configured in application settings.
@@ -1148,117 +1165,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DropdownField'
-    ChangedWorklog_2:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        isDeleted:
-          type: boolean
-          description: Indicates if the worklog has been deleted.
-        isMigrated:
-          type: boolean
-          description: Indicates if the worklog is migrated.
-        comment:
-          type: string
-        startedAt:
-          type: string
-          format: date-time
-          example: '2025-07-15T09:30:11'
-        createdAt:
-          type: string
-          format: date-time
-        editedAt:
-          type: string
-          format: date-time
-        assigneeId:
-          type: string
-        authorId:
-          type: string
-        accountId:
-          type: string
-        editorId:
-          type: string
-        duration:
-          type: integer
-        externalItemId:
-          type: string
-        customFields:
-          $ref: '#/components/schemas/CustomFieldsResponse'
-    CustomFieldsResponse:
-      type: array
-      description: A list of user-defined fields for additional worklog data. Each field has a 'type' property that determines its structure and value.
-      items:
-        oneOf:
-        - $ref: '#/components/schemas/ToggleFieldResponse'
-        - $ref: '#/components/schemas/DropdownFieldResponse'
-        discriminator:
-          propertyName: type
-          mapping:
-            toggle: '#/components/schemas/ToggleFieldResponse'
-            dropdown: '#/components/schemas/DropdownFieldResponse'
-    ToggleFieldRequest:
-      allOf:
-      - $ref: '#/components/schemas/CustomFieldRequest'
-      - type: object
-        properties:
-          value:
-            type: boolean
-    ToggleField:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Identifier of the toggle field.
-        value:
-          type: boolean
-    ToggleFieldResponse:
-      allOf:
-      - $ref: '#/components/schemas/CustomFieldResponse'
-      - type: object
-        properties:
-          value:
-            type: boolean
-            description: The boolean value of the toggle.
-    WorklogRequest_2:
-      type: object
-      required:
-      - startedAt
-      - duration
-      properties:
-        comment:
-          type: string
-          description: Description or notes about the worklog.
-        startedAt:
-          type: string
-          format: date-time
-          description: Date and time of starting work in the format YYYY-MM-DDTHH:mm:ss or YYYY-MM-DDTHH:mm:ss±hh:mm. If a timezone offset is provided, it will be ignored and the time will be treated as local time.
-          example: '2025-07-01T12:00:00'
-        assigneeId:
-          type: string
-          description: Identifier of the user assigned to the worklog. If not provided, the user creating the worklog will be assigned by default.
-          example: 5b20f3469bcd7518af217f81
-        duration:
-          type: integer
-          description: Duration of the work in seconds.
-          example: 3600
-        externalItemId:
-          type: string
-          description: The item id the worklog is associated with (jira work item, for example)
-          example: '423432'
-        customFields:
-          $ref: '#/components/schemas/CustomFieldsRequest'
-    WorklogResponse:
-      type: object
-      properties:
-        worklog:
-          $ref: '#/components/schemas/Worklog'
-    DropdownValueRequest:
-      type: object
-      properties:
-        id:
-          type: string
     Worklog:
       type: object
       properties:
@@ -1294,63 +1200,25 @@ components:
           type: string
         customFields:
           $ref: '#/components/schemas/CustomFields'
-    DropdownValueResponse:
-      type: object
-      description: Represents the selected option in a dropdown field.
-      properties:
-        id:
-          type: string
-          description: Identifier of the selected option.
-        name:
-          type: string
-          description: Name of the selected option.
-    Worklog_2:
+    DropdownField:
       type: object
       properties:
         id:
           type: string
-          format: uuid
-        comment:
+          description: Identifier of the dropdown field.
+        value:
+          type: array
+          items:
+            type: string
+            description: Selected option identifier for the dropdown field.
+    ToggleField:
+      type: object
+      properties:
+        id:
           type: string
-        startedAt:
-          type: string
-          format: date-time
-          example: '2025-07-15T09:30:11'
-        createdAt:
-          type: string
-          format: date-time
-        editedAt:
-          type: string
-          format: date-time
-        assigneeId:
-          type: string
-        authorId:
-          type: string
-        accountId:
-          type: string
-        editorId:
-          type: string
-        duration:
-          type: integer
-        isMigrated:
+          description: Identifier of the toggle field.
+        value:
           type: boolean
-          description: Indicates if the worklog is migrated.
-        externalItemId:
-          type: string
-        customFields:
-          $ref: '#/components/schemas/CustomFieldsResponse'
-    CustomFieldsRequest:
-      type: array
-      description: A list of user-defined fields for additional worklog data. Each field has a 'type' property that determines its structure and value.
-      items:
-        oneOf:
-        - $ref: '#/components/schemas/ToggleFieldRequest'
-        - $ref: '#/components/schemas/DropdownFieldRequest'
-        discriminator:
-          propertyName: type
-          mapping:
-            toggle: '#/components/schemas/ToggleFieldRequest'
-            dropdown: '#/components/schemas/DropdownFieldRequest'
     ChangedWorklog:
       type: object
       properties:
@@ -1389,60 +1257,6 @@ components:
           type: string
         customFields:
           $ref: '#/components/schemas/CustomFields'
-    DropdownField:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Identifier of the dropdown field.
-        value:
-          type: array
-          items:
-            type: string
-            description: Selected option identifier for the dropdown field.
-    CustomFieldResponse:
-      type: object
-      required:
-      - id
-      - type
-      - name
-      properties:
-        id:
-          type: string
-          description: Identifier of the custom field.
-        type:
-          type: string
-          description: The type of the custom field, which determines the structure of the 'value' property.
-        name:
-          type: string
-          description: Name of the custom field.
-    DropdownFieldResponse:
-      type: object
-      description: A custom field representing a single-select dropdown.
-      allOf:
-      - $ref: '#/components/schemas/CustomFieldResponse'
-      - type: object
-        properties:
-          value:
-            $ref: '#/components/schemas/DropdownValueResponse'
-    DropdownFieldRequest:
-      allOf:
-      - $ref: '#/components/schemas/CustomFieldRequest'
-      - type: object
-        properties:
-          value:
-            $ref: '#/components/schemas/DropdownValueRequest'
-    PageInfo:
-      type: object
-      properties:
-        hasNextPage:
-          type: boolean
-        hasPreviousPage:
-          type: boolean
-        startCursor:
-          type: string
-        endCursor:
-          type: string
     WorklogRequest:
       type: object
       required:
@@ -1471,6 +1285,220 @@ components:
           example: '423432'
         customFields:
           $ref: '#/components/schemas/CustomFields'
+    WorklogResponse:
+      type: object
+      properties:
+        worklog:
+          $ref: '#/components/schemas/Worklog'
+    PageInfo:
+      type: object
+      properties:
+        hasNextPage:
+          type: boolean
+        hasPreviousPage:
+          type: boolean
+        startCursor:
+          type: string
+        endCursor:
+          type: string
+    CustomFieldRequest:
+      type: object
+      description: A custom field representing a boolean toggle.
+      required:
+      - id
+      - type
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+    Worklog_2:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        comment:
+          type: string
+        startedAt:
+          type: string
+          format: date-time
+          example: '2025-07-15T09:30:11'
+        createdAt:
+          type: string
+          format: date-time
+        editedAt:
+          type: string
+          format: date-time
+        assigneeId:
+          type: string
+        authorId:
+          type: string
+        accountId:
+          type: string
+        editorId:
+          type: string
+        duration:
+          type: integer
+        isMigrated:
+          type: boolean
+          description: Indicates if the worklog is migrated.
+        externalItemId:
+          type: string
+        customFields:
+          $ref: '#/components/schemas/CustomFieldsResponse'
+    CustomFieldsResponse:
+      type: array
+      description: A list of user-defined fields for additional worklog data. Each field has a 'type' property that determines its structure and value.
+      items:
+        oneOf:
+        - $ref: '#/components/schemas/ToggleFieldResponse'
+        - $ref: '#/components/schemas/DropdownFieldResponse'
+        discriminator:
+          propertyName: type
+          mapping:
+            toggle: '#/components/schemas/ToggleFieldResponse'
+            dropdown: '#/components/schemas/DropdownFieldResponse'
+    CustomFieldResponse:
+      type: object
+      required:
+      - id
+      - type
+      - name
+      properties:
+        id:
+          type: string
+          description: Identifier of the custom field.
+        type:
+          type: string
+          description: The type of the custom field, which determines the structure of the 'value' property.
+        name:
+          type: string
+          description: Name of the custom field.
+    CustomFieldsRequest:
+      type: array
+      description: A list of user-defined fields for additional worklog data. Each field has a 'type' property that determines its structure and value.
+      items:
+        oneOf:
+        - $ref: '#/components/schemas/ToggleFieldRequest'
+        - $ref: '#/components/schemas/DropdownFieldRequest'
+        discriminator:
+          propertyName: type
+          mapping:
+            toggle: '#/components/schemas/ToggleFieldRequest'
+            dropdown: '#/components/schemas/DropdownFieldRequest'
+    DropdownValueRequest:
+      type: object
+      properties:
+        id:
+          type: string
+    ToggleFieldResponse:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldResponse'
+      - type: object
+        properties:
+          value:
+            type: boolean
+            description: The boolean value of the toggle.
+    ToggleFieldRequest:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldRequest'
+      - type: object
+        properties:
+          value:
+            type: boolean
+    DropdownFieldResponse:
+      type: object
+      description: A custom field representing a single-select dropdown.
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldResponse'
+      - type: object
+        properties:
+          value:
+            $ref: '#/components/schemas/DropdownValueResponse'
+    DropdownValueResponse:
+      type: object
+      description: Represents the selected option in a dropdown field.
+      properties:
+        id:
+          type: string
+          description: Identifier of the selected option.
+        name:
+          type: string
+          description: Name of the selected option.
+    DropdownFieldRequest:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldRequest'
+      - type: object
+        properties:
+          value:
+            $ref: '#/components/schemas/DropdownValueRequest'
+    ChangedWorklog_2:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        isDeleted:
+          type: boolean
+          description: Indicates if the worklog has been deleted.
+        isMigrated:
+          type: boolean
+          description: Indicates if the worklog is migrated.
+        comment:
+          type: string
+        startedAt:
+          type: string
+          format: date-time
+          example: '2025-07-15T09:30:11'
+        createdAt:
+          type: string
+          format: date-time
+        editedAt:
+          type: string
+          format: date-time
+        assigneeId:
+          type: string
+        authorId:
+          type: string
+        accountId:
+          type: string
+        editorId:
+          type: string
+        duration:
+          type: integer
+        externalItemId:
+          type: string
+        customFields:
+          $ref: '#/components/schemas/CustomFieldsResponse'
+    WorklogRequest_2:
+      type: object
+      required:
+      - startedAt
+      - duration
+      properties:
+        comment:
+          type: string
+          description: Description or notes about the worklog.
+        startedAt:
+          type: string
+          format: date-time
+          description: Date and time of starting work in the format YYYY-MM-DDTHH:mm:ss or YYYY-MM-DDTHH:mm:ss±hh:mm. If a timezone offset is provided, it will be ignored and the time will be treated as local time.
+          example: '2025-07-01T12:00:00'
+        assigneeId:
+          type: string
+          description: Identifier of the user assigned to the worklog. If not provided, the user creating the worklog will be assigned by default.
+          example: 5b20f3469bcd7518af217f81
+        duration:
+          type: integer
+          description: Duration of the work in seconds.
+          example: 3600
+        externalItemId:
+          type: string
+          description: The item id the worklog is associated with (jira work item, for example)
+          example: '423432'
+        customFields:
+          $ref: '#/components/schemas/CustomFieldsRequest'
   securitySchemes:
     bearer:
       type: http
