@@ -54,7 +54,7 @@ tags:
 - Work Management
 - Time Tracking
 - OKRs
-- Workflow-Automation
+- Workflow Automation
 - Azure DevOps
 - marketplace-apps
 - Document Workflow
@@ -72,6 +72,7 @@ tags_raw:
 - marketplace-apps
 - document-workflow
 - enterprise-software
+- Workflow-Automation
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
