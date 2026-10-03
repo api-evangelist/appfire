@@ -1153,17 +1153,25 @@ paths:
       description: Production API
 components:
   schemas:
-    DropdownField:
+    PageInfo:
+      type: object
+      properties:
+        hasNextPage:
+          type: boolean
+        hasPreviousPage:
+          type: boolean
+        startCursor:
+          type: string
+        endCursor:
+          type: string
+    ToggleField:
       type: object
       properties:
         id:
           type: string
-          description: Identifier of the dropdown field.
+          description: Identifier of the toggle field.
         value:
-          type: array
-          items:
-            type: string
-            description: Selected option identifier for the dropdown field.
+          type: boolean
     ChangedWorklog:
       type: object
       properties:
@@ -1202,29 +1210,11 @@ components:
           type: string
         customFields:
           $ref: '#/components/schemas/CustomFields'
-    CustomFields:
-      type: object
-      description: Custom fields represents user-defined fields for additional worklog data, such as toggles and dropdowns configured in application settings.
-      properties:
-        toggle:
-          type: array
-          items:
-            $ref: '#/components/schemas/ToggleField'
-        dropdown:
-          type: array
-          items:
-            $ref: '#/components/schemas/DropdownField'
-    PageInfo:
+    WorklogResponse:
       type: object
       properties:
-        hasNextPage:
-          type: boolean
-        hasPreviousPage:
-          type: boolean
-        startCursor:
-          type: string
-        endCursor:
-          type: string
+        worklog:
+          $ref: '#/components/schemas/Worklog'
     WorklogRequest:
       type: object
       required:
@@ -1253,14 +1243,29 @@ components:
           example: '423432'
         customFields:
           $ref: '#/components/schemas/CustomFields'
-    ToggleField:
+    DropdownField:
       type: object
       properties:
         id:
           type: string
-          description: Identifier of the toggle field.
+          description: Identifier of the dropdown field.
         value:
-          type: boolean
+          type: array
+          items:
+            type: string
+            description: Selected option identifier for the dropdown field.
+    CustomFields:
+      type: object
+      description: Custom fields represents user-defined fields for additional worklog data, such as toggles and dropdowns configured in application settings.
+      properties:
+        toggle:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToggleField'
+        dropdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/DropdownField'
     Worklog:
       type: object
       properties:
@@ -1296,20 +1301,24 @@ components:
           type: string
         customFields:
           $ref: '#/components/schemas/CustomFields'
-    WorklogResponse:
-      type: object
-      properties:
-        worklog:
-          $ref: '#/components/schemas/Worklog'
-    DropdownFieldResponse:
-      type: object
-      description: A custom field representing a single-select dropdown.
+    ToggleFieldResponse:
       allOf:
       - $ref: '#/components/schemas/CustomFieldResponse'
       - type: object
         properties:
           value:
-            $ref: '#/components/schemas/DropdownValueResponse'
+            type: boolean
+            description: The boolean value of the toggle.
+    DropdownValueResponse:
+      type: object
+      description: Represents the selected option in a dropdown field.
+      properties:
+        id:
+          type: string
+          description: Identifier of the selected option.
+        name:
+          type: string
+          description: Name of the selected option.
     CustomFieldRequest:
       type: object
       description: A custom field representing a boolean toggle.
@@ -1320,11 +1329,6 @@ components:
         id:
           type: string
         type:
-          type: string
-    DropdownValueRequest:
-      type: object
-      properties:
-        id:
           type: string
     ChangedWorklog_2:
       type: object
@@ -1364,6 +1368,13 @@ components:
           type: string
         customFields:
           $ref: '#/components/schemas/CustomFieldsResponse'
+    ToggleFieldRequest:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldRequest'
+      - type: object
+        properties:
+          value:
+            type: boolean
     WorklogRequest_2:
       type: object
       required:
@@ -1392,6 +1403,27 @@ components:
           example: '423432'
         customFields:
           $ref: '#/components/schemas/CustomFieldsRequest'
+    DropdownFieldResponse:
+      type: object
+      description: A custom field representing a single-select dropdown.
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldResponse'
+      - type: object
+        properties:
+          value:
+            $ref: '#/components/schemas/DropdownValueResponse'
+    CustomFieldsRequest:
+      type: array
+      description: A list of user-defined fields for additional worklog data. Each field has a 'type' property that determines its structure and value.
+      items:
+        oneOf:
+        - $ref: '#/components/schemas/ToggleFieldRequest'
+        - $ref: '#/components/schemas/DropdownFieldRequest'
+        discriminator:
+          propertyName: type
+          mapping:
+            toggle: '#/components/schemas/ToggleFieldRequest'
+            dropdown: '#/components/schemas/DropdownFieldRequest'
     CustomFieldResponse:
       type: object
       required:
@@ -1408,20 +1440,6 @@ components:
         name:
           type: string
           description: Name of the custom field.
-    DropdownFieldRequest:
-      allOf:
-      - $ref: '#/components/schemas/CustomFieldRequest'
-      - type: object
-        properties:
-          value:
-            $ref: '#/components/schemas/DropdownValueRequest'
-    ToggleFieldRequest:
-      allOf:
-      - $ref: '#/components/schemas/CustomFieldRequest'
-      - type: object
-        properties:
-          value:
-            type: boolean
     Worklog_2:
       type: object
       properties:
@@ -1457,28 +1475,18 @@ components:
           type: string
         customFields:
           $ref: '#/components/schemas/CustomFieldsResponse'
-    DropdownValueResponse:
+    DropdownFieldRequest:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldRequest'
+      - type: object
+        properties:
+          value:
+            $ref: '#/components/schemas/DropdownValueRequest'
+    DropdownValueRequest:
       type: object
-      description: Represents the selected option in a dropdown field.
       properties:
         id:
           type: string
-          description: Identifier of the selected option.
-        name:
-          type: string
-          description: Name of the selected option.
-    CustomFieldsRequest:
-      type: array
-      description: A list of user-defined fields for additional worklog data. Each field has a 'type' property that determines its structure and value.
-      items:
-        oneOf:
-        - $ref: '#/components/schemas/ToggleFieldRequest'
-        - $ref: '#/components/schemas/DropdownFieldRequest'
-        discriminator:
-          propertyName: type
-          mapping:
-            toggle: '#/components/schemas/ToggleFieldRequest'
-            dropdown: '#/components/schemas/DropdownFieldRequest'
     CustomFieldsResponse:
       type: array
       description: A list of user-defined fields for additional worklog data. Each field has a 'type' property that determines its structure and value.
@@ -1491,14 +1499,6 @@ components:
           mapping:
             toggle: '#/components/schemas/ToggleFieldResponse'
             dropdown: '#/components/schemas/DropdownFieldResponse'
-    ToggleFieldResponse:
-      allOf:
-      - $ref: '#/components/schemas/CustomFieldResponse'
-      - type: object
-        properties:
-          value:
-            type: boolean
-            description: The boolean value of the toggle.
   securitySchemes:
     bearer:
       type: http
