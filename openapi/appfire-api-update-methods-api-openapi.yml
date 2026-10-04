@@ -158,50 +158,6 @@ paths:
                 type: object
 components:
   schemas:
-    ApiUpdateObjectiveRequestSchema:
-      type: object
-      description: Objective update request. **status** values match the labels shown in Jira (in-progress set below).
-      properties:
-        objectiveId:
-          type: string
-          description: ID of the objective to add an update for
-        status:
-          type: string
-          description: 'New displayed status (in progress): NOT STARTED, ON TRACK, AT RISK, OFF TRACK'
-          enum:
-          - NOT STARTED
-          - ON TRACK
-          - AT RISK
-          - OFF TRACK
-        description:
-          type: string
-          description: Text shown on the created update
-      required:
-      - objectiveId
-    ApiUpdateKeyResultRequestSchema:
-      type: object
-      description: Key result update request. **status** uses displayed labels; **newValue** only for manual (non-auto) key results.
-      properties:
-        keyResultId:
-          type: string
-          description: ID of the key result to add an update for
-        status:
-          type: string
-          description: 'New displayed status: NOT STARTED, ON TRACK, AT RISK, OFF TRACK'
-          enum:
-          - NOT STARTED
-          - ON TRACK
-          - AT RISK
-          - OFF TRACK
-        newValue:
-          type: number
-          format: double
-          description: Progress value on this update (numeric). Omit for auto key results — their value comes from linked work items.
-        description:
-          type: string
-          description: Text shown on the created update
-      required:
-      - keyResultId
     ApiExportUpdate:
       type: object
       description: A status update for an objective or key result
@@ -275,6 +231,50 @@ components:
           - AUTO
           examples:
           - MANUAL
+    ApiUpdateKeyResultRequestSchema:
+      type: object
+      description: Key result update request. **status** uses displayed labels; **newValue** only for manual (non-auto) key results.
+      properties:
+        keyResultId:
+          type: string
+          description: ID of the key result to add an update for
+        status:
+          type: string
+          description: 'New displayed status: NOT STARTED, ON TRACK, AT RISK, OFF TRACK'
+          enum:
+          - NOT STARTED
+          - ON TRACK
+          - AT RISK
+          - OFF TRACK
+        newValue:
+          type: number
+          format: double
+          description: Progress value on this update (numeric). Omit for auto key results — their value comes from linked work items.
+        description:
+          type: string
+          description: Text shown on the created update
+      required:
+      - keyResultId
+    ApiUpdateObjectiveRequestSchema:
+      type: object
+      description: Objective update request. **status** values match the labels shown in Jira (in-progress set below).
+      properties:
+        objectiveId:
+          type: string
+          description: ID of the objective to add an update for
+        status:
+          type: string
+          description: 'New displayed status (in progress): NOT STARTED, ON TRACK, AT RISK, OFF TRACK'
+          enum:
+          - NOT STARTED
+          - ON TRACK
+          - AT RISK
+          - OFF TRACK
+        description:
+          type: string
+          description: Text shown on the created update
+      required:
+      - objectiveId
   securitySchemes:
     API-Token:
       type: apiKey
