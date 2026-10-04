@@ -1,0 +1,35 @@
+slug: appfire
+provider: Appfire
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: API query methods
+  spec_file: appfire-api-query-methods-api-openapi.yml
+  capability_id: BC-100.20
+  capability_id_l1: BC-100
+  capability_name: Strategy Execution Management
+  confidence: 0.82
+  evidence: '"REST API for integrating your OKR data (Objectives and Key Results)"; "Query objectives
+    by date range", schema ApiExportKeyResult'
+  reason: Operations expose Objectives and Key Results data — OKR tracking is strategy execution management
+    (translation of strategy into objectives, OKRs).
+- tag: API update methods
+  spec_file: appfire-api-update-methods-api-openapi.yml
+  capability_id: BC-100.20
+  capability_id_l1: BC-100
+  capability_name: Strategy Execution Management
+  confidence: 0.82
+  evidence: '"POST /api/v2/api-update/objectives  updateObjective  Update objective (create update)";
+    "Update key result"'
+  reason: Posting progress updates against objectives and key results is OKR execution tracking, i.e.
+    strategy execution management.
