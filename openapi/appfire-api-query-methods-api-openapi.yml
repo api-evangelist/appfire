@@ -467,6 +467,42 @@ paths:
                 type: object
 components:
   schemas:
+    ApiExportOkrType:
+      type: object
+      description: An OKR type definition
+      properties:
+        id:
+          type: string
+          description: Unique type identifier
+          examples:
+          - 6123abc000ee2b102e34fd04
+        name:
+          type: string
+          description: Type name
+          examples:
+          - Company OKR
+        backgroundColor:
+          type: string
+          description: Icon background color hex code
+          examples:
+          - '#4C9AFF'
+        textColor:
+          type: string
+          description: Icon text color hex code
+          examples:
+          - '#FFFFFF'
+    ApiExportBulkUpdateComments:
+      type: object
+      description: Paginated list of update comments
+      properties:
+        comments:
+          type: array
+          description: List of comments, newest first
+          items:
+            $ref: '#/components/schemas/ApiExportUpdateComment'
+        nextCursor:
+          type: string
+          description: Cursor for fetching the next page. Null when there are no more results.
     ApiExportLabel:
       type: object
       description: A label used to categorize OKRs
@@ -481,6 +517,154 @@ components:
           description: Label name
           examples:
           - High Priority
+    ApiExportUpdate:
+      type: object
+      description: A status update for an objective or key result
+      properties:
+        updateId:
+          type: string
+          description: Unique update identifier
+          examples:
+          - 6456a3b200ee2b102e34fdb9
+        entityId:
+          type: string
+          description: ID of the objective or key result this update belongs to
+          examples:
+          - 62334eac00ee2b102e34fdb7
+        status:
+          type: string
+          description: Status enum value
+          enum:
+          - ON_TRACK
+          - AT_RISK
+          - ACTION_REQUIRED
+          - NOT_STARTED
+          - SUCCESS
+          - FINISHED
+          - ASSUMPTIONS_CHANGED
+          - DELAYED
+          - CANCELED
+          - FAILED
+          - UNDEFINED
+          - MISSED_TARGET
+          examples:
+          - ON_TRACK
+        displayedStatus:
+          type: string
+          description: Human-readable status label
+          examples:
+          - On Track
+        created:
+          type: string
+          format: date-time
+          description: When the update was created
+          examples:
+          - 2024-02-15T14:30:00+0000
+        value:
+          type: number
+          format: double
+          description: Current progress value (key results only)
+          examples:
+          - 13500.5
+        description:
+          type: string
+          description: Update description/comment text
+        startValue:
+          type: number
+          format: double
+          description: Start value of the progress range
+          examples:
+          - 0.0
+        desiredValue:
+          type: number
+          format: double
+          description: Target/desired value of the progress range
+          examples:
+          - 20000.0
+        source:
+          type: string
+          description: 'Origin of the update: MANUAL (UI), API (public API), or AUTO (system/linked issues)'
+          enum:
+          - MANUAL
+          - API
+          - AUTO
+          examples:
+          - MANUAL
+    ApiExportBulkUpdate:
+      type: object
+      description: Paginated list of updates
+      properties:
+        updates:
+          type: array
+          description: List of updates, newest first
+          items:
+            $ref: '#/components/schemas/ApiExportUpdate'
+        nextCursor:
+          type: string
+          description: Cursor for fetching the next page. Null when there are no more results.
+    ApiExportUpdateComment:
+      type: object
+      description: A comment on an update
+      properties:
+        commentId:
+          type: string
+          description: Unique comment identifier
+          examples:
+          - 6456a3b200ee2b102e34fdba
+        updateId:
+          type: string
+          description: ID of the update this comment belongs to
+          examples:
+          - 6456a3b200ee2b102e34fdb9
+        text:
+          type: string
+          description: Comment text content
+        authorAccountId:
+          type: string
+          description: Jira account ID of the comment author
+          examples:
+          - 557058:5aedf933-2312-40bc-b328-0c21314167f0
+        replyToCommentId:
+          type: string
+          description: ID of the comment this is a reply to, if threaded
+        created:
+          type: string
+          format: date-time
+          description: When the comment was created
+          examples:
+          - 2024-02-15T14:30:00+0000
+        lastEdited:
+          type: string
+          format: date-time
+          description: When the comment was last edited
+          examples:
+          - 2024-02-15T15:00:00+0000
+    ApiExportPeriodAlias:
+      type: object
+      description: A time period for OKRs
+      properties:
+        id:
+          type: string
+          description: Unique period identifier
+          examples:
+          - 6123abc000ee2b102e34fd03
+        name:
+          type: string
+          description: Period name
+          examples:
+          - Q1 2024
+        startDate:
+          type: string
+          format: date-time
+          description: Period start date
+          examples:
+          - 2024-01-01T00:00:00+0000
+        deadline:
+          type: string
+          format: date-time
+          description: Period end date
+          examples:
+          - 2024-03-31T23:59:59+0000
     ApiExportKeyResult:
       type: object
       description: A key result linked to an objective
@@ -597,118 +781,36 @@ components:
           type: object
           additionalProperties: {}
           description: Custom field values keyed by field ID. Only includes fields that are visible (not hidden or deleted). Expand CUSTOM_FIELDS to receive field definitions (id, name, type, etc.) as a lookup.
-    ApiExportUpdateComment:
+    ApiExportUnit:
       type: object
-      description: A comment on an update
+      description: Unit of measurement for key result progress
       properties:
-        commentId:
+        name:
           type: string
-          description: Unique comment identifier
+          description: Unit name
           examples:
-          - 6456a3b200ee2b102e34fdba
-        updateId:
+          - Currency
+        symbol:
           type: string
-          description: ID of the update this comment belongs to
+          description: Unit symbol
           examples:
-          - 6456a3b200ee2b102e34fdb9
-        text:
-          type: string
-          description: Comment text content
-        authorAccountId:
-          type: string
-          description: Jira account ID of the comment author
-          examples:
-          - 557058:5aedf933-2312-40bc-b328-0c21314167f0
-        replyToCommentId:
-          type: string
-          description: ID of the comment this is a reply to, if threaded
-        created:
-          type: string
-          format: date-time
-          description: When the comment was created
-          examples:
-          - 2024-02-15T14:30:00+0000
-        lastEdited:
-          type: string
-          format: date-time
-          description: When the comment was last edited
-          examples:
-          - 2024-02-15T15:00:00+0000
-    ApiExportCustomField:
+          - $
+    ApiExportTeam:
       type: object
-      description: Custom field definition
+      description: A team linked to objectives or key results in this export payload
       properties:
         id:
           type: string
-          description: Unique identifier of the custom field
+          description: Team identifier. Matches the corresponding **teamIds** entry on objectives and key results in this response. For additional team properties, use the **Teams** API documented in the BigPicture developer documentation.
+          examples:
+          - '2'
+          - '7'
+          - '11'
         name:
           type: string
-          description: User-facing label for the field
-        type:
-          type: string
-          description: Data type of the custom field
-          enum:
-          - TEXT
-          - NUMBER
-          - HYPERLINK
-          - SELECT
-          - MULTI_SELECT
-          - USER
-          - DATE
-        applicableGoalTypes:
-          type: array
-          description: Goal types this field applies to
-          items:
-            type: string
-            enum:
-            - OBJECTIVE
-            - KEY_RESULT
-          uniqueItems: true
-        description:
-          type: string
-          description: Description of the field's purpose
-        selectOptions:
-          type: array
-          description: Available options for SELECT and MULTI_SELECT fields
-          items:
-            type: string
-        multipleUsers:
-          type: boolean
-          description: Whether multiple users can be selected (USER type only)
-        maxLength:
-          type: integer
-          format: int32
-          description: Maximum length for TEXT fields
-        displayOrder:
-          type: integer
-          format: int32
-          description: Display order in the UI
-    ApiExportPeriodAlias:
-      type: object
-      description: A time period for OKRs
-      properties:
-        id:
-          type: string
-          description: Unique period identifier
+          description: Team name
           examples:
-          - 6123abc000ee2b102e34fd03
-        name:
-          type: string
-          description: Period name
-          examples:
-          - Q1 2024
-        startDate:
-          type: string
-          format: date-time
-          description: Period start date
-          examples:
-          - 2024-01-01T00:00:00+0000
-        deadline:
-          type: string
-          format: date-time
-          description: Period end date
-          examples:
-          - 2024-03-31T23:59:59+0000
+          - Engineering
     ApiExportProgressDefinition:
       type: object
       description: Progress tracking definition for a key result
@@ -736,196 +838,6 @@ components:
         jql:
           type: string
           description: JQL query for auto key results (null for standard key results)
-    ApiExportUpdate:
-      type: object
-      description: A status update for an objective or key result
-      properties:
-        updateId:
-          type: string
-          description: Unique update identifier
-          examples:
-          - 6456a3b200ee2b102e34fdb9
-        entityId:
-          type: string
-          description: ID of the objective or key result this update belongs to
-          examples:
-          - 62334eac00ee2b102e34fdb7
-        status:
-          type: string
-          description: Status enum value
-          enum:
-          - ON_TRACK
-          - AT_RISK
-          - ACTION_REQUIRED
-          - NOT_STARTED
-          - SUCCESS
-          - FINISHED
-          - ASSUMPTIONS_CHANGED
-          - DELAYED
-          - CANCELED
-          - FAILED
-          - UNDEFINED
-          - MISSED_TARGET
-          examples:
-          - ON_TRACK
-        displayedStatus:
-          type: string
-          description: Human-readable status label
-          examples:
-          - On Track
-        created:
-          type: string
-          format: date-time
-          description: When the update was created
-          examples:
-          - 2024-02-15T14:30:00+0000
-        value:
-          type: number
-          format: double
-          description: Current progress value (key results only)
-          examples:
-          - 13500.5
-        description:
-          type: string
-          description: Update description/comment text
-        startValue:
-          type: number
-          format: double
-          description: Start value of the progress range
-          examples:
-          - 0.0
-        desiredValue:
-          type: number
-          format: double
-          description: Target/desired value of the progress range
-          examples:
-          - 20000.0
-        source:
-          type: string
-          description: 'Origin of the update: MANUAL (UI), API (public API), or AUTO (system/linked issues)'
-          enum:
-          - MANUAL
-          - API
-          - AUTO
-          examples:
-          - MANUAL
-    ApiExportBulkUpdateComments:
-      type: object
-      description: Paginated list of update comments
-      properties:
-        comments:
-          type: array
-          description: List of comments, newest first
-          items:
-            $ref: '#/components/schemas/ApiExportUpdateComment'
-        nextCursor:
-          type: string
-          description: Cursor for fetching the next page. Null when there are no more results.
-    ApiExportBulkUpdate:
-      type: object
-      description: Paginated list of updates
-      properties:
-        updates:
-          type: array
-          description: List of updates, newest first
-          items:
-            $ref: '#/components/schemas/ApiExportUpdate'
-        nextCursor:
-          type: string
-          description: Cursor for fetching the next page. Null when there are no more results.
-    ApiExportTeam:
-      type: object
-      description: A team linked to objectives or key results in this export payload
-      properties:
-        id:
-          type: string
-          description: Team identifier. Matches the corresponding **teamIds** entry on objectives and key results in this response. For additional team properties, use the **Teams** API documented in the BigPicture developer documentation.
-          examples:
-          - '2'
-          - '7'
-          - '11'
-        name:
-          type: string
-          description: Team name
-          examples:
-          - Engineering
-    ApiExportOkrType:
-      type: object
-      description: An OKR type definition
-      properties:
-        id:
-          type: string
-          description: Unique type identifier
-          examples:
-          - 6123abc000ee2b102e34fd04
-        name:
-          type: string
-          description: Type name
-          examples:
-          - Company OKR
-        backgroundColor:
-          type: string
-          description: Icon background color hex code
-          examples:
-          - '#4C9AFF'
-        textColor:
-          type: string
-          description: Icon text color hex code
-          examples:
-          - '#FFFFFF'
-    ApiExportData:
-      type: object
-      description: Response containing objectives and/or key results with optionally expanded related entities
-      properties:
-        okrs:
-          type: array
-          description: List of objectives
-          items:
-            $ref: '#/components/schemas/ApiExportObjective'
-        krs:
-          type: array
-          description: List of key results (included when expand contains KEY_RESULTS or OBJECTIVES)
-          items:
-            $ref: '#/components/schemas/ApiExportKeyResult'
-        teams:
-          type: array
-          description: Teams referenced by objectives and key results (included when **expand** contains **TEAMS**). Each **id** matches the corresponding **teamIds** entry. For more team fields, use the **Teams** API documented in the BigPicture developer documentation.
-          items:
-            $ref: '#/components/schemas/ApiExportTeam'
-        periods:
-          type: array
-          description: List of periods (included when expand contains PERIODS)
-          items:
-            $ref: '#/components/schemas/ApiExportPeriodAlias'
-        labels:
-          type: array
-          description: List of labels (included when expand contains LABELS)
-          items:
-            $ref: '#/components/schemas/ApiExportLabel'
-        okrTypes:
-          type: array
-          description: List of OKR types (included when expand contains TYPES)
-          items:
-            $ref: '#/components/schemas/ApiExportOkrType'
-        customFields:
-          type: array
-          description: List of custom field definitions (included when expand contains CUSTOM_FIELDS)
-          items:
-            $ref: '#/components/schemas/ApiExportCustomField'
-    ApiExportUnit:
-      type: object
-      description: Unit of measurement for key result progress
-      properties:
-        name:
-          type: string
-          description: Unit name
-          examples:
-          - Currency
-        symbol:
-          type: string
-          description: Unit symbol
-          examples:
-          - $
     ApiExportObjective:
       type: object
       description: An OKR objective
@@ -1055,6 +967,94 @@ components:
           type: object
           additionalProperties: {}
           description: Custom field values keyed by field ID. Only includes fields that are visible (not hidden or deleted). Expand CUSTOM_FIELDS to receive field definitions (id, name, type, etc.) as a lookup.
+    ApiExportCustomField:
+      type: object
+      description: Custom field definition
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the custom field
+        name:
+          type: string
+          description: User-facing label for the field
+        type:
+          type: string
+          description: Data type of the custom field
+          enum:
+          - TEXT
+          - NUMBER
+          - HYPERLINK
+          - SELECT
+          - MULTI_SELECT
+          - USER
+          - DATE
+        applicableGoalTypes:
+          type: array
+          description: Goal types this field applies to
+          items:
+            type: string
+            enum:
+            - OBJECTIVE
+            - KEY_RESULT
+          uniqueItems: true
+        description:
+          type: string
+          description: Description of the field's purpose
+        selectOptions:
+          type: array
+          description: Available options for SELECT and MULTI_SELECT fields
+          items:
+            type: string
+        multipleUsers:
+          type: boolean
+          description: Whether multiple users can be selected (USER type only)
+        maxLength:
+          type: integer
+          format: int32
+          description: Maximum length for TEXT fields
+        displayOrder:
+          type: integer
+          format: int32
+          description: Display order in the UI
+    ApiExportData:
+      type: object
+      description: Response containing objectives and/or key results with optionally expanded related entities
+      properties:
+        okrs:
+          type: array
+          description: List of objectives
+          items:
+            $ref: '#/components/schemas/ApiExportObjective'
+        krs:
+          type: array
+          description: List of key results (included when expand contains KEY_RESULTS or OBJECTIVES)
+          items:
+            $ref: '#/components/schemas/ApiExportKeyResult'
+        teams:
+          type: array
+          description: Teams referenced by objectives and key results (included when **expand** contains **TEAMS**). Each **id** matches the corresponding **teamIds** entry. For more team fields, use the **Teams** API documented in the BigPicture developer documentation.
+          items:
+            $ref: '#/components/schemas/ApiExportTeam'
+        periods:
+          type: array
+          description: List of periods (included when expand contains PERIODS)
+          items:
+            $ref: '#/components/schemas/ApiExportPeriodAlias'
+        labels:
+          type: array
+          description: List of labels (included when expand contains LABELS)
+          items:
+            $ref: '#/components/schemas/ApiExportLabel'
+        okrTypes:
+          type: array
+          description: List of OKR types (included when expand contains TYPES)
+          items:
+            $ref: '#/components/schemas/ApiExportOkrType'
+        customFields:
+          type: array
+          description: List of custom field definitions (included when expand contains CUSTOM_FIELDS)
+          items:
+            $ref: '#/components/schemas/ApiExportCustomField'
   securitySchemes:
     API-Token:
       type: apiKey

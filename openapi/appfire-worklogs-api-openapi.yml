@@ -1153,41 +1153,6 @@ paths:
       description: Production API
 components:
   schemas:
-    Worklog:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        comment:
-          type: string
-        startedAt:
-          type: string
-          format: date-time
-          example: '2025-07-15T09:30:11'
-        createdAt:
-          type: string
-          format: date-time
-        editedAt:
-          type: string
-          format: date-time
-        assigneeId:
-          type: string
-        authorId:
-          type: string
-        accountId:
-          type: string
-        editorId:
-          type: string
-        duration:
-          type: integer
-        isMigrated:
-          type: boolean
-          description: Indicates if the worklog is migrated.
-        externalItemId:
-          type: string
-        customFields:
-          $ref: '#/components/schemas/CustomFields'
     ChangedWorklog:
       type: object
       properties:
@@ -1226,22 +1191,52 @@ components:
           type: string
         customFields:
           $ref: '#/components/schemas/CustomFields'
-    DropdownField:
+    Worklog:
       type: object
       properties:
         id:
           type: string
-          description: Identifier of the dropdown field.
-        value:
-          type: array
-          items:
-            type: string
-            description: Selected option identifier for the dropdown field.
-    WorklogResponse:
+          format: uuid
+        comment:
+          type: string
+        startedAt:
+          type: string
+          format: date-time
+          example: '2025-07-15T09:30:11'
+        createdAt:
+          type: string
+          format: date-time
+        editedAt:
+          type: string
+          format: date-time
+        assigneeId:
+          type: string
+        authorId:
+          type: string
+        accountId:
+          type: string
+        editorId:
+          type: string
+        duration:
+          type: integer
+        isMigrated:
+          type: boolean
+          description: Indicates if the worklog is migrated.
+        externalItemId:
+          type: string
+        customFields:
+          $ref: '#/components/schemas/CustomFields'
+    PageInfo:
       type: object
       properties:
-        worklog:
-          $ref: '#/components/schemas/Worklog'
+        hasNextPage:
+          type: boolean
+        hasPreviousPage:
+          type: boolean
+        startCursor:
+          type: string
+        endCursor:
+          type: string
     WorklogRequest:
       type: object
       required:
@@ -1290,17 +1285,29 @@ components:
           description: Identifier of the toggle field.
         value:
           type: boolean
-    PageInfo:
+    DropdownField:
       type: object
       properties:
-        hasNextPage:
-          type: boolean
-        hasPreviousPage:
-          type: boolean
-        startCursor:
+        id:
           type: string
-        endCursor:
-          type: string
+          description: Identifier of the dropdown field.
+        value:
+          type: array
+          items:
+            type: string
+            description: Selected option identifier for the dropdown field.
+    WorklogResponse:
+      type: object
+      properties:
+        worklog:
+          $ref: '#/components/schemas/Worklog'
+    DropdownFieldRequest:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldRequest'
+      - type: object
+        properties:
+          value:
+            $ref: '#/components/schemas/DropdownValueRequest'
     DropdownFieldResponse:
       type: object
       description: A custom field representing a single-select dropdown.
@@ -1310,75 +1317,6 @@ components:
         properties:
           value:
             $ref: '#/components/schemas/DropdownValueResponse'
-    Worklog_2:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        comment:
-          type: string
-        startedAt:
-          type: string
-          format: date-time
-          example: '2025-07-15T09:30:11'
-        createdAt:
-          type: string
-          format: date-time
-        editedAt:
-          type: string
-          format: date-time
-        assigneeId:
-          type: string
-        authorId:
-          type: string
-        accountId:
-          type: string
-        editorId:
-          type: string
-        duration:
-          type: integer
-        isMigrated:
-          type: boolean
-          description: Indicates if the worklog is migrated.
-        externalItemId:
-          type: string
-        customFields:
-          $ref: '#/components/schemas/CustomFieldsResponse'
-    ToggleFieldResponse:
-      allOf:
-      - $ref: '#/components/schemas/CustomFieldResponse'
-      - type: object
-        properties:
-          value:
-            type: boolean
-            description: The boolean value of the toggle.
-    CustomFieldResponse:
-      type: object
-      required:
-      - id
-      - type
-      - name
-      properties:
-        id:
-          type: string
-          description: Identifier of the custom field.
-        type:
-          type: string
-          description: The type of the custom field, which determines the structure of the 'value' property.
-        name:
-          type: string
-          description: Name of the custom field.
-    DropdownValueResponse:
-      type: object
-      description: Represents the selected option in a dropdown field.
-      properties:
-        id:
-          type: string
-          description: Identifier of the selected option.
-        name:
-          type: string
-          description: Name of the selected option.
     ChangedWorklog_2:
       type: object
       properties:
@@ -1417,11 +1355,52 @@ components:
           type: string
         customFields:
           $ref: '#/components/schemas/CustomFieldsResponse'
-    DropdownValueRequest:
+    CustomFieldRequest:
+      type: object
+      description: A custom field representing a boolean toggle.
+      required:
+      - id
+      - type
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+    Worklog_2:
       type: object
       properties:
         id:
           type: string
+          format: uuid
+        comment:
+          type: string
+        startedAt:
+          type: string
+          format: date-time
+          example: '2025-07-15T09:30:11'
+        createdAt:
+          type: string
+          format: date-time
+        editedAt:
+          type: string
+          format: date-time
+        assigneeId:
+          type: string
+        authorId:
+          type: string
+        accountId:
+          type: string
+        editorId:
+          type: string
+        duration:
+          type: integer
+        isMigrated:
+          type: boolean
+          description: Indicates if the worklog is migrated.
+        externalItemId:
+          type: string
+        customFields:
+          $ref: '#/components/schemas/CustomFieldsResponse'
     WorklogRequest_2:
       type: object
       required:
@@ -1450,6 +1429,28 @@ components:
           example: '423432'
         customFields:
           $ref: '#/components/schemas/CustomFieldsRequest'
+    ToggleFieldRequest:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldRequest'
+      - type: object
+        properties:
+          value:
+            type: boolean
+    DropdownValueRequest:
+      type: object
+      properties:
+        id:
+          type: string
+    DropdownValueResponse:
+      type: object
+      description: Represents the selected option in a dropdown field.
+      properties:
+        id:
+          type: string
+          description: Identifier of the selected option.
+        name:
+          type: string
+          description: Name of the selected option.
     CustomFieldsRequest:
       type: array
       description: A list of user-defined fields for additional worklog data. Each field has a 'type' property that determines its structure and value.
@@ -1462,31 +1463,30 @@ components:
           mapping:
             toggle: '#/components/schemas/ToggleFieldRequest'
             dropdown: '#/components/schemas/DropdownFieldRequest'
-    DropdownFieldRequest:
-      allOf:
-      - $ref: '#/components/schemas/CustomFieldRequest'
-      - type: object
-        properties:
-          value:
-            $ref: '#/components/schemas/DropdownValueRequest'
-    CustomFieldRequest:
+    CustomFieldResponse:
       type: object
-      description: A custom field representing a boolean toggle.
       required:
       - id
       - type
+      - name
       properties:
         id:
           type: string
+          description: Identifier of the custom field.
         type:
           type: string
-    ToggleFieldRequest:
+          description: The type of the custom field, which determines the structure of the 'value' property.
+        name:
+          type: string
+          description: Name of the custom field.
+    ToggleFieldResponse:
       allOf:
-      - $ref: '#/components/schemas/CustomFieldRequest'
+      - $ref: '#/components/schemas/CustomFieldResponse'
       - type: object
         properties:
           value:
             type: boolean
+            description: The boolean value of the toggle.
     CustomFieldsResponse:
       type: array
       description: A list of user-defined fields for additional worklog data. Each field has a 'type' property that determines its structure and value.
