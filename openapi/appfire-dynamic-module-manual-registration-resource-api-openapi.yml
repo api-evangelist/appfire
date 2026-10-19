@@ -1,0 +1,110 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Dynamic Module Manual Registration…
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: dynamic-module-manual-registration-resource
+paths:
+  /api/internal/jql-functions/register:
+    post:
+      tags:
+      - dynamic-module-manual-registration-resource
+      operationId: register
+      parameters:
+      - name: tenantIds
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: returnVerbose
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Register
+      x-summary-source: derived
+    delete:
+      tags:
+      - dynamic-module-manual-registration-resource
+      operationId: deregister
+      parameters:
+      - name: tenantIds
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: all
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: page
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: size
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Deregister
+      x-summary-source: derived
+  /api/internal/jql-functions/register/all:
+    post:
+      tags:
+      - dynamic-module-manual-registration-resource
+      operationId: register_1
+      parameters:
+      - name: returnVerbose
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: page
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: size
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Register 1
+      x-summary-source: derived

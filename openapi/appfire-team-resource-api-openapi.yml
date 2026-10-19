@@ -1,0 +1,276 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Team Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: team-resource
+paths:
+  /api/v2/team:
+    get:
+      tags:
+      - team-resource
+      operationId: getAll
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Team'
+      summary: Get all
+      x-summary-source: derived
+    post:
+      tags:
+      - team-resource
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamCreateInputBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Team'
+      summary: Create
+      x-summary-source: derived
+  /api/v2/team/{teamId}:
+    get:
+      tags:
+      - team-resource
+      operationId: getSingle_2
+      parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Team'
+      summary: Get single 2
+      x-summary-source: derived
+    delete:
+      tags:
+      - team-resource
+      operationId: delete
+      parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      summary: Delete
+      x-summary-source: derived
+    patch:
+      tags:
+      - team-resource
+      operationId: update_1
+      parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamUpdateInputBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Team'
+      summary: Update 1
+      x-summary-source: derived
+components:
+  schemas:
+    TeamCreateInputBean:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        fetchType:
+          type: string
+          enum:
+          - MANUAL
+          - JIRA_SYNC
+        memberAccountIdsWithRole:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountIdWithUserRole'
+        groupIdsWithRole:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupIdWithUserRole'
+        iconColors:
+          $ref: '#/components/schemas/IconColors'
+      required:
+      - fetchType
+      - groupIdsWithRole
+      - iconColors
+      - memberAccountIdsWithRole
+      - name
+    UserWithRole:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/JiraUser'
+        role:
+          type: string
+          enum:
+          - ADMIN
+          - MANAGER
+          - USER
+      required:
+      - role
+      - user
+    JiraUser:
+      type: object
+      properties:
+        id:
+          type: string
+        userName:
+          type: string
+        accountId:
+          type: string
+      required:
+      - accountId
+    AccountIdWithUserRole:
+      type: object
+      properties:
+        accountId:
+          type: string
+        role:
+          type: string
+          enum:
+          - ADMIN
+          - MANAGER
+          - USER
+      required:
+      - accountId
+      - role
+    GroupIdWithUserRole:
+      type: object
+      properties:
+        groupId:
+          type: string
+        role:
+          type: string
+          enum:
+          - ADMIN
+          - MANAGER
+          - USER
+      required:
+      - groupId
+      - role
+    Team:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        creator:
+          $ref: '#/components/schemas/JiraUser'
+        userFetchType:
+          type: string
+          enum:
+          - MANUAL
+          - JIRA_SYNC
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserWithRole'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupIdWithRole'
+        resolvedUserAccountIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserWithRole'
+        jiraSyncRunning:
+          type: boolean
+        dateOfLastSuccessfulSync:
+          type: string
+          format: date-time
+        iconColors:
+          $ref: '#/components/schemas/IconColors'
+      required:
+      - creator
+      - groups
+      - iconColors
+      - jiraSyncRunning
+      - members
+      - name
+      - resolvedUserAccountIds
+      - userFetchType
+    IconColors:
+      type: object
+      properties:
+        backgroundColor:
+          type: string
+          minLength: 1
+        textColor:
+          type: string
+          minLength: 1
+      required:
+      - backgroundColor
+      - textColor
+    TeamUpdateInputBean:
+      type: object
+      properties:
+        name:
+          type: string
+        fetchType:
+          type: string
+          enum:
+          - MANUAL
+          - JIRA_SYNC
+        memberAccountIdsWithRole:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountIdWithUserRole'
+        groupIdsWithRole:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupIdWithUserRole'
+        iconColors:
+          $ref: '#/components/schemas/IconColors'
+    GroupIdWithRole:
+      type: object
+      properties:
+        groupId:
+          type: string
+          minLength: 1
+        role:
+          type: string
+          enum:
+          - ADMIN
+          - MANAGER
+          - USER
+      required:
+      - groupId
+      - role

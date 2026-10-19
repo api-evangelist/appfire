@@ -1,0 +1,188 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Jql Function Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: jql-function-resource
+paths:
+  /api/jql-functions/issues-in-objectives:
+    post:
+      tags:
+      - jql-function-resource
+      operationId: issuesInObjectives
+      parameters:
+      - name: forgeContext
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/ForgeContext'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JqlFunctionInput'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JqlFunctionResponseBean'
+      summary: Issues in objectives
+      x-summary-source: derived
+  /api/jql-functions/issues-in-krs:
+    post:
+      tags:
+      - jql-function-resource
+      operationId: issuesInKr
+      parameters:
+      - name: forgeContext
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/ForgeContext'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JqlFunctionInput'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JqlFunctionResponseBean'
+      summary: Issues in kr
+      x-summary-source: derived
+components:
+  schemas:
+    JqlFunctionResponseBean:
+      type: object
+      properties:
+        jql:
+          type: string
+        error:
+          type: string
+        storeErrorAsPrecomputation:
+          type: boolean
+    ForgeContext:
+      type: object
+      properties:
+        forgeInvocationToken:
+          $ref: '#/components/schemas/ForgeInvocationToken'
+        license:
+          $ref: '#/components/schemas/ForgeLicense'
+        environmentId:
+          type: string
+        environmentType:
+          type: string
+        appId:
+          type: string
+        installationId:
+          type: string
+        cloudId:
+          type: string
+        siteUrl:
+          type: string
+        appShortId:
+          type: string
+        appVersion:
+          type: string
+        environmentShortId:
+          type: string
+    JsonNode: {}
+    ForgeLicense:
+      type: object
+      properties:
+        isActive:
+          type: boolean
+        billingPeriod:
+          type: string
+        capabilitySet:
+          type: string
+        ccpEntitlementId:
+          type: string
+        ccpEntitlementSlug:
+          type: string
+        isEvaluation:
+          type: boolean
+        subscriptionEndDate:
+          type: string
+        supportEntitlementNumber:
+          type: string
+        trialEndDate:
+          type: string
+        type:
+          type: string
+    JqlFunctionInput:
+      type: object
+      properties:
+        clause:
+          $ref: '#/components/schemas/JqlFunctionInputClause'
+        precomputationId:
+          type: string
+    ForgeInvocationToken:
+      type: object
+      properties:
+        app:
+          $ref: '#/components/schemas/ForgeApp'
+        context:
+          $ref: '#/components/schemas/JsonNode'
+        aud:
+          type: string
+        principal:
+          type: string
+        iss:
+          type: string
+    JqlFunctionInputClause:
+      type: object
+      properties:
+        field:
+          type: string
+        type:
+          type: array
+          items:
+            type: string
+        operator:
+          type: string
+        functionName:
+          type: string
+        arguments:
+          type: array
+          items:
+            type: string
+    ForgeAppModule:
+      type: object
+      properties:
+        type:
+          type: string
+        key:
+          type: string
+    ForgeEnvironment:
+      type: object
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+    ForgeApp:
+      type: object
+      properties:
+        id:
+          type: string
+        version:
+          type: string
+        apiBaseUrl:
+          type: string
+        installationId:
+          type: string
+        environment:
+          $ref: '#/components/schemas/ForgeEnvironment'
+        module:
+          $ref: '#/components/schemas/ForgeAppModule'

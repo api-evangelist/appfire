@@ -1,0 +1,313 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition UPS global role seed (internal) API
+  version: v0
+  description: Batch backfill of ADMIN/VIEWER role assignments to UPS.
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: UPS global role seed (internal)
+  description: Batch backfill of ADMIN/VIEWER role assignments to UPS.
+paths:
+  /api/internal/ups-global-role-seed/process:
+    post:
+      tags:
+      - UPS global role seed (internal)
+      summary: Seed UPS global role assignments for a tenant (chunked)
+      description: Call repeatedly until status is not IN_PROGRESS. The first chunk builds a frozen work queue; later chunks resume from progress.nextWorkItemIndex. See response fields for per-role metrics and issues.
+      operationId: processSeed
+      parameters:
+      - name: X-APPFIRE-M2M-AUTH-INSTALLATION-ID
+        in: header
+        description: Forge installation ID of the tenant
+        required: true
+        schema:
+          type: string
+      - name: maxWrites
+        in: query
+        description: Maximum UPS writes per request
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: force
+        in: query
+        description: Rebuild work queue and re-seed from current Mongo state
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: allowPartial
+        in: query
+        description: When true, persist completion marker even if status is COMPLETED_WITH_ERRORS
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Chunk processed, skipped, failed, or completed with no resolution issues
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UpsGlobalRoleSeedResponse'
+        '206':
+          description: All work items written but resolution issues remain (status COMPLETED_WITH_ERRORS)
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UpsGlobalRoleSeedResponse'
+components:
+  schemas:
+    SourceCounts:
+      type: object
+      description: Mongo RoleAssignment rows for one OKR global role at snapshot time.
+      properties:
+        mongoUserAssignments:
+          type: integer
+          format: int32
+          description: Assignments with entity type USER.
+        mongoTeamAssignments:
+          type: integer
+          format: int32
+          description: Assignments with entity type TEAM.
+    UpsRoleSeedResult:
+      type: object
+      description: Per-role snapshot, resolution metrics, chunk writes, and reported issues for one OKR global role.
+      properties:
+        okrRoleId:
+          type: string
+          description: OKR app-provided global role id.
+          examples:
+          - ADMIN
+          - VIEWER
+        upsRoleCode:
+          type: string
+          description: UPS role code used to resolve upsRoleId.
+          examples:
+          - OKRAD
+          - OKRVIEW
+        upsRoleId:
+          type: integer
+          format: int64
+          description: Numeric UPS role id used for assign calls; null if role id could not be resolved.
+        sourceCounts:
+          $ref: '#/components/schemas/SourceCounts'
+          description: Counts of Mongo RoleAssignment rows for this role before resolution.
+        resolutionCounts:
+          $ref: '#/components/schemas/ResolutionCounts'
+          description: How Mongo users and teams were mapped to UPS principals when the snapshot was built.
+        upsWrites:
+          $ref: '#/components/schemas/WriteCounts'
+          description: UPS assign outcomes for this role during the current HTTP request chunk.
+        issues:
+          type: array
+          description: Resolution or write issues for this role (capped at 50 entries per role in the response). Empty when none.
+          items:
+            $ref: '#/components/schemas/SeedIssue'
+    SeedTotals:
+      type: object
+      description: Aggregate UPS write and issue counts across both global roles for this response.
+      properties:
+        usersAttempted:
+          type: integer
+          format: int32
+          description: Total user assign work items (or chunk attempts while IN_PROGRESS).
+        usersSucceeded:
+          type: integer
+          format: int32
+          description: User assigns that succeeded.
+        usersFailed:
+          type: integer
+          format: int32
+          description: User assigns that failed.
+        groupsAttempted:
+          type: integer
+          format: int32
+          description: Total group assign work items (or chunk attempts while IN_PROGRESS).
+        groupsSucceeded:
+          type: integer
+          format: int32
+          description: Group assigns that succeeded.
+        groupsFailed:
+          type: integer
+          format: int32
+          description: Group assigns that failed.
+        issuesReported:
+          type: integer
+          format: int32
+          description: Number of issues listed under admin.issues and viewer.issues combined (each list capped at 50).
+    WriteCounts:
+      type: object
+      description: UPS assign API outcomes for one role during the current request chunk.
+      properties:
+        usersAttempted:
+          type: integer
+          format: int32
+          description: User assign operations attempted in this chunk.
+        usersSucceeded:
+          type: integer
+          format: int32
+          description: User assign operations that succeeded (including HTTP 409 treated as success).
+        usersFailed:
+          type: integer
+          format: int32
+          description: User assign operations that failed in this chunk.
+        groupsAttempted:
+          type: integer
+          format: int32
+          description: Group assign operations attempted in this chunk.
+        groupsSucceeded:
+          type: integer
+          format: int32
+          description: Group assign operations that succeeded (including HTTP 409 treated as success).
+        groupsFailed:
+          type: integer
+          format: int32
+          description: Group assign operations that failed in this chunk.
+    UpsGlobalRoleSeedResponse:
+      type: object
+      description: Result of one chunked call to the UPS global role seed worker for a tenant.
+      properties:
+        tenantId:
+          type: string
+          description: OKR tenant client key (same as HostInfo id).
+        status:
+          type: string
+          description: Overall outcome of this request; drives HTTP status and whether the worker should retry.
+          enum:
+          - COMPLETED
+          - COMPLETED_WITH_ERRORS
+          - SKIPPED_ALREADY_SEEDED
+          - SKIPPED_NO_ASSIGNMENTS
+          - FAILED
+          - IN_PROGRESS
+        startedAt:
+          type: string
+          format: date-time
+          description: When processing for this HTTP request started.
+          examples:
+          - 2026-09-04 07:30:04 UTC
+        completedAt:
+          type: string
+          format: date-time
+          description: When this HTTP response was assembled (end of the request).
+          examples:
+          - 2026-09-04 07:30:05 UTC
+        fullySeededAt:
+          type: string
+          format: date-time
+          description: Timestamp stored on HostInfo as upsGlobalRoleFullySeededAt when the seed is considered complete for this tenant. Null while IN_PROGRESS, on FAILED runs, or when COMPLETED_WITH_ERRORS without allowPartial. For SKIPPED_ALREADY_SEEDED, reflects the existing marker, not necessarily completedAt of this call.
+        markerPersisted:
+          type: boolean
+          description: True if upsGlobalRoleFullySeededAt was persisted during this request (COMPLETED, or COMPLETED_WITH_ERRORS with allowPartial=true). False for IN_PROGRESS, FAILED, skips, and failed-closed COMPLETED_WITH_ERRORS.
+        failureReason:
+          type: string
+          description: Human-readable failure reason when status is FAILED; null for successful or skipped outcomes.
+        progress:
+          $ref: '#/components/schemas/SeedProgress'
+          description: Chunk cursor for the frozen work queue. Present when a run exists or just finished; null when skipped (already seeded), failed before snapshot, or lock contention.
+        admin:
+          $ref: '#/components/schemas/UpsRoleSeedResult'
+          description: Snapshot and write details for the OKR Admin global role.
+        viewer:
+          $ref: '#/components/schemas/UpsRoleSeedResult'
+          description: Snapshot and write details for the OKR Viewer global role.
+        totals:
+          $ref: '#/components/schemas/SeedTotals'
+          description: Aggregate UPS write counters for this response. During IN_PROGRESS reflects only the current chunk; on terminal success statuses reflects all queued work items.
+    ResolutionCounts:
+      type: object
+      description: Resolution of Mongo users and teams into UPS user and group principals for one role.
+      properties:
+        directUsersResolved:
+          type: integer
+          format: int32
+          description: Direct USER assignments with a resolvable Jira account id.
+        directUsersSkippedUnknown:
+          type: integer
+          format: int32
+          description: Direct USER assignments whose JiraUser or account id could not be resolved.
+        teamsResolvedToGroup:
+          type: integer
+          format: int32
+          description: TEAM assignments resolved to a single Jira group id in BigPicture.
+        teamsResolvedToMembers:
+          type: integer
+          format: int32
+          description: TEAM assignments expanded to individual member account ids (no group).
+        teamsSkippedMissing:
+          type: integer
+          format: int32
+          description: TEAM assignments whose team id is missing from BigPicture global-team list.
+        teamsSkippedEmpty:
+          type: integer
+          format: int32
+          description: TEAM assignments with no group and no members.
+        upsUsersAfterDedup:
+          type: integer
+          format: int32
+          description: Distinct Atlassian account ids queued for UPS user assign after deduplication across direct users and team members.
+        upsGroupsAfterDedup:
+          type: integer
+          format: int32
+          description: Distinct Jira group ids queued for UPS group assign after team→group resolution.
+    SeedIssue:
+      type: object
+      description: A resolution or UPS write problem encountered while seeding one global role.
+      properties:
+        category:
+          type: string
+          description: Issue kind.
+          examples:
+          - UNKNOWN_USER
+          - TEAM_EMPTY
+          - TEAM_MISSING
+          - ROLE_ID_UNRESOLVED
+          - UPS_WRITE_FAILED
+        principalType:
+          type: string
+          description: Kind of principal affected.
+          examples:
+          - USER
+          - TEAM
+          - GROUP
+          - ROLE
+        principalId:
+          type: string
+          description: 'Principal identifier for the issue: RoleAssignment entityId for USER (Jira user id, not account id);
+
+            team id for TEAM; Jira group id for GROUP (e.g. UPS write failures); OKR global role id for ROLE;
+
+            null for some UPS_WRITE_FAILED USER rows.'
+        okrRoleId:
+          type: string
+          description: OKR app-provided global role id (ADMIN or VIEWER).
+        message:
+          type: string
+          description: Human-readable detail for operators.
+    SeedProgress:
+      type: object
+      description: Progress of the persisted seed run for chunked UPS writes.
+      properties:
+        seedRunId:
+          type: string
+          description: Identifier of this seed run (stored in UpsGlobalRoleSeedProgress).
+        nextWorkItemIndex:
+          type: integer
+          format: int32
+          description: Index of the next work item to process in the frozen queue (0-based).
+        numberOfTotalWorkItems:
+          type: integer
+          format: int32
+          description: Total number of UPS seed work items in the frozen queue for this run.
+        numberOfProcessedWorkItemsInThisRequest:
+          type: integer
+          format: int32
+          description: Work items successfully written to UPS during this HTTP request.
+        numberOfFailedWorkItemsInThisRequest:
+          type: integer
+          format: int32
+          description: Work items that failed UPS assign during this HTTP request.

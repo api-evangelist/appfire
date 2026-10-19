@@ -1,0 +1,155 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Key Result Linking API
+  version: v0
+  description: Manage links between OKR key results and BigPicture boxes. Linked entities contribute to auto key result progress calculation.
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: Key Result Linking
+  description: Manage links between OKR key results and BigPicture boxes. Linked entities contribute to auto key result progress calculation.
+paths:
+  /api/internal/kr/linked-entities/{progressEntityId}/progress:
+    put:
+      tags:
+      - Key Result Linking
+      summary: Update linked entity progress
+      description: Updates the progress value of a linked progress entity. Triggers recalculation of all auto key results linked to the updated entity. No-op if the progress value hasn't changed significantly (< 0.0001 delta).
+      operationId: updateLinkProgress
+      parameters:
+      - name: progressEntityId
+        in: path
+        description: Progress entity ID to update
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLinkProgressBean'
+        required: true
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Progress entity or link not found
+  /api/internal/kr/{keyResultId}/linked-entities:
+    post:
+      tags:
+      - Key Result Linking
+      summary: Link entities to key result
+      description: Creates links between external progress entities (BigPicture boxes) and an OKR key result. For auto key results, progress is recalculated based on linked entity weights.
+      operationId: createLinkToKr
+      parameters:
+      - name: keyResultId
+        in: path
+        description: Key result ID to link entities to
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLinkToKrBean'
+        required: true
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Key result not found
+  /api/internal/kr/{keyResultId}/linked-entities/{externalEntityId}:
+    delete:
+      tags:
+      - Key Result Linking
+      summary: Unlink entity from key result
+      description: Removes the link between a BigPicture box and an OKR key result. For auto key results, progress is recalculated after unlinking.
+      operationId: removeLinkToKR
+      parameters:
+      - name: keyResultId
+        in: path
+        description: Key result ID to unlink from
+        required: true
+        schema:
+          type: string
+      - name: externalEntityId
+        in: path
+        description: External entity ID (BigPicture box ID) to unlink
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Key result not found
+components:
+  schemas:
+    CreateLinkToKrBean:
+      type: object
+      description: Request to link progress entities to a key result
+      properties:
+        requestId:
+          type: string
+          description: Idempotency key for the request
+        updateTime:
+          type: string
+          format: date-time
+          description: Timestamp of the linking event (UNIX epoch milliseconds)
+        items:
+          type: array
+          description: List of entities to link
+          items:
+            $ref: '#/components/schemas/LinkItem'
+      required:
+      - items
+      - requestId
+      - updateTime
+    UpdateLinkProgressBean:
+      type: object
+      description: Request to update a linked entity's progress value
+      properties:
+        requestId:
+          type: string
+          description: Idempotency key for the request
+        updateTime:
+          type: string
+          format: date-time
+          description: Timestamp of the progress update (UNIX epoch milliseconds)
+        item:
+          $ref: '#/components/schemas/LinkItem'
+          description: The entity with updated progress
+      required:
+      - item
+      - requestId
+      - updateTime
+    LinkItem:
+      type: object
+      description: A progress entity to link or update
+      properties:
+        externalEntityId:
+          type: string
+          description: External entity identifier (e.g., BigPicture box ID)
+        type:
+          type: string
+          description: Type of progress entity
+          enum:
+          - JIRA_ISSUE
+          - JQL
+          - BP_BOX
+        progress:
+          type: number
+          format: double
+          description: Progress value as a fraction (0.0 to 1.0)
+          examples:
+          - 0.75
+        weight:
+          type: integer
+          format: int32
+          description: Weight for weighted progress aggregation
+          examples:
+          - 1
+      required:
+      - type

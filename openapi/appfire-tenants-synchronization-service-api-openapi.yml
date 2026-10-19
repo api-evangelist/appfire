@@ -1,0 +1,50 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Tenants Synchronization Service API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: tenants-synchronization-service
+paths:
+  /scheduled/synchronizeTenantTeams:
+    get:
+      tags:
+      - tenants-synchronization-service
+      operationId: synchronizeTenantTeams
+      responses:
+        '200':
+          description: OK
+      summary: Synchronize tenant teams
+      x-summary-source: derived
+  /scheduled/synchronizePredefinedEntities:
+    get:
+      tags:
+      - tenants-synchronization-service
+      operationId: synchronizePredefinedEntities
+      responses:
+        '200':
+          description: OK
+      summary: Synchronize predefined entities
+      x-summary-source: derived
+  /scheduled/synchronizeCurrentProgress:
+    get:
+      tags:
+      - tenants-synchronization-service
+      operationId: synchronizeCurrentProgress
+      responses:
+        '200':
+          description: OK
+      summary: Synchronize current progress
+      x-summary-source: derived
+  /scheduled/synchronizeAutoKRs:
+    get:
+      tags:
+      - tenants-synchronization-service
+      operationId: synchronizeAutoKRs
+      responses:
+        '200':
+          description: OK
+      summary: Synchronize auto KRs
+      x-summary-source: derived

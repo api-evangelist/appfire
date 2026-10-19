@@ -1,0 +1,130 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Test Setup Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: test-setup-resource
+paths:
+  /test/teardown:
+    get:
+      tags:
+      - test-setup-resource
+      operationId: teardown
+      parameters:
+      - name: e2eTenantId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Teardown
+      x-summary-source: derived
+  /test/setup:
+    get:
+      tags:
+      - test-setup-resource
+      operationId: setup
+      parameters:
+      - name: accountId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Setup
+      x-summary-source: derived
+  /test/seed/main:
+    get:
+      tags:
+      - test-setup-resource
+      operationId: seedMain
+      parameters:
+      - name: tenantIdToModify
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Seed main
+      x-summary-source: derived
+  /test/seed/export-import-roundtrip:
+    get:
+      tags:
+      - test-setup-resource
+      operationId: seedExportImportRoundtrip
+      parameters:
+      - name: tenantIdToModify
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Seed export import roundtrip
+      x-summary-source: derived
+  /test/clear-okr-data:
+    get:
+      tags:
+      - test-setup-resource
+      operationId: clearOkrData
+      parameters:
+      - name: tenantIdToModify
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Clear okr data
+      x-summary-source: derived
+  /test/clear-all:
+    get:
+      tags:
+      - test-setup-resource
+      operationId: clearAll
+      parameters:
+      - name: tenantIdToModify
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Clear all
+      x-summary-source: derived

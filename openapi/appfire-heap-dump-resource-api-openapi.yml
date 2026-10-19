@@ -1,0 +1,74 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Heap Dump Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: heap-dump-resource
+paths:
+  /heapdump/oom:
+    get:
+      tags:
+      - heap-dump-resource
+      operationId: bla
+      responses:
+        '200':
+          description: OK
+      summary: Bla
+      x-summary-source: derived
+    put:
+      tags:
+      - heap-dump-resource
+      operationId: bla_2
+      responses:
+        '200':
+          description: OK
+      summary: Bla 2
+      x-summary-source: derived
+    post:
+      tags:
+      - heap-dump-resource
+      operationId: bla_1
+      responses:
+        '200':
+          description: OK
+      summary: Bla 1
+      x-summary-source: derived
+    delete:
+      tags:
+      - heap-dump-resource
+      operationId: bla_3
+      responses:
+        '200':
+          description: OK
+      summary: Bla 3
+      x-summary-source: derived
+    options:
+      tags:
+      - heap-dump-resource
+      operationId: bla_6
+      responses:
+        '200':
+          description: OK
+      summary: Bla 6
+      x-summary-source: derived
+    head:
+      tags:
+      - heap-dump-resource
+      operationId: bla_5
+      responses:
+        '200':
+          description: OK
+      summary: Bla 5
+      x-summary-source: derived
+    patch:
+      tags:
+      - heap-dump-resource
+      operationId: bla_4
+      responses:
+        '200':
+          description: OK
+      summary: Bla 4
+      x-summary-source: derived

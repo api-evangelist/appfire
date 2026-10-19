@@ -1,0 +1,12 @@
+{
+ "url": "https://okr-ppm-prod.appfire.com/v3/api-docs",
+ "final": "https://okr-ppm-prod.appfire.com/v3/api-docs",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 248055,
+ "sha256": "63fefe06eb15acf6248d4aa2025f9388cd9152cf070363f61600e57b4a8a9772",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}

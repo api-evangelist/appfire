@@ -1,0 +1,307 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Activity Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: activity-resource
+paths:
+  /api/v2/activity/bulk:
+    post:
+      tags:
+      - activity-resource
+      operationId: getBulkActivities
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkActivityRequestBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkActivityResponseBean'
+      summary: Get bulk activities
+      x-summary-source: derived
+  /api/v2/activity/objective/{objectiveId}:
+    get:
+      tags:
+      - activity-resource
+      operationId: getActivitiesForObjective
+      parameters:
+      - name: objectiveId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: maxResults
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityControllerResult'
+      summary: Get activities for objective
+      x-summary-source: derived
+  /api/v2/activity/kr/{krId}:
+    get:
+      tags:
+      - activity-resource
+      operationId: getActivitiesForKr
+      parameters:
+      - name: krId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: maxResults
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityControllerResult'
+      summary: Get activities for kr
+      x-summary-source: derived
+components:
+  schemas:
+    ActivityBean:
+      type: object
+      properties:
+        id:
+          type: string
+        dateOfActivity:
+          type: string
+          format: date-time
+        entityType:
+          type: string
+          enum:
+          - OBJECTIVE
+          - KEY_RESULT
+          - ISSUE_CHANGES
+          - AUTO_KR
+        entityId:
+          type: string
+        isRestricted:
+          type: boolean
+          writeOnly: true
+        entityKey:
+          type: string
+        entityName:
+          type: string
+        entityOwner:
+          $ref: '#/components/schemas/JiraUser'
+        userAccountIdTriggeringEvent:
+          type:
+          - string
+          - 'null'
+        status:
+          type: string
+          enum:
+          - ON_TRACK
+          - AT_RISK
+          - ACTION_REQUIRED
+          - NOT_STARTED
+          - SUCCESS
+          - FINISHED
+          - ASSUMPTIONS_CHANGED
+          - DELAYED
+          - CANCELED
+          - FAILED
+          - UNDEFINED
+          - MISSED_TARGET
+        daysInStatus:
+          type: integer
+          format: int32
+        value:
+          type: number
+          format: double
+        changeFromLastUpdate:
+          type: number
+          format: double
+        unit:
+          $ref: '#/components/schemas/KeyResultUpdateUnit'
+        valuePercentage:
+          type: number
+          format: double
+        changeFromLastUpdatePercentage:
+          type: number
+          format: double
+        isDecreasing:
+          type: boolean
+        isFirst:
+          type: boolean
+        isClosed:
+          type: boolean
+        isCreated:
+          type: boolean
+        changes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Change'
+        okrType:
+          $ref: '#/components/schemas/ObjectiveType'
+        restricted:
+          type: boolean
+      required:
+      - dateOfActivity
+      - entityId
+      - entityType
+      - id
+    ActivityControllerResult:
+      type: object
+      properties:
+        activities:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActivityBean'
+        hasMore:
+          type: boolean
+        nextQueryDate:
+          type: string
+          format: date-time
+      required:
+      - activities
+    BulkActivityResponseBean:
+      type: object
+      properties:
+        krResults:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ActivityControllerResult'
+        objectiveResults:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ActivityControllerResult'
+      required:
+      - krResults
+      - objectiveResults
+    ObjectiveType:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        iconColors:
+          $ref: '#/components/schemas/ObjectiveTypeIconColors'
+        canOnlyBeAssignedDuringCreation:
+          type: boolean
+        customPrefix:
+          type: object
+          additionalProperties:
+            type: string
+        appProvided:
+          type: boolean
+        hidden:
+          type: boolean
+      required:
+      - name
+    JiraUser:
+      type: object
+      properties:
+        id:
+          type: string
+        userName:
+          type: string
+        accountId:
+          type: string
+      required:
+      - accountId
+    KeyResultUpdateUnit:
+      type: object
+      properties:
+        symbol:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - NUMERIC
+          - PERCENT
+          - CURRENCY
+        isSymbolBefore:
+          type: boolean
+          writeOnly: true
+        symbolBefore:
+          type: boolean
+      required:
+      - name
+      - symbol
+      - type
+    BulkActivityRequestBean:
+      type: object
+      properties:
+        krRequests:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActivityRequestBean'
+        objectiveRequests:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActivityRequestBean'
+    Change:
+      type: object
+      properties:
+        key:
+          type: string
+        removed:
+          type: boolean
+        created:
+          type: boolean
+        oldState:
+          type: string
+        oldStatusCategory:
+          type: string
+          enum:
+          - TODO
+          - IN_PROGRESS
+          - DONE
+          - UNDEFINED
+        newState:
+          type: string
+        newStateCategory:
+          type: string
+          enum:
+          - TODO
+          - IN_PROGRESS
+          - DONE
+          - UNDEFINED
+    ActivityRequestBean:
+      type: object
+      properties:
+        id:
+          type: string
+        maxResults:
+          type: integer
+          format: int32
+      required:
+      - id
+    ObjectiveTypeIconColors:
+      type: object
+      properties:
+        backgroundColor:
+          type: string
+        textColor:
+          type: string
+      required:
+      - backgroundColor
+      - textColor

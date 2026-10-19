@@ -1,0 +1,150 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition External Link Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: external-link-resource
+paths:
+  /api/external-links:
+    get:
+      tags:
+      - external-link-resource
+      operationId: getExternalLinks
+      parameters:
+      - name: okrId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: entityType
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - OBJECTIVE
+          - KEY_RESULT
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExternalLinkBean'
+      summary: Get external links
+      x-summary-source: derived
+    post:
+      tags:
+      - external-link-resource
+      operationId: createExternalLink
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalLinkBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ExternalLinkBean'
+      summary: Create external link
+      x-summary-source: derived
+  /api/external-links/{externalLinkId}:
+    delete:
+      tags:
+      - external-link-resource
+      operationId: deleteExternalLink
+      parameters:
+      - name: externalLinkId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      summary: Delete external link
+      x-summary-source: derived
+    patch:
+      tags:
+      - external-link-resource
+      operationId: updateExternalLink
+      parameters:
+      - name: externalLinkId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalLinkUpdateInputBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ExternalLinkBean'
+      summary: Update external link
+      x-summary-source: derived
+components:
+  schemas:
+    ExternalLinkBean:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+          minLength: 0
+        url:
+          type: string
+          minLength: 1
+        ownerAccountId:
+          type:
+          - string
+          - 'null'
+        entityType:
+          type: string
+          enum:
+          - OBJECTIVE
+          - KEY_RESULT
+        okrId:
+          type: string
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - entityType
+      - okrId
+      - title
+      - url
+    ExternalLinkUpdateInputBean:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 255
+          minLength: 0
+        url:
+          type: string
+          minLength: 1
+        ownerAccountId:
+          type: string
+      required:
+      - title
+      - url

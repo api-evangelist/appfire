@@ -1,0 +1,124 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition API Token Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: api-token-resource
+paths:
+  /api/v2/auth/token/revoke:
+    post:
+      tags:
+      - api-token-resource
+      operationId: revoke
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTokenRevocationBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+      summary: Revoke
+      x-summary-source: derived
+  /api/v2/auth/token/rename:
+    post:
+      tags:
+      - api-token-resource
+      operationId: rename
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTokenRenameBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+      summary: Rename
+      x-summary-source: derived
+  /api/v2/auth/token/generate:
+    post:
+      tags:
+      - api-token-resource
+      operationId: generateToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTokenCreationBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+      summary: Generate token
+      x-summary-source: derived
+  /api/v2/auth/token/list:
+    get:
+      tags:
+      - api-token-resource
+      operationId: listTokens
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+      summary: List tokens
+      x-summary-source: derived
+  /api/v2/auth/token/list/admin:
+    get:
+      tags:
+      - api-token-resource
+      operationId: getAdminTableTokens
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+      summary: Get admin table tokens
+      x-summary-source: derived
+components:
+  schemas:
+    ApiTokenRenameBean:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
+    ApiTokenRevocationBean:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+      - id
+    ApiTokenCreationBean:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+      - name

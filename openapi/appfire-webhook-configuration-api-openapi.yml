@@ -1,0 +1,66 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Webhook Configuration API
+  version: v0
+  description: Configure webhook target URLs for receiving OKR change notifications. Used by BigPicture to register its callback endpoint for real-time OKR synchronization.
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: Webhook Configuration
+  description: Configure webhook target URLs for receiving OKR change notifications. Used by BigPicture to register its callback endpoint for real-time OKR synchronization.
+paths:
+  /api/internal/admin/webhook/target:
+    post:
+      tags:
+      - Webhook Configuration
+      summary: Set webhook target URL
+      description: Registers or updates the webhook callback URL for a tenant. When set, OKR changes will be pushed to this URL. Set webhookTargetUrl to null to disable webhook notifications.
+      operationId: update
+      parameters:
+      - name: X-APPFIRE-M2M-AUTH-INSTALLATION-ID
+        in: header
+        description: Forge installation ID of the tenant
+        required: false
+        schema:
+          type: string
+      - name: X-APPFIRE-M2M-AUTH-CLOUD-ID
+        in: header
+        description: Atlassian Cloud site ID
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HostToWebhookTargetUrl'
+        required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Missing or invalid Forge installation ID header
+        '500':
+          description: Host or HostInfo not found for installation ID
+components:
+  schemas:
+    HostToWebhookTargetUrl:
+      type: object
+      description: Webhook target URL configuration
+      properties:
+        instanceUrl:
+          type: string
+          deprecated: true
+          description: Jira Cloud instance URL (deprecated, use installationId header instead)
+          examples:
+          - https://mysite.atlassian.net
+        webhookTargetUrl:
+          type:
+          - string
+          - 'null'
+          description: Callback URL to receive OKR change notifications, or null to disable
+          examples:
+          - https://bigpicture.example.com/webhooks/okr-changes
+      required:
+      - instanceUrl

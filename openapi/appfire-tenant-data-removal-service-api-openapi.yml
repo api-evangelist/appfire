@@ -1,0 +1,24 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Tenant Data Removal Service API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: tenant-data-removal-service
+paths:
+  /scheduled/remove-inactive-data:
+    get:
+      tags:
+      - tenant-data-removal-service
+      operationId: removeDataOfOldTenants
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Remove data of old tenants
+      x-summary-source: derived

@@ -1,0 +1,80 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Permissions API
+  version: v0
+  description: Check user permissions on OKR objectives and key results. Returns the granted permissions (VIEW, EDIT) for each requested entity based on the user's access restrictions.
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: Permissions
+  description: Check user permissions on OKR objectives and key results. Returns the granted permissions (VIEW, EDIT) for each requested entity based on the user's access restrictions.
+paths:
+  /api/v2/spm/permission:
+    post:
+      tags:
+      - Permissions
+      summary: Check OKR permissions
+      description: Checks the requesting user's view and edit permissions on a set of objectives and/or key results. Entities the user has no access to are omitted from the response.
+      operationId: checkPermissions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckPermissionRequestBean'
+        required: true
+      responses:
+        '200':
+          description: Permissions response
+          content:
+            application/json:
+              schema:
+                type: object
+        '403':
+          description: Request not from SPM
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/internal/okrs/permissions:
+    post:
+      tags:
+      - Permissions
+      summary: Check OKR permissions
+      description: Checks the requesting user's view and edit permissions on a set of objectives and/or key results. Entities the user has no access to are omitted from the response.
+      operationId: checkPermissions_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckPermissionRequestBean'
+        required: true
+      responses:
+        '200':
+          description: Permissions response
+          content:
+            application/json:
+              schema:
+                type: object
+        '403':
+          description: Request not from SPM
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  schemas:
+    CheckPermissionRequestBean:
+      type: object
+      description: Request to check permissions on objectives and/or key results
+      properties:
+        okrs:
+          type: array
+          description: List of objective IDs to check permissions for
+          items:
+            type: string
+        krs:
+          type: array
+          description: List of key result IDs to check permissions for
+          items:
+            type: string

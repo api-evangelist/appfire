@@ -1,0 +1,265 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Permissions Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: permissions-resource
+paths:
+  /api/v2/settings/permissions/basic/swap:
+    post:
+      tags:
+      - permissions-resource
+      operationId: swapBasicSetting
+      parameters:
+      - name: settingKey
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - FULL_ACCESS
+          - GLOBAL_SETTINGS_CONTROL
+          - EDITING_CONTROL
+          - GLOBAL_SETTINGS_AND_EDITING_CONTROL
+          - ADVANCED_SETUP
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Swap basic setting
+      x-summary-source: derived
+  /api/v2/settings/permissions/basic/editUsers:
+    post:
+      tags:
+      - permissions-resource
+      operationId: editBasicUsers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeMembersBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Edit basic users
+      x-summary-source: derived
+  /api/v2/settings/permissions/advanced/roles/edit:
+    post:
+      tags:
+      - permissions-resource
+      operationId: updateExistingRole
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditRoleAssignmentTableItemBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Update existing role
+      x-summary-source: derived
+  /api/v2/settings/permissions/advanced/roles/delete:
+    post:
+      tags:
+      - permissions-resource
+      operationId: deleteExistingRole
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditRoleAssignmentTableItemBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Delete existing role
+      x-summary-source: derived
+  /api/v2/settings/permissions/advanced/roles/create:
+    post:
+      tags:
+      - permissions-resource
+      operationId: createCustomRole
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditRoleAssignmentTableItemBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Create custom role
+      x-summary-source: derived
+  /api/v2/settings/permissions/advanced/permission/change:
+    post:
+      tags:
+      - permissions-resource
+      operationId: updatePermissionRoleAssignment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePermissionAssignmentBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Update permission role assignment
+      x-summary-source: derived
+  /api/v2/settings/permissions/advanced/ownership:
+    post:
+      tags:
+      - permissions-resource
+      operationId: setContextRoleConfiguration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OwnerShipBasedRolesConfigurationBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Set context role configuration
+      x-summary-source: derived
+  /api/v2/settings/permissions/basic:
+    get:
+      tags:
+      - permissions-resource
+      operationId: getBasicSettings
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Get basic settings
+      x-summary-source: derived
+  /api/v2/settings/permissions/advanced:
+    get:
+      tags:
+      - permissions-resource
+      operationId: getAdvancedSettings
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Get advanced settings
+      x-summary-source: derived
+components:
+  schemas:
+    OwnerShipBasedRolesConfigurationBean:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        managerOn:
+          type: boolean
+        ownerOn:
+          type: boolean
+        collaboratorOn:
+          type: boolean
+        teamMemberOn:
+          type: boolean
+      required:
+      - collaboratorOn
+      - enabled
+      - managerOn
+      - ownerOn
+      - teamMemberOn
+    ChangeMembersBean:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - GLOBAL_SETTINGS
+          - EDITING_CONTROL
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserOrTeam'
+      required:
+      - members
+      - type
+    EditRoleAssignmentTableItemBean:
+      type: object
+      properties:
+        roleId:
+          type: string
+        roleName:
+          type: string
+        defaultRole:
+          type: boolean
+        userOrTeams:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserOrTeam'
+      required:
+      - defaultRole
+      - roleId
+      - roleName
+      - userOrTeams
+    UserOrTeam:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - USER
+          - TEAM
+      required:
+      - type
+    ChangePermissionAssignmentBean:
+      type: object
+      properties:
+        roleId:
+          type: string
+        permissionKeys:
+          type: array
+          items:
+            type: string
+        checked:
+          type: boolean
+      required:
+      - checked
+      - permissionKeys
+      - roleId

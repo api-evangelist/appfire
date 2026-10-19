@@ -1,0 +1,24 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Addon Descriptor Controller API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: addon-descriptor-controller
+paths:
+  /atlassian-connect.json:
+    get:
+      tags:
+      - addon-descriptor-controller
+      operationId: getDescriptor
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+      summary: Get descriptor
+      x-summary-source: derived

@@ -1,0 +1,29 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Data Retention API
+  version: v0
+  description: Appfire Data Retention Service (DRS) v2 integration. Handles tenant data cleanup when a tenant's data retention period expires after license expiration or app uninstall.
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: Data Retention
+  description: Appfire Data Retention Service (DRS) v2 integration. Handles tenant data cleanup when a tenant's data retention period expires after license expiration or app uninstall.
+paths:
+  /api/internal/drs/tenants:
+    delete:
+      tags:
+      - Data Retention
+      summary: Delete tenant data
+      description: Called by the Data Retention Service when a tenant's data retention period expires (typically 90 days after license expiration). Idempotent — safe to call multiple times for the same tenant. Currently returns 202 Accepted without performing actual deletion (pending full rollout).
+      operationId: deleteTenantData
+      parameters:
+      - name: tenantId
+        in: query
+        description: Forge installation ID of the tenant whose data should be deleted
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Request acknowledged

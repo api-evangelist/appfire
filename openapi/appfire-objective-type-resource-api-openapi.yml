@@ -1,0 +1,300 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Objective Type Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: objective-type-resource
+paths:
+  /api/v2/objectiveType:
+    get:
+      tags:
+      - objective-type-resource
+      operationId: getAvailable
+      parameters:
+      - name: includeCreateExclusive
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: entityType
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - OBJECTIVE
+          - KR
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ObjectiveType'
+      summary: Get available
+      x-summary-source: derived
+    post:
+      tags:
+      - objective-type-resource
+      operationId: create_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ObjectiveTypeCreateInputBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Create 1
+      x-summary-source: derived
+  /api/v2/objectiveType/{id}/updateVisibility:
+    post:
+      tags:
+      - objective-type-resource
+      operationId: changeVisibilityOfProvidedAlias_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: visible
+        in: query
+        required: true
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Change visibility of provided alias 1
+      x-summary-source: derived
+  /api/v2/objectiveType/{id}:
+    get:
+      tags:
+      - objective-type-resource
+      operationId: getSingle_3
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ObjectiveType'
+      summary: Get single 3
+      x-summary-source: derived
+    delete:
+      tags:
+      - objective-type-resource
+      operationId: delete_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Delete 1
+      x-summary-source: derived
+    patch:
+      tags:
+      - objective-type-resource
+      operationId: update_2
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ObjectiveTypeUpdateInputBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Update 2
+      x-summary-source: derived
+  /api/v2/objectiveType/colorInheritance:
+    get:
+      tags:
+      - objective-type-resource
+      operationId: getColorInheritanceSettings
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
+      summary: Get color inheritance settings
+      x-summary-source: derived
+    patch:
+      tags:
+      - objective-type-resource
+      operationId: saveColorInheritanceSettings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveColorInheritanceSettingsBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
+      summary: Save color inheritance settings
+      x-summary-source: derived
+  /api/v2/objectiveType/{id}/count:
+    get:
+      tags:
+      - objective-type-resource
+      operationId: getCount
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UsageBean'
+      summary: Get count
+      x-summary-source: derived
+  /api/v2/objectiveType/all:
+    get:
+      tags:
+      - objective-type-resource
+      operationId: getAll_2
+      parameters:
+      - name: includeCreateExclusive
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: entityType
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - OBJECTIVE
+          - KR
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ObjectiveType'
+      summary: Get all 2
+      x-summary-source: derived
+components:
+  schemas:
+    ObjectiveTypeCreateInputBean:
+      type: object
+      properties:
+        name:
+          type: string
+        iconColors:
+          $ref: '#/components/schemas/ObjectiveTypeIconColors'
+      required:
+      - iconColors
+      - name
+    UsageBean:
+      type: object
+      properties:
+        okrCount:
+          type: integer
+          format: int32
+        krCount:
+          type: integer
+          format: int32
+      required:
+      - krCount
+      - okrCount
+    SaveColorInheritanceSettingsBean:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+      required:
+      - enabled
+    ObjectiveType:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        iconColors:
+          $ref: '#/components/schemas/ObjectiveTypeIconColors'
+        canOnlyBeAssignedDuringCreation:
+          type: boolean
+        customPrefix:
+          type: object
+          additionalProperties:
+            type: string
+        appProvided:
+          type: boolean
+        hidden:
+          type: boolean
+      required:
+      - name
+    ObjectiveTypeIconColors:
+      type: object
+      properties:
+        backgroundColor:
+          type: string
+        textColor:
+          type: string
+      required:
+      - backgroundColor
+      - textColor
+    ObjectiveTypeUpdateInputBean:
+      type: object
+      properties:
+        name:
+          type: string
+        iconColors:
+          $ref: '#/components/schemas/ObjectiveTypeIconColors'

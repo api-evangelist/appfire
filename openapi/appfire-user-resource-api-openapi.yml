@@ -1,0 +1,188 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition User Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: user-resource
+paths:
+  /api/user/permissions/context:
+    post:
+      tags:
+      - user-resource
+      operationId: permissionsForUserWithContext
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PermissionContextBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GrantedPermissionsBean'
+      summary: Permissions for user with context
+      x-summary-source: derived
+  /api/user/permissions/context/batch:
+    post:
+      tags:
+      - user-resource
+      operationId: permissionsForUserWithContextBatch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkPermissionContextRequestBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkPermissionContextResponseBean'
+      summary: Permissions for user with context batch
+      x-summary-source: derived
+  /api/user:
+    get:
+      tags:
+      - user-resource
+      operationId: getUserAccountIdsOnInstance
+      parameters:
+      - name: maxResults
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JiraUser'
+      summary: Get user account ids on instance
+      x-summary-source: derived
+  /api/user/permissions:
+    get:
+      tags:
+      - user-resource
+      operationId: permissionsForUser
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GrantedPermissionsBean'
+      summary: Permissions for user
+      x-summary-source: derived
+  /api/user/has-global-permissions:
+    get:
+      tags:
+      - user-resource
+      operationId: hasGlobalPermission
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean
+      summary: Has global permission
+      x-summary-source: derived
+components:
+  schemas:
+    BulkPermissionContextResponseBean:
+      type: object
+      properties:
+        permissionsByContextKey:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/GrantedPermissionsBean'
+      required:
+      - permissionsByContextKey
+    BulkPermissionContextRequestBean:
+      type: object
+      properties:
+        contexts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PermissionContextBean'
+          maxItems: 200
+          minItems: 0
+      required:
+      - contexts
+    JiraUser:
+      type: object
+      properties:
+        id:
+          type: string
+        userName:
+          type: string
+        accountId:
+          type: string
+      required:
+      - accountId
+    PermissionContextBean:
+      type: object
+      properties:
+        entityType:
+          type: string
+          enum:
+          - OBJECTIVE
+          - KR
+        id:
+          type: string
+          minLength: 1
+      required:
+      - entityType
+      - id
+    GrantedPermissionsBean:
+      type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            type: string
+            enum:
+            - VIEW_OKR
+            - CREATE_OKR
+            - EDIT_OKR
+            - CREATE_UPDATE_OKR
+            - EDIT_UPDATE_OKR
+            - LINK_OKR
+            - CLOSE_OKR
+            - DELETE_OKR
+            - MODIFY_ISSUES_FOR_OKR
+            - DELETE_UPDATE_HISTORY
+            - VIEW_PROGRESS_DASHBOARD
+            - MANAGE_PERIODS
+            - MANAGE_NOTIFICATIONS
+            - ADD_NEW_LABELS
+            - EDIT_AND_DELETE_LABELS
+            - ADD_NEW_TEAMS
+            - EDIT_AND_DELETE_TEAMS
+            - MANAGE_OKR_TYPES
+            - MANAGE_CUSTOM_FIELDS
+            - MANAGE_DATE_TIME_SETTINGS
+            - MANAGE_CUSTOM_VIEWS
+            - MANAGE_PERMISSIONS
+            - MANAGE_OKR_AI
+            - RESTRICT_CHOSEN_OKRS
+            - API_ACCESS
+            - API_ADMIN_TABLE_ACCESS
+            - DATA_EXPORT
+            - ADD_COMMENT
+            - REORDER_ITEMS
+          uniqueItems: true
+      required:
+      - permissions

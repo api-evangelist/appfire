@@ -1,0 +1,47 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Aikr Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: aikr-resource
+paths:
+  /api/v2/ai/kr/suggestions:
+    get:
+      tags:
+      - aikr-resource
+      operationId: suggestKeyResults
+      parameters:
+      - name: inputBean
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SuggestKeyResultsInputBean'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+      summary: Suggest key results
+      x-summary-source: derived
+components:
+  schemas:
+    SuggestKeyResultsInputBean:
+      type: object
+      properties:
+        objectiveId:
+          type: string
+        previousAiResponses:
+          type: array
+          items:
+            type: string
+        userRefinementPromptText:
+          type: string
+      required:
+      - objectiveId

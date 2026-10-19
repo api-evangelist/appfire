@@ -1,0 +1,118 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Atlassian Connect Error Controller API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: atlassian-connect-error-controller
+paths:
+  /error:
+    get:
+      tags:
+      - atlassian-connect-error-controller
+      operationId: error
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorJson'
+      summary: Error
+      x-summary-source: derived
+    put:
+      tags:
+      - atlassian-connect-error-controller
+      operationId: error_2
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorJson'
+      summary: Error 2
+      x-summary-source: derived
+    post:
+      tags:
+      - atlassian-connect-error-controller
+      operationId: error_1
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorJson'
+      summary: Error 1
+      x-summary-source: derived
+    delete:
+      tags:
+      - atlassian-connect-error-controller
+      operationId: error_3
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorJson'
+      summary: Error 3
+      x-summary-source: derived
+    options:
+      tags:
+      - atlassian-connect-error-controller
+      operationId: error_6
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorJson'
+      summary: Error 6
+      x-summary-source: derived
+    head:
+      tags:
+      - atlassian-connect-error-controller
+      operationId: error_5
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorJson'
+      summary: Error 5
+      x-summary-source: derived
+    patch:
+      tags:
+      - atlassian-connect-error-controller
+      operationId: error_4
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorJson'
+      summary: Error 4
+      x-summary-source: derived
+components:
+  schemas:
+    ErrorJson:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        error:
+          type: string
+        message:
+          type: string
+        timeStamp:
+          type: string
+        trace:
+          type: string

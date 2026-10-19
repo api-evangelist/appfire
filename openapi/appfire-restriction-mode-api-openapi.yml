@@ -1,0 +1,112 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Restriction mode API
+  version: v0
+  description: Read and set a tenant's OKR Restriction mode. Used by BigPicture's Security page; the M2M scope is the authorization and no user identity is exchanged.
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: Restriction mode
+  description: Read and set a tenant's OKR Restriction mode. Used by BigPicture's Security page; the M2M scope is the authorization and no user identity is exchanged.
+paths:
+  /api/internal/settings/restrictions:
+    get:
+      tags:
+      - Restriction mode
+      summary: Get the tenant's Restriction mode
+      description: Projects the tenant's stored restriction settings onto a single mode. A tenant without stored settings reads as COMPLETELY_HIDDEN and the default record is created.
+      operationId: getMode
+      parameters:
+      - name: X-APPFIRE-M2M-AUTH-INSTALLATION-ID
+        in: header
+        description: Forge installation ID of the tenant
+        required: true
+        schema:
+          type: string
+        example: ari:cloud:ecosystem::installation/2161e86b-06b8-4ea1-bec1-df6eed1dce91
+      responses:
+        '200':
+          description: Current Restriction mode
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestrictionModeBean'
+        '400':
+          description: Installation ID header missing, blank or not a Forge installation ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestrictionModeBean'
+        '401':
+          description: M2M token missing, invalid or lacking the OKR scope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestrictionModeBean'
+        '404':
+          description: No tenant known for the installation ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestrictionModeBean'
+    put:
+      tags:
+      - Restriction mode
+      summary: Set the tenant's Restriction mode
+      description: 'Idempotent: repeating the same mode changes nothing. Switching from an enabled mode to OFF irreversibly discards every restricted OKR''s configuration in the tenant; confirm with the user before sending OFF. OFF keeps the tenant''s last visibility choice so switching back on restores it.'
+      operationId: setMode
+      parameters:
+      - name: X-APPFIRE-M2M-AUTH-INSTALLATION-ID
+        in: header
+        description: Forge installation ID of the tenant
+        required: true
+        schema:
+          type: string
+        example: ari:cloud:ecosystem::installation/2161e86b-06b8-4ea1-bec1-df6eed1dce91
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestrictionModeBean'
+        required: true
+      responses:
+        '200':
+          description: Persisted Restriction mode
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestrictionModeBean'
+        '400':
+          description: Installation ID header missing, blank or not a Forge installation ID; body malformed; mode missing or unknown
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestrictionModeBean'
+        '401':
+          description: M2M token missing, invalid or lacking the OKR scope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestrictionModeBean'
+        '404':
+          description: No tenant known for the installation ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestrictionModeBean'
+components:
+  schemas:
+    RestrictionModeBean:
+      type: object
+      description: A tenant's Restriction mode
+      properties:
+        mode:
+          type: string
+          description: 'OFF: restrictions unavailable in the tenant. COMPLETELY_HIDDEN: users without permission do not see a restricted OKR at all. PARTIALLY_HIDDEN: they see its icon and progress only.'
+          enum:
+          - 'OFF'
+          - COMPLETELY_HIDDEN
+          - PARTIALLY_HIDDEN
+      required:
+      - mode

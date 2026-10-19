@@ -1,0 +1,107 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Feature Flag Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: feature-flag-resource
+paths:
+  /api-admin/feature-flag:
+    get:
+      tags:
+      - feature-flag-resource
+      operationId: getFeatureFlag
+      parameters:
+      - name: tenantId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: featureFlag
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureFlagState'
+      summary: Get feature flag
+      x-summary-source: derived
+    post:
+      tags:
+      - feature-flag-resource
+      operationId: setFeatureFlag
+      parameters:
+      - name: tenantId
+        in: query
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetFeatureFlagBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureFlagState'
+      summary: Set feature flag
+      x-summary-source: derived
+  /api-admin/feature-flag/{flag}/toggle:
+    post:
+      tags:
+      - feature-flag-resource
+      operationId: toggleFeatureFlag
+      parameters:
+      - name: flag
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: value
+        in: query
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/FeatureFlagState'
+      summary: Toggle feature flag
+      x-summary-source: derived
+components:
+  schemas:
+    SetFeatureFlagBean:
+      type: object
+      properties:
+        featureFlag:
+          type: string
+        enabled:
+          type: boolean
+      required:
+      - enabled
+      - featureFlag
+    FeatureFlagState:
+      type: object
+      properties:
+        featureFlag:
+          type: string
+        state:
+          type: boolean
+      required:
+      - featureFlag
+      - state

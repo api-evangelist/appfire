@@ -1,0 +1,146 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition OKR alignment (internal) API
+  version: v0
+  description: Bulk alignment link lookup for objectives and key results, for M2M consumers (PPM), keyed by installation ID.
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: OKR alignment (internal)
+  description: Bulk alignment link lookup for objectives and key results, for M2M consumers (PPM), keyed by installation ID.
+paths:
+  /api/internal/okrs/alignment:
+    post:
+      tags:
+      - OKR alignment (internal)
+      summary: Bulk fetch alignment links by installation ID
+      description: Returns alignment links for the requested objectives and key results in a single call, grouped by entity with direction normalised relative to each entity, matching GET /api/v2/alignment/entity/{entityType}/id/{entityId} behavior. Entities with no qualifying links are omitted from the response.
+      operationId: getBulkAlignmentLinks_1
+      parameters:
+      - name: X-APPFIRE-M2M-AUTH-INSTALLATION-ID
+        in: header
+        description: Forge installation ID of the tenant
+        required: true
+        schema:
+          type: string
+        example: ari:cloud:ecosystem::installation/2161e86b-06b8-4ea1-bec1-df6eed1dce91
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkAlignmentLinksRequestBean'
+        required: true
+      responses:
+        '200':
+          description: Alignment links grouped by requested entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkAlignmentLinksResponseBean'
+        '400':
+          description: Missing required Header X-APPFIRE-M2M-AUTH-INSTALLATION-ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkAlignmentLinksResponseBean'
+        '401':
+          description: Invalid or missing M2M Token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkAlignmentLinksResponseBean'
+        '404':
+          description: Host not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkAlignmentLinksResponseBean'
+components:
+  schemas:
+    BulkAlignmentLinksResponseBean:
+      type: object
+      description: Response to a bulk alignment links lookup
+      properties:
+        entities:
+          type: array
+          description: Alignment links grouped by requested entity; entities with no qualifying links are omitted
+          items:
+            $ref: '#/components/schemas/EntityAlignmentLinksBean'
+      required:
+      - entities
+    AlignmentLinkBean:
+      type: object
+      properties:
+        id:
+          type: string
+        source:
+          $ref: '#/components/schemas/AlignmentEntityBean'
+        target:
+          $ref: '#/components/schemas/AlignmentEntityBean'
+        alignmentLinkTypeBean:
+          type: string
+          enum:
+          - BLOCKS
+          - BLOCKED_BY
+          - SUPPORTS
+          - SUPPORTED_BY
+          - COPIES
+          - COPIED_TO
+      required:
+      - alignmentLinkTypeBean
+      - id
+      - source
+      - target
+    BulkAlignmentLinksRequestBean:
+      type: object
+      description: Request to bulk fetch alignment links for a set of objectives and/or key results
+      properties:
+        okrs:
+          type: array
+          description: List of objective IDs to fetch alignment links for
+          items:
+            type: string
+          maxItems: 2000
+          minItems: 0
+        krs:
+          type: array
+          description: List of key result IDs to fetch alignment links for
+          items:
+            type: string
+          maxItems: 2000
+          minItems: 0
+        linkTypes:
+          type: array
+          description: When non-empty, only links of these types are returned; null or empty list returns all link types
+          items:
+            type: string
+            enum:
+            - BLOCKS
+            - SUPPORTS
+            - COPIES
+    EntityAlignmentLinksBean:
+      type: object
+      properties:
+        entity:
+          $ref: '#/components/schemas/AlignmentEntityBean'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlignmentLinkBean'
+      required:
+      - entity
+      - links
+    AlignmentEntityBean:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - OKR
+          - KR
+        id:
+          type: string
+      required:
+      - id
+      - type

@@ -1,0 +1,104 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Periods API
+  version: v0
+  description: Query OKR time periods. Periods define the time boundaries for OKR cycles, such as quarters or custom date ranges.
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: Periods
+  description: Query OKR time periods. Periods define the time boundaries for OKR cycles, such as quarters or custom date ranges.
+paths:
+  /api/internal/periods:
+    get:
+      tags:
+      - Periods
+      summary: Get periods by installation ID
+      description: Retrieves all available OKR periods for a tenant identified by Forge installation ID.
+      operationId: getAvailableAliasesByInstallationId
+      parameters:
+      - name: installationId
+        in: query
+        description: Forge installation ID of the tenant
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of periods
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PeriodAlias'
+        '404':
+          description: Host not found for installationId
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PeriodAlias'
+  /api/internal/periods/{tenantId}:
+    get:
+      tags:
+      - Periods
+      summary: Get periods by tenant ID
+      description: Retrieves all available OKR periods for a tenant. Prefer using the installationId query parameter; the tenantId path variable is deprecated.
+      operationId: getAvailableAliases_1
+      parameters:
+      - name: tenantId
+        in: path
+        description: Tenant ID (deprecated, use installationId instead)
+        required: true
+        schema:
+          type: string
+      - name: installationId
+        in: query
+        description: Forge installation ID, preferred over tenantId path variable
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of periods
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PeriodAlias'
+        '404':
+          description: Host not found
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PeriodAlias'
+      deprecated: true
+components:
+  schemas:
+    PeriodAlias:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        deadline:
+          type: string
+          format: date-time
+        appProvided:
+          type: boolean
+        hidden:
+          type: boolean
+      required:
+      - deadline
+      - name
+      - startDate

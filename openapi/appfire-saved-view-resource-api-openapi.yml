@@ -1,0 +1,174 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Saved View Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: saved-view-resource
+paths:
+  /api/v2/savedFilter:
+    get:
+      tags:
+      - saved-view-resource
+      operationId: getAll_1
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SavedFilter'
+      summary: Get all 1
+      x-summary-source: derived
+    post:
+      tags:
+      - saved-view-resource
+      operationId: createSavedFilter
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SavedFilterInputBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Create saved filter
+      x-summary-source: derived
+  /api/v2/savedFilter/{id}:
+    get:
+      tags:
+      - saved-view-resource
+      operationId: getOne
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SavedFilter'
+      summary: Get one
+      x-summary-source: derived
+    post:
+      tags:
+      - saved-view-resource
+      operationId: editCustomAlias
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SavedFilterInputBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Edit custom alias
+      x-summary-source: derived
+    delete:
+      tags:
+      - saved-view-resource
+      operationId: deleteSavedFilter
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Delete saved filter
+      x-summary-source: derived
+  /api/v2/savedFilter/{id}/favorite:
+    patch:
+      tags:
+      - saved-view-resource
+      operationId: toggleFavoriteSavedFilter
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Toggle favorite saved filter
+      x-summary-source: derived
+components:
+  schemas:
+    SavedFilterInputBean:
+      type: object
+      properties:
+        name:
+          type: string
+        payload:
+          type: string
+    JiraUser:
+      type: object
+      properties:
+        id:
+          type: string
+        userName:
+          type: string
+        accountId:
+          type: string
+      required:
+      - accountId
+    SavedFilter:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        stringifiedViewConfiguration:
+          type: string
+        type:
+          type: string
+          enum:
+          - OKRS_TABLE_OVERVIEW
+        favorite:
+          type: array
+          items:
+            $ref: '#/components/schemas/JiraUser'
+        version:
+          type:
+          - string
+          - 'null'
+      required:
+      - name
+      - stringifiedViewConfiguration
+      - type

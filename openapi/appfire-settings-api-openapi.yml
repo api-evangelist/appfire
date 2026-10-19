@@ -882,11 +882,47 @@ paths:
       description: Production API
 components:
   schemas:
-    CreateDropdownCustomFieldRequest:
+    JiraNotificationsSettingsRequest:
+      type: object
+      required:
+      - enabled
+      properties:
+        enabled:
+          type: boolean
+    AccountSettings:
+      type: object
+      properties:
+        dropdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/DropdownSettings'
+        toggle:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToggleSettings'
+    UpdateDropdownOptionRequest:
+      type: object
+      required:
+      - value
+      - color
+      properties:
+        id:
+          type: string
+          minLength: 1
+        value:
+          type: string
+          minLength: 1
+          maxLength: 50
+        color:
+          type: string
+          pattern: ^#([0-9a-fA-F]{6})$
+    UpdateToggleCustomFieldRequest:
+      allOf:
+      - $ref: '#/components/schemas/CreateToggleCustomFieldRequest'
+    CreateToggleCustomFieldRequest:
       type: object
       required:
       - name
-      - options
       properties:
         name:
           type: string
@@ -899,18 +935,7 @@ components:
         description:
           type: string
           maxLength: 150
-        options:
-          type: array
-          minItems: 1
-          maxItems: 199
-          items:
-            $ref: '#/components/schemas/CreateDropdownOptionRequest'
-    JiraNotificationsSettingsRequest:
-      type: object
-      required:
-      - enabled
-      properties:
-        enabled:
+        default:
           type: boolean
     DropdownSettings:
       type: object
@@ -940,9 +965,6 @@ components:
           type: string
         used:
           type: integer
-    UpdateToggleCustomFieldRequest:
-      allOf:
-      - $ref: '#/components/schemas/CreateToggleCustomFieldRequest'
     CreateDropdownOptionRequest:
       type: object
       required:
@@ -956,26 +978,11 @@ components:
         color:
           type: string
           pattern: ^#([0-9a-fA-F]{6})$
-    UpdateDropdownOptionRequest:
-      type: object
-      required:
-      - value
-      - color
-      properties:
-        id:
-          type: string
-          minLength: 1
-        value:
-          type: string
-          minLength: 1
-          maxLength: 50
-        color:
-          type: string
-          pattern: ^#([0-9a-fA-F]{6})$
-    CreateToggleCustomFieldRequest:
+    CreateDropdownCustomFieldRequest:
       type: object
       required:
       - name
+      - options
       properties:
         name:
           type: string
@@ -988,6 +995,25 @@ components:
         description:
           type: string
           maxLength: 150
+        options:
+          type: array
+          minItems: 1
+          maxItems: 199
+          items:
+            $ref: '#/components/schemas/CreateDropdownOptionRequest'
+    ToggleSettings:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        enabled:
+          type: boolean
+        mandatory:
+          type: boolean
+        description:
+          type: string
         default:
           type: boolean
     UpdateDropdownCustomFieldRequest:
@@ -1013,32 +1039,6 @@ components:
           maxItems: 199
           items:
             $ref: '#/components/schemas/UpdateDropdownOptionRequest'
-    AccountSettings:
-      type: object
-      properties:
-        dropdown:
-          type: array
-          items:
-            $ref: '#/components/schemas/DropdownSettings'
-        toggle:
-          type: array
-          items:
-            $ref: '#/components/schemas/ToggleSettings'
-    ToggleSettings:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        enabled:
-          type: boolean
-        mandatory:
-          type: boolean
-        description:
-          type: string
-        default:
-          type: boolean
     JiraNotificationsSettingsResponse:
       type: object
       required:
@@ -1046,33 +1046,11 @@ components:
       properties:
         enabled:
           type: boolean
-    ProblemDetails:
-      type: object
-      properties:
-        type:
-          type: string
-        title:
-          type: string
-        detail:
-          type: string
-        traceId:
-          type: string
     CreateCustomFieldSettingRequest:
       type: object
       required:
       - name
       - spaceIds
-      properties:
-        name:
-          type: string
-          minLength: 1
-        spaceIds:
-          type: array
-          items:
-            type: string
-    UpdateCustomFieldSettingRequest:
-      type: object
-      description: At least one of name or spaceIds must be provided.
       properties:
         name:
           type: string
@@ -1094,6 +1072,28 @@ components:
             type: string
         customFields:
           $ref: '#/components/schemas/AccountSettings'
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        detail:
+          type: string
+        traceId:
+          type: string
+    UpdateCustomFieldSettingRequest:
+      type: object
+      description: At least one of name or spaceIds must be provided.
+      properties:
+        name:
+          type: string
+          minLength: 1
+        spaceIds:
+          type: array
+          items:
+            type: string
   securitySchemes:
     bearer:
       type: http

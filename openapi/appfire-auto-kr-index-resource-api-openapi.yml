@@ -1,0 +1,91 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Auto Kr Index Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: auto-kr-index-resource
+paths:
+  /index-autokr/tenant/{tenantId}:
+    get:
+      tags:
+      - auto-kr-index-resource
+      operationId: getSingle_1
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantIdUrlIssuesLeftToIndex'
+      summary: Get single 1
+      x-summary-source: derived
+    post:
+      tags:
+      - auto-kr-index-resource
+      operationId: runSingle_1
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantIdUrlIssuesLeftToIndex'
+      summary: Run single 1
+      x-summary-source: derived
+  /index-autokr/list:
+    get:
+      tags:
+      - auto-kr-index-resource
+      operationId: getAllList_1
+      parameters:
+      - name: skipEmpty
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: skipFinished
+        in: query
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TenantIdUrlIssuesLeftToIndex'
+      summary: Get all list 1
+      x-summary-source: derived
+components:
+  schemas:
+    TenantIdUrlIssuesLeftToIndex:
+      type: object
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+        lagging:
+          type: integer
+          format: int64
+        all:
+          type: integer
+          format: int64

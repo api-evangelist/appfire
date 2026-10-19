@@ -1,0 +1,382 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition OKR metadata (internal) API
+  version: v0
+  description: Objective types, labels, teams, and period aliases for M2M consumers (PPM), keyed by installation ID.
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: OKR metadata (internal)
+  description: Objective types, labels, teams, and period aliases for M2M consumers (PPM), keyed by installation ID.
+paths:
+  /api/internal/teams:
+    get:
+      tags:
+      - OKR metadata (internal)
+      summary: List teams by installation ID
+      description: Returns all teams for the tenant, matching GET /api/v2/team behavior.
+      operationId: getTeams
+      parameters:
+      - name: X-APPFIRE-M2M-AUTH-INSTALLATION-ID
+        in: header
+        description: Forge installation ID of the tenant
+        required: true
+        schema:
+          type: string
+        example: ari:cloud:ecosystem::installation/2161e86b-06b8-4ea1-bec1-df6eed1dce91
+      responses:
+        '200':
+          description: List of teams
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Team'
+        '400':
+          description: Missing required Header X-APPFIRE-M2M-AUTH-INSTALLATION-ID
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Team'
+        '401':
+          description: Invalid or missing M2M Token
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Team'
+        '404':
+          description: Host not found
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Team'
+  /api/internal/periodAliases:
+    get:
+      tags:
+      - OKR metadata (internal)
+      summary: List period aliases by installation ID
+      description: Returns all period aliases for the tenant, matching GET /api/v2/periodAlias/all behavior.
+      operationId: getPeriodAliases
+      parameters:
+      - name: X-APPFIRE-M2M-AUTH-INSTALLATION-ID
+        in: header
+        description: Forge installation ID of the tenant
+        required: true
+        schema:
+          type: string
+        example: ari:cloud:ecosystem::installation/2161e86b-06b8-4ea1-bec1-df6eed1dce91
+      responses:
+        '200':
+          description: List of period aliases
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PeriodAlias'
+        '400':
+          description: Missing required Header X-APPFIRE-M2M-AUTH-INSTALLATION-ID
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PeriodAlias'
+        '401':
+          description: Invalid or missing M2M Token
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PeriodAlias'
+        '404':
+          description: Host not found
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PeriodAlias'
+  /api/internal/objectiveTypes:
+    get:
+      tags:
+      - OKR metadata (internal)
+      summary: List objective types by installation ID
+      description: Returns visible objective types for the tenant, matching GET /api/v2/objectiveType behavior.
+      operationId: getObjectiveTypes
+      parameters:
+      - name: X-APPFIRE-M2M-AUTH-INSTALLATION-ID
+        in: header
+        description: Forge installation ID of the tenant
+        required: true
+        schema:
+          type: string
+        example: ari:cloud:ecosystem::installation/2161e86b-06b8-4ea1-bec1-df6eed1dce91
+      - name: includeCreateExclusive
+        in: query
+        description: When true, include types that can only be assigned at creation time
+        required: false
+        schema:
+          type: boolean
+      - name: entityType
+        in: query
+        description: Filter by entity type (OBJECTIVE or KR)
+        required: false
+        schema:
+          type: string
+          enum:
+          - OBJECTIVE
+          - KR
+      responses:
+        '200':
+          description: List of objective types
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ObjectiveType'
+        '400':
+          description: Missing required Header X-APPFIRE-M2M-AUTH-INSTALLATION-ID
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ObjectiveType'
+        '401':
+          description: Invalid or missing M2M Token
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ObjectiveType'
+        '404':
+          description: Host not found
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ObjectiveType'
+  /api/internal/labels:
+    get:
+      tags:
+      - OKR metadata (internal)
+      summary: List labels by installation ID
+      description: Returns all labels for the tenant, matching GET /api/v2/label behavior.
+      operationId: getLabels
+      parameters:
+      - name: X-APPFIRE-M2M-AUTH-INSTALLATION-ID
+        in: header
+        description: Forge installation ID of the tenant
+        required: true
+        schema:
+          type: string
+        example: ari:cloud:ecosystem::installation/2161e86b-06b8-4ea1-bec1-df6eed1dce91
+      responses:
+        '200':
+          description: List of labels
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Label'
+        '400':
+          description: Missing required Header X-APPFIRE-M2M-AUTH-INSTALLATION-ID
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Label'
+        '401':
+          description: Invalid or missing M2M Token
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Label'
+        '404':
+          description: Host not found
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Label'
+components:
+  schemas:
+    UserWithRole:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/JiraUser'
+        role:
+          type: string
+          enum:
+          - ADMIN
+          - MANAGER
+          - USER
+      required:
+      - role
+      - user
+    Label:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        backgroundColor:
+          type: string
+        textColor:
+          type: string
+      required:
+      - backgroundColor
+      - name
+      - textColor
+    GroupIdWithRole:
+      type: object
+      properties:
+        groupId:
+          type: string
+          minLength: 1
+        role:
+          type: string
+          enum:
+          - ADMIN
+          - MANAGER
+          - USER
+      required:
+      - groupId
+      - role
+    ObjectiveType:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        iconColors:
+          $ref: '#/components/schemas/ObjectiveTypeIconColors'
+        canOnlyBeAssignedDuringCreation:
+          type: boolean
+        customPrefix:
+          type: object
+          additionalProperties:
+            type: string
+        appProvided:
+          type: boolean
+        hidden:
+          type: boolean
+      required:
+      - name
+    JiraUser:
+      type: object
+      properties:
+        id:
+          type: string
+        userName:
+          type: string
+        accountId:
+          type: string
+      required:
+      - accountId
+    Team:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        creator:
+          $ref: '#/components/schemas/JiraUser'
+        userFetchType:
+          type: string
+          enum:
+          - MANUAL
+          - JIRA_SYNC
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserWithRole'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupIdWithRole'
+        resolvedUserAccountIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserWithRole'
+        jiraSyncRunning:
+          type: boolean
+        dateOfLastSuccessfulSync:
+          type: string
+          format: date-time
+        iconColors:
+          $ref: '#/components/schemas/IconColors'
+      required:
+      - creator
+      - groups
+      - iconColors
+      - jiraSyncRunning
+      - members
+      - name
+      - resolvedUserAccountIds
+      - userFetchType
+    ObjectiveTypeIconColors:
+      type: object
+      properties:
+        backgroundColor:
+          type: string
+        textColor:
+          type: string
+      required:
+      - backgroundColor
+      - textColor
+    IconColors:
+      type: object
+      properties:
+        backgroundColor:
+          type: string
+          minLength: 1
+        textColor:
+          type: string
+          minLength: 1
+      required:
+      - backgroundColor
+      - textColor
+    PeriodAlias:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        deadline:
+          type: string
+          format: date-time
+        appProvided:
+          type: boolean
+        hidden:
+          type: boolean
+      required:
+      - deadline
+      - name
+      - startDate

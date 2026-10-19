@@ -1,0 +1,41 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Permissions Cache API
+  version: v0
+  description: Invalidate OKR's cached UPS permission answers for a tenant. Called by BigPicture when OKR global permissions change so the change takes effect immediately instead of after cache expiry.
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: Permissions Cache
+  description: Invalidate OKR's cached UPS permission answers for a tenant. Called by BigPicture when OKR global permissions change so the change takes effect immediately instead of after cache expiry.
+paths:
+  /api/internal/permissions/cache/invalidate:
+    post:
+      tags:
+      - Permissions Cache
+      summary: Invalidate the tenant's UPS permissions cache
+      description: Wipes every cached UPS permission answer for the tenant identified by the M2M headers. Any request body is accepted and ignored. Idempotent; wiping an empty cache is a normal success.
+      operationId: invalidate
+      parameters:
+      - name: X-APPFIRE-M2M-AUTH-INSTALLATION-ID
+        in: header
+        description: Forge installation ID of the tenant
+        required: false
+        schema:
+          type: string
+      - name: X-APPFIRE-M2M-AUTH-CLOUD-ID
+        in: header
+        description: Atlassian Cloud site ID
+        required: false
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Cache wiped (or nothing to wipe)
+        '400':
+          description: Neither tenant header present
+        '404':
+          description: Headers resolve to no SPM host
+        '500':
+          description: Cache wipe failed; stale entries persist until TTL

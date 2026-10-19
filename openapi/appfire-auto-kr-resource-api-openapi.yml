@@ -1,0 +1,286 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Auto Kr Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: auto-kr-resource
+paths:
+  /api/v2/auto-kr/{goalId}/triggerResync:
+    post:
+      tags:
+      - auto-kr-resource
+      operationId: triggerResync
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+      summary: Trigger resync
+      x-summary-source: derived
+  /api/v2/auto-kr/{krId}/activity:
+    get:
+      tags:
+      - auto-kr-resource
+      operationId: getActivitiesForAutoKR
+      parameters:
+      - name: krId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: maxResults
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityControllerResult'
+      summary: Get activities for auto KR
+      x-summary-source: derived
+  /api/v2/auto-kr/{goalId}/syncState:
+    get:
+      tags:
+      - auto-kr-resource
+      operationId: getSyncStateForAutoKr
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+      summary: Get sync state for auto kr
+      x-summary-source: derived
+  /api/v2/auto-kr/{goalId}/issueData:
+    get:
+      tags:
+      - auto-kr-resource
+      operationId: getIssueDataForAutoKr
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+      summary: Get issue data for auto kr
+      x-summary-source: derived
+components:
+  schemas:
+    ActivityBean:
+      type: object
+      properties:
+        id:
+          type: string
+        dateOfActivity:
+          type: string
+          format: date-time
+        entityType:
+          type: string
+          enum:
+          - OBJECTIVE
+          - KEY_RESULT
+          - ISSUE_CHANGES
+          - AUTO_KR
+        entityId:
+          type: string
+        isRestricted:
+          type: boolean
+          writeOnly: true
+        entityKey:
+          type: string
+        entityName:
+          type: string
+        entityOwner:
+          $ref: '#/components/schemas/JiraUser'
+        userAccountIdTriggeringEvent:
+          type:
+          - string
+          - 'null'
+        status:
+          type: string
+          enum:
+          - ON_TRACK
+          - AT_RISK
+          - ACTION_REQUIRED
+          - NOT_STARTED
+          - SUCCESS
+          - FINISHED
+          - ASSUMPTIONS_CHANGED
+          - DELAYED
+          - CANCELED
+          - FAILED
+          - UNDEFINED
+          - MISSED_TARGET
+        daysInStatus:
+          type: integer
+          format: int32
+        value:
+          type: number
+          format: double
+        changeFromLastUpdate:
+          type: number
+          format: double
+        unit:
+          $ref: '#/components/schemas/KeyResultUpdateUnit'
+        valuePercentage:
+          type: number
+          format: double
+        changeFromLastUpdatePercentage:
+          type: number
+          format: double
+        isDecreasing:
+          type: boolean
+        isFirst:
+          type: boolean
+        isClosed:
+          type: boolean
+        isCreated:
+          type: boolean
+        changes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Change'
+        okrType:
+          $ref: '#/components/schemas/ObjectiveType'
+        restricted:
+          type: boolean
+      required:
+      - dateOfActivity
+      - entityId
+      - entityType
+      - id
+    ActivityControllerResult:
+      type: object
+      properties:
+        activities:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActivityBean'
+        hasMore:
+          type: boolean
+        nextQueryDate:
+          type: string
+          format: date-time
+      required:
+      - activities
+    ObjectiveType:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        iconColors:
+          $ref: '#/components/schemas/ObjectiveTypeIconColors'
+        canOnlyBeAssignedDuringCreation:
+          type: boolean
+        customPrefix:
+          type: object
+          additionalProperties:
+            type: string
+        appProvided:
+          type: boolean
+        hidden:
+          type: boolean
+      required:
+      - name
+    JiraUser:
+      type: object
+      properties:
+        id:
+          type: string
+        userName:
+          type: string
+        accountId:
+          type: string
+      required:
+      - accountId
+    KeyResultUpdateUnit:
+      type: object
+      properties:
+        symbol:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - NUMERIC
+          - PERCENT
+          - CURRENCY
+        isSymbolBefore:
+          type: boolean
+          writeOnly: true
+        symbolBefore:
+          type: boolean
+      required:
+      - name
+      - symbol
+      - type
+    Change:
+      type: object
+      properties:
+        key:
+          type: string
+        removed:
+          type: boolean
+        created:
+          type: boolean
+        oldState:
+          type: string
+        oldStatusCategory:
+          type: string
+          enum:
+          - TODO
+          - IN_PROGRESS
+          - DONE
+          - UNDEFINED
+        newState:
+          type: string
+        newStateCategory:
+          type: string
+          enum:
+          - TODO
+          - IN_PROGRESS
+          - DONE
+          - UNDEFINED
+    ObjectiveTypeIconColors:
+      type: object
+      properties:
+        backgroundColor:
+          type: string
+        textColor:
+          type: string
+      required:
+      - backgroundColor
+      - textColor

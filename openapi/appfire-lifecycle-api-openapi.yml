@@ -1,0 +1,268 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Lifecycle API
+  version: v0
+  description: SPM app lifecycle event handlers for Connect-based installations. Called by the Appfire platform when an app is installed or uninstalled.
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: Lifecycle
+  description: SPM app lifecycle event handlers for Connect-based installations. Called by the Appfire platform when an app is installed or uninstalled.
+paths:
+  /api/internal/installation/uninstalled:
+    post:
+      tags:
+      - Lifecycle
+      summary: Handle app uninstallation
+      description: Marks host as uninstalled when SPM sends uninstall callback.
+      operationId: uninstall
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpmLifecycleEventPayload'
+        required: true
+      responses:
+        '204':
+          description: Success
+        '400':
+          description: Wrong event type
+      deprecated: true
+  /api/internal/installation/installed:
+    post:
+      tags:
+      - Lifecycle
+      summary: Handle app installation
+      description: Receives installation callback from SPM, saves host record, and publishes install event.
+      operationId: install
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpmLifecycleEventPayload'
+        required: true
+      responses:
+        '204':
+          description: Success
+          content:
+            '*/*':
+              schema:
+                type: object
+        '400':
+          description: Wrong event type
+          content:
+            '*/*':
+              schema:
+                type: object
+      deprecated: true
+  /api/internal/installation/__temporary-sync:
+    post:
+      tags:
+      - Lifecycle
+      summary: Sync existing installation
+      description: Temporary endpoint for retroactively updating existing SPM installations with installationId and cloudId. Will be removed after the sync process is completed.
+      operationId: __temporarySync
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstallationSyncPayload'
+        required: true
+      responses:
+        '204':
+          description: Success
+        '400':
+          description: Missing fields
+        '404':
+          description: Host not found
+      deprecated: true
+  /api/internal/forge/upgraded:
+    post:
+      tags:
+      - Lifecycle
+      summary: Handle Forge app upgrade
+      description: Updates host record with new app version details and refreshes installation context.
+      operationId: upgraded
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternalForgeLifecyclePayload'
+        required: true
+      responses:
+        '204':
+          description: Success
+          content:
+            '*/*':
+              schema:
+                type: object
+        '400':
+          description: Host not SPM type
+          content:
+            '*/*':
+              schema:
+                type: object
+        '404':
+          description: Host not found
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/internal/forge/uninstalled:
+    post:
+      tags:
+      - Lifecycle
+      summary: Handle Forge app uninstallation
+      description: Marks the SPM host as uninstalled when PPM forwards a Forge uninstall lifecycle event. Idempotent - repeated calls are safe.
+      operationId: uninstalled
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternalForgeLifecyclePayload'
+        required: true
+      responses:
+        '204':
+          description: Success
+  /api/internal/forge/installed:
+    post:
+      tags:
+      - Lifecycle
+      summary: Handle Forge app installation
+      description: Creates or updates SPM host record for Forge installation, sets up host mapping, checks license status, and updates installation context.
+      operationId: installed
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternalForgeLifecyclePayload'
+        required: true
+      responses:
+        '204':
+          description: Success
+components:
+  schemas:
+    InternalForgeLifecyclePayload:
+      type: object
+      description: Forge lifecycle event payload for installation
+      properties:
+        appId:
+          type: string
+          description: Forge app ID from the OKR app
+          examples:
+          - ari:cloud:ecosystem::app/a1b2c3d4-e5f6
+        environmentId:
+          type: string
+          description: Forge environment ID for the OKR app
+          examples:
+          - a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        bigPictureAppId:
+          type: string
+          description: Forge app ID for the associated BigPicture app (if applicable)
+        bigPictureEnvironmentId:
+          type: string
+          description: Forge environment ID for the associated BigPicture app
+        cloudId:
+          type: string
+          description: Atlassian Cloud site ID
+          examples:
+          - a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        installationId:
+          type: string
+          description: Unique Forge installation ID
+          examples:
+          - ari:cloud:ecosystem::app/install/a1b2c3d4-e5f6
+        siteUrl:
+          type: string
+          description: URL of the Jira Cloud site
+          examples:
+          - https://mysite.atlassian.net
+        eventType:
+          type: string
+          description: Type of lifecycle event (installed, upgraded, uninstalled)
+        installerAccountId:
+          type: string
+          description: Jira account ID of the user who triggered the event
+          examples:
+          - 557058:5aedf933-2312-40bc-b328-0c21314167f0
+        apiGatewayUrl:
+          type: string
+          description: 'Gateway mount URL for BigPicture API calls. Must include the APISIX or /api prefix; OKR appends /public/bigpicture/rest. Examples: https://qa.softwareplant.com/apisix/mk-instance, https://remote-dev-user.softwareplant.xyz/api'
+          examples:
+          - https://qa.softwareplant.com/apisix/mk-instance
+          - https://remote-dev-user.softwareplant.xyz/api
+      required:
+      - appId
+      - cloudId
+      - environmentId
+      - installationId
+      - siteUrl
+    InstallationSyncPayload:
+      type: object
+      description: Payload containing clientKey, cloudId, and installationId for sync
+      properties:
+        clientKey:
+          type: string
+          description: Unique Atlassian tenant identifier
+          examples:
+          - abc123-def456-ghi789
+        cloudId:
+          type: string
+          description: Atlassian Cloud site ID
+          examples:
+          - a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        installationId:
+          type: string
+          description: Unique Forge installation ID
+          examples:
+          - ari:cloud:ecosystem::app/install/a1b2c3d4-e5f6
+    SpmLifecycleEventPayload:
+      type: object
+      description: SPM lifecycle event payload for installation
+      properties:
+        key:
+          type: string
+          description: Addon key identifier
+          examples:
+          - com.digitaltoucan.okrforjira
+        clientKey:
+          type: string
+          description: Unique Atlassian tenant identifier
+          examples:
+          - abc123-def456-ghi789
+        baseUrl:
+          type: string
+          description: Base URL of the Jira Cloud instance
+          examples:
+          - https://mysite.atlassian.net
+        displayUrl:
+          type: string
+          description: Human-readable URL of the Jira Cloud instance
+        eventType:
+          type: string
+          description: Type of lifecycle event
+          enum:
+          - installed
+          - uninstalled
+        entitlementNumber:
+          type: string
+          description: Marketplace entitlement number
+        entitlementId:
+          type: string
+          description: Marketplace entitlement ID
+        cloudId:
+          type: string
+          description: Atlassian Cloud site ID
+          examples:
+          - a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        installationId:
+          type: string
+          description: Unique Forge installation ID
+          examples:
+          - ari:cloud:ecosystem::app/install/a1b2c3d4-e5f6
+      required:
+      - baseUrl
+      - clientKey
+      - eventType
+      - key

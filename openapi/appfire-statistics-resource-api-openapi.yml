@@ -1,0 +1,174 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Statistics Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: statistics-resource
+paths:
+  /api/statistics/team:
+    post:
+      tags:
+      - statistics-resource
+      operationId: statisticsForTeam
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OkrKrIdInputBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamProgressStatisticsBean'
+      summary: Statistics for team
+      x-summary-source: derived
+  /api/statistics/successes:
+    post:
+      tags:
+      - statistics-resource
+      operationId: successesForTeam
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OkrKrIdInputBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamSuccessesStatisticsBean'
+      summary: Successes for team
+      x-summary-source: derived
+  /api/statistics/statusesOverTime:
+    post:
+      tags:
+      - statistics-resource
+      operationId: statusesOverTimeForTeam
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OkrKrIdInputBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamStatusesOverTimeStatisticsBean'
+      summary: Statuses over time for team
+      x-summary-source: derived
+components:
+  schemas:
+    TeamStatusesOverTimeStatisticsBean:
+      type: object
+      properties:
+        objectiveData:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamStatusesOverTimeStatisticsInnerBean'
+        krData:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamStatusesOverTimeStatisticsInnerBean'
+      required:
+      - krData
+      - objectiveData
+    TeamStatusesOverTimeStatisticsInnerBean:
+      type: object
+      properties:
+        groupingKey:
+          type: string
+        count:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int64
+      required:
+      - count
+      - groupingKey
+    OkrKrIdInputBean:
+      type: object
+      properties:
+        okrIds:
+          type: array
+          items:
+            type: string
+        krIds:
+          type: array
+          items:
+            type: string
+      required:
+      - krIds
+      - okrIds
+    TeamSuccessesStatisticsBean:
+      type: object
+      properties:
+        objectiveData:
+          $ref: '#/components/schemas/TeamSuccessesStatisticsInnerBean'
+        krData:
+          $ref: '#/components/schemas/TeamSuccessesStatisticsInnerBean'
+      required:
+      - krData
+      - objectiveData
+    TeamProgressStatisticsBean:
+      type: object
+      properties:
+        countByStateObjectives:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int64
+        countByStateKrs:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int64
+        completed:
+          $ref: '#/components/schemas/PercentageCompleteBean'
+      required:
+      - completed
+      - countByStateKrs
+      - countByStateObjectives
+    TeamSuccessesStatisticsInnerBean:
+      type: object
+      properties:
+        keptOnTrack:
+          type: integer
+          format: int64
+        movedFromOffTrackToOnTrack:
+          type: integer
+          format: int64
+        movedFromAtRiskToOnTrack:
+          type: integer
+          format: int64
+        movedFromNotStartedToOnTrack:
+          type: integer
+          format: int64
+      required:
+      - keptOnTrack
+      - movedFromAtRiskToOnTrack
+      - movedFromNotStartedToOnTrack
+      - movedFromOffTrackToOnTrack
+    PercentageCompleteBean:
+      type: object
+      properties:
+        percentage:
+          type: number
+          format: double
+        percentageChange:
+          type: number
+          format: double
+      required:
+      - percentage
+      - percentageChange

@@ -1,22 +1,11 @@
 openapi: 3.2.0
 info:
-  title: OKR API update methods API
-  description: REST API for integrating your OKR data (Objectives and Key Results) with external tools and workflows.
-  contact:
-    name: OKR for Jira Support
-    url: https://appfire.atlassian.net/servicedesk/customer/portal/11/group/1237
-  version: v2
+  title: OpenAPI definition API update methods API
+  version: v0
+  description: '**POST** with a JSON body. Send **Content-Type: application/json** and the **API-Token** header. Creates update records that set current status (and key-result progress where applicable).'
 servers:
-- url: https://okr-ppm-prod.appfire.com
-  description: Current instance
-- url: https://eu.okr-ppm-prod.appfire.com
-  description: Europe region
-- url: https://au.okr-ppm-prod.appfire.com
-  description: Australia region
-- url: https://ca.okr-ppm-prod.appfire.com
-  description: Canada region
-security:
-- API-Token: []
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
 tags:
 - name: API update methods
   description: '**POST** with a JSON body. Send **Content-Type: application/json** and the **API-Token** header. Creates update records that set current status (and key-result progress where applicable).'
@@ -26,23 +15,8 @@ paths:
       tags:
       - API update methods
       summary: Update objective (create update)
-      description: '## Base URL for this request
-
-
-        Select the server matching your Jira Cloud data residency from the **Servers** drop-down before making requests:
-
-
-        - **Europe region:** https://eu.okr-ppm-prod.appfire.com
-
-        - **Australia region:** https://au.okr-ppm-prod.appfire.com
-
-        - **Canada region:** https://ca.okr-ppm-prod.appfire.com
-
-        - **US / Everywhere else:** https://okr-ppm-prod.appfire.com
-
-
-        Creates an update for the specified objective. **status** uses the same **displayed** labels as in the app: **NOT STARTED**, **ON TRACK**, **AT RISK**, **OFF TRACK** (action required). **description** is the text stored on that update. The new update becomes the objective''s current status (and progress when the objective is manual).'
-      operationId: updateObjective
+      description: 'Creates an update for the specified objective. **status** uses the same **displayed** labels as in the app: **NOT STARTED**, **ON TRACK**, **AT RISK**, **OFF TRACK** (action required). **description** is the text stored on that update. The new update becomes the objective''s current status (and progress when the objective is manual).'
+      operationId: updateObjective_1
       requestBody:
         description: JSON body. **objectiveId** required; **status** and **description** optional.
         content:
@@ -93,23 +67,8 @@ paths:
       tags:
       - API update methods
       summary: Update key result (create update)
-      description: '## Base URL for this request
-
-
-        Select the server matching your Jira Cloud data residency from the **Servers** drop-down before making requests:
-
-
-        - **Europe region:** https://eu.okr-ppm-prod.appfire.com
-
-        - **Australia region:** https://au.okr-ppm-prod.appfire.com
-
-        - **Canada region:** https://ca.okr-ppm-prod.appfire.com
-
-        - **US / Everywhere else:** https://okr-ppm-prod.appfire.com
-
-
-        Creates an update for the specified key result. **status:** displayed values **NOT STARTED**, **ON TRACK**, **AT RISK**, **OFF TRACK**. **newValue:** progress to record on this update — not allowed for **auto** key results (progress from linked work items). For currency units, send a plain number (no currency symbol). **description** appears on the created update.'
-      operationId: updateKeyResult
+      description: Creates an update for the specified key result. **status:** displayed values **NOT STARTED**, **ON TRACK**, **AT RISK**, **OFF TRACK**. **newValue:** progress to record on this update — not allowed for **auto** key results (progress from linked work items). For currency units, send a plain number (no currency symbol). **description** appears on the created update.
+      operationId: updateKeyResult_1
       requestBody:
         description: JSON body. **keyResultId** required; **status**, **newValue**, **description** optional where allowed.
         content:
@@ -255,6 +214,18 @@ components:
           - AUTO
           examples:
           - MANUAL
+        updateEvent:
+          type: string
+          description: System event type for non-progress updates, e.g. progress tracking mode conversion
+          enum:
+          - CONVERTED_TO_AUTOMATIC_PROGRESS_TRACKING
+          - CONVERTED_TO_MANUAL_PROGRESS_TRACKING
+        pinDate:
+          type: string
+          format: date-time
+          description: When the update was pinned to the activity feed; null if not pinned
+          examples:
+          - 2024-02-15T14:30:00+0000
     ApiUpdateObjectiveRequestSchema:
       type: object
       description: Objective update request. **status** values match the labels shown in Jira (in-progress set below).
@@ -275,9 +246,3 @@ components:
           description: Text shown on the created update
       required:
       - objectiveId
-  securitySchemes:
-    API-Token:
-      type: apiKey
-      description: API authentication token generated from OKR module settings. Send only this header name (`API-Token`), not `Authorization` or `Authentication`.
-      name: API-Token
-      in: header

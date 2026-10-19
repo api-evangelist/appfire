@@ -1,0 +1,100 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Import Okr Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: import-okr-resource
+paths:
+  /api/v2/import:
+    get:
+      tags:
+      - import-okr-resource
+      operationId: getImportJob
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportJob'
+      summary: Get import job
+      x-summary-source: derived
+    post:
+      tags:
+      - import-okr-resource
+      operationId: importData
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Import data
+      x-summary-source: derived
+    patch:
+      tags:
+      - import-okr-resource
+      operationId: archiveImportJob
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Archive import job
+      x-summary-source: derived
+components:
+  schemas:
+    ImportJob:
+      type: object
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        fileName:
+          type: string
+        originalFileName:
+          type: string
+        status:
+          type: string
+          enum:
+          - PENDING
+          - PROCESSING
+          - ERROR
+          - COMPLETED
+          - ARCHIVED
+        createdAt:
+          type: string
+          format: date-time
+        userId:
+          type: string
+        importedOkrs:
+          type: integer
+          format: int32
+        errorMessage:
+          type: string
+        parsingErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImportJobParsingError'
+      required:
+      - createdAt
+      - fileName
+      - originalFileName
+      - status
+      - tenantId
+      - userId
+    ImportJobParsingError:
+      type: object
+      properties:
+        lineNumber:
+          type: integer
+          format: int64
+        message:
+          type: string

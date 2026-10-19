@@ -1,0 +1,332 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Alignment Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: alignment-resource
+paths:
+  /api/v2/alignment/link:
+    post:
+      tags:
+      - alignment-resource
+      operationId: createAlignmentLink
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAlignmentLinkRequestBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Create alignment link
+      x-summary-source: derived
+  /api/v2/alignment/bulk:
+    post:
+      tags:
+      - alignment-resource
+      operationId: getBulkAlignmentLinks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkAlignmentRequestBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkAlignmentResponseBean'
+      summary: Get bulk alignment links
+      x-summary-source: derived
+  /api/v2/alignment/progress/stats/objective/{entityId}:
+    get:
+      tags:
+      - alignment-resource
+      operationId: getProgressStatsForObjective
+      parameters:
+      - name: entityId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ProgressStatsBean'
+      summary: Get progress stats for objective
+      x-summary-source: derived
+  /api/v2/alignment/progress/stats/kr/{entityId}:
+    get:
+      tags:
+      - alignment-resource
+      operationId: getProgressStatsForKeyResult
+      parameters:
+      - name: entityId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ProgressStatsBean'
+      summary: Get progress stats for key result
+      x-summary-source: derived
+  /api/v2/alignment/entity/{entityType}/id/{entityId}:
+    get:
+      tags:
+      - alignment-resource
+      operationId: getAlignmentLinks
+      parameters:
+      - name: entityType
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - OKR
+          - KR
+      - name: entityId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AlignmentLinkBean'
+      summary: Get alignment links
+      x-summary-source: derived
+  /api/v2/alignment/link/{linkId}:
+    delete:
+      tags:
+      - alignment-resource
+      operationId: remove
+      parameters:
+      - name: linkId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      summary: Remove
+      x-summary-source: derived
+components:
+  schemas:
+    BulkAlignmentResponseBean:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityAlignmentLinksBean'
+        dependencyPresence:
+          $ref: '#/components/schemas/DependencyPresenceSummaryBean'
+      required:
+      - results
+    EntityDependencyPresenceBean:
+      type: object
+      properties:
+        hasDependencies:
+          type: boolean
+        blockedBy:
+          type: boolean
+        blocks:
+          type: boolean
+    AlignmentLinkBean:
+      type: object
+      properties:
+        id:
+          type: string
+        source:
+          $ref: '#/components/schemas/AlignmentEntityBean'
+        target:
+          $ref: '#/components/schemas/AlignmentEntityBean'
+        alignmentLinkTypeBean:
+          type: string
+          enum:
+          - BLOCKS
+          - BLOCKED_BY
+          - SUPPORTS
+          - SUPPORTED_BY
+          - COPIES
+          - COPIED_TO
+      required:
+      - alignmentLinkTypeBean
+      - id
+      - source
+      - target
+    KeyResultUpdateUnit:
+      type: object
+      properties:
+        symbol:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - NUMERIC
+          - PERCENT
+          - CURRENCY
+        isSymbolBefore:
+          type: boolean
+          writeOnly: true
+        symbolBefore:
+          type: boolean
+      required:
+      - name
+      - symbol
+      - type
+    BulkAlignmentRequestBean:
+      type: object
+      properties:
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlignmentEntityBean'
+        linkTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - BLOCKS
+            - SUPPORTS
+            - COPIES
+      required:
+      - entities
+    ProgressStatsBean:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - ON_TRACK
+          - AT_RISK
+          - ACTION_REQUIRED
+          - NOT_STARTED
+          - SUCCESS
+          - FINISHED
+          - ASSUMPTIONS_CHANGED
+          - DELAYED
+          - CANCELED
+          - FAILED
+          - UNDEFINED
+          - MISSED_TARGET
+        daysInStatus:
+          type: integer
+          format: int32
+        currentValue:
+          type: number
+          format: double
+        previousValue:
+          type: number
+          format: double
+        progressPercentage:
+          type: number
+          format: double
+        progressPercentageChange:
+          type: number
+          format: double
+        dateOfLastUpdate:
+          type: string
+          format: date-time
+        progressUnit:
+          $ref: '#/components/schemas/KeyResultUpdateUnit'
+      required:
+      - currentValue
+      - dateOfLastUpdate
+      - daysInStatus
+      - previousValue
+      - progressPercentage
+      - progressPercentageChange
+      - status
+    DependencyPresenceSummaryBean:
+      type: object
+      properties:
+        counts:
+          $ref: '#/components/schemas/DependencyPresenceCountsBean'
+        byEntity:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/EntityDependencyPresenceBean'
+    EntityAlignmentLinksBean:
+      type: object
+      properties:
+        entity:
+          $ref: '#/components/schemas/AlignmentEntityBean'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlignmentLinkBean'
+      required:
+      - entity
+      - links
+    DependencyPresenceCountsBean:
+      type: object
+      properties:
+        withDependencies:
+          type: integer
+          format: int32
+        blockedBy:
+          type: integer
+          format: int32
+        blocks:
+          type: integer
+          format: int32
+    AlignmentEntityBean:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - OKR
+          - KR
+        id:
+          type: string
+      required:
+      - id
+      - type
+    CreateAlignmentLinkRequestBean:
+      type: object
+      properties:
+        source:
+          $ref: '#/components/schemas/AlignmentEntityBean'
+        target:
+          $ref: '#/components/schemas/AlignmentEntityBean'
+        alignmentLinkTypeBean:
+          type: string
+          enum:
+          - BLOCKS
+          - BLOCKED_BY
+          - SUPPORTS
+          - SUPPORTED_BY
+          - COPIES
+          - COPIED_TO
+      required:
+      - alignmentLinkTypeBean
+      - source
+      - target

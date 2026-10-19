@@ -1,0 +1,176 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Notification Settings Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: notification-settings-resource
+paths:
+  /api/v2/settings/notification:
+    get:
+      tags:
+      - notification-settings-resource
+      operationId: getSettings_1
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NotificationSettingsWithInfoBean'
+      summary: Get settings 1
+      x-summary-source: derived
+    post:
+      tags:
+      - notification-settings-resource
+      operationId: setSettings_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationSettingsBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NotificationSettingsBean'
+      summary: Set settings 1
+      x-summary-source: derived
+  /api/v2/settings/notification/user:
+    get:
+      tags:
+      - notification-settings-resource
+      operationId: getSettingsUser
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserNotificationSettingsBean'
+      summary: Get settings user
+      x-summary-source: derived
+    post:
+      tags:
+      - notification-settings-resource
+      operationId: setSettingsUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserNotificationSettingsBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserNotificationSettingsBean'
+      summary: Set settings user
+      x-summary-source: derived
+components:
+  schemas:
+    NotificationInformationBean:
+      type: object
+      properties:
+        sendUpdateReminderEmail:
+          $ref: '#/components/schemas/NotificationInfoBean'
+      required:
+      - sendUpdateReminderEmail
+    NotificationSettingsWithInfoBean:
+      type: object
+      properties:
+        settings:
+          $ref: '#/components/schemas/NotificationSettingsBean'
+        info:
+          $ref: '#/components/schemas/NotificationInformationBean'
+      required:
+      - info
+      - settings
+    NotificationSettingBean:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        recipients:
+          type: string
+          enum:
+          - OWNERS
+          - OWNERS_AND_COLLABORATORS
+        cadence:
+          $ref: '#/components/schemas/Cadence'
+      required:
+      - cadence
+      - enabled
+      - recipients
+    Cadence:
+      type: object
+      properties:
+        cadenceType:
+          type: string
+          enum:
+          - WEEK
+          - TWO_WEEKS
+          - MONTH
+        dayOfWeek:
+          type: integer
+          format: int32
+        dayOfMonth:
+          type: string
+          enum:
+          - FIRST_DAY
+          - LAST_DAY
+        hour:
+          type: integer
+          format: int32
+      required:
+      - cadenceType
+      - dayOfMonth
+      - dayOfWeek
+      - hour
+    NotificationInfoBean:
+      type: object
+      properties:
+        dateOfLastSync:
+          type: string
+          format: date-time
+        dateOfNextSync:
+          type: string
+          format: date-time
+      required:
+      - dateOfNextSync
+    NotificationSettingsBean:
+      type: object
+      properties:
+        sendUpdateReminderEmail:
+          $ref: '#/components/schemas/NotificationSettingBean'
+      required:
+      - sendUpdateReminderEmail
+    UserNotificationSettingsBean:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        newCommentOnUserOwnedOkr:
+          type: boolean
+        newCommentOnUserOwnedUpdate:
+          type: boolean
+        newCommentReplyOnUserOwnedComment:
+          type: boolean
+        newMentionOnAnyComment:
+          type: boolean
+        assignedToOkr:
+          type: boolean
+      required:
+      - assignedToOkr
+      - enabled
+      - newCommentOnUserOwnedOkr
+      - newCommentOnUserOwnedUpdate
+      - newCommentReplyOnUserOwnedComment
+      - newMentionOnAnyComment

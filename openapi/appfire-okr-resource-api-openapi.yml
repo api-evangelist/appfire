@@ -1,0 +1,2235 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Okr Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: okr-resource
+paths:
+  /api/okr:
+    get:
+      tags:
+      - okr-resource
+      operationId: getGoals
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OKRChangeOutputBean'
+      summary: Get goals
+      x-summary-source: derived
+    post:
+      tags:
+      - okr-resource
+      operationId: createGoalWizard
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WizardObjectiveInputBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OkrGoalOutputBean'
+      summary: Create goal wizard
+      x-summary-source: derived
+  /api/okr/{okrGoalId}/status:
+    post:
+      tags:
+      - okr-resource
+      operationId: updateStatus
+      parameters:
+      - name: okrGoalId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateObjectiveInputBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OKRChangeOutputBean'
+      summary: Update status
+      x-summary-source: derived
+  /api/okr/{okrGoalId}/status/{statusId}:
+    post:
+      tags:
+      - okr-resource
+      operationId: updateExistingStatus_1
+      parameters:
+      - name: okrGoalId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: statusId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateBean'
+      summary: Update existing status 1
+      x-summary-source: derived
+    delete:
+      tags:
+      - okr-resource
+      operationId: deleteExistingStatus_1
+      parameters:
+      - name: okrGoalId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: statusId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      summary: Delete existing status 1
+      x-summary-source: derived
+  /api/okr/{okrGoalId}/status/{statusId}/pin:
+    post:
+      tags:
+      - okr-resource
+      operationId: setUpdatePinned_1
+      parameters:
+      - name: okrGoalId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: statusId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePinBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateBean'
+      summary: Set update pinned 1
+      x-summary-source: derived
+  /api/okr/{objectiveId}/rank:
+    post:
+      tags:
+      - okr-resource
+      operationId: setRank_1
+      parameters:
+      - name: objectiveId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RankUpdateBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleOkrOutputBean'
+      summary: Set rank 1
+      x-summary-source: derived
+  /api/okr/{goalId}/updatePeriod/{periodId}:
+    post:
+      tags:
+      - okr-resource
+      operationId: updateGoalPeriod_1
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: periodId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: moveChildren
+        in: query
+        required: true
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OKRChangeOutputBean'
+      summary: Update goal period 1
+      x-summary-source: derived
+  /api/okr/{goalId}/updateParent:
+    post:
+      tags:
+      - okr-resource
+      operationId: updateGoalParent
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: confirm
+        in: query
+        required: false
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateParentGoalBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OKRChangeOutputBean'
+      summary: Update goal parent
+      x-summary-source: derived
+  /api/okr/{goalId}/updateCollaborators:
+    post:
+      tags:
+      - okr-resource
+      operationId: updateGoalCollaborators_1
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCollaboratorsBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleOkrOutputBean'
+      summary: Update goal collaborators 1
+      x-summary-source: derived
+  /api/okr/{goalId}/reopen:
+    post:
+      tags:
+      - okr-resource
+      operationId: reopenGoal_1
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleOkrOutputBean'
+      summary: Reopen goal 1
+      x-summary-source: derived
+  /api/okr/{goalId}/progressType:
+    post:
+      tags:
+      - okr-resource
+      operationId: changeProgressType
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProgressTrackingTypeBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OKRChangeOutputBean'
+      summary: Change progress type
+      x-summary-source: derived
+  /api/okr/{goalId}/copy:
+    post:
+      tags:
+      - okr-resource
+      operationId: copyGoal
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ObjectiveCopyBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OKRChangeOutputBean'
+      summary: Copy goal
+      x-summary-source: derived
+  /api/okr/{goalId}/complete:
+    post:
+      tags:
+      - okr-resource
+      operationId: completeGoal
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OkrCompletionBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OKRChangeOutputBean'
+      summary: Complete goal
+      x-summary-source: derived
+  /api/okr/{goalId}/clearUpdates:
+    post:
+      tags:
+      - okr-resource
+      operationId: bulkClearUpdates_1
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleOkrOutputBean'
+      summary: Bulk clear updates 1
+      x-summary-source: derived
+  /api/okr/{goalId}:
+    get:
+      tags:
+      - okr-resource
+      operationId: getSingleGoal
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleOkrOutputBean'
+      summary: Get single goal
+      x-summary-source: derived
+    delete:
+      tags:
+      - okr-resource
+      operationId: deleteGoal_1
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: deleteChildObjectives
+        in: query
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OKRChangeOutputBean'
+      summary: Delete goal 1
+      x-summary-source: derived
+    patch:
+      tags:
+      - okr-resource
+      operationId: updateGoal
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OkrGoalUpdateInputBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleOkrOutputBean'
+      summary: Update goal
+      x-summary-source: derived
+  /api/okr/{goalId}/updateStartEndDates:
+    patch:
+      tags:
+      - okr-resource
+      operationId: updateStartEndDates
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: expectedStartDate
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: expectedEndDate
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleOkrOutputBean'
+      summary: Update start end dates
+      x-summary-source: derived
+  /api/okr/{goalId}/updateOwner:
+    patch:
+      tags:
+      - okr-resource
+      operationId: updateGoalOwner_1
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: accountId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleOkrOutputBean'
+      summary: Update goal owner 1
+      x-summary-source: derived
+  /api/okr/{goalId}/okrType:
+    delete:
+      tags:
+      - okr-resource
+      operationId: deleteOkrType
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleOkrOutputBean'
+      summary: Delete okr type
+      x-summary-source: derived
+    patch:
+      tags:
+      - okr-resource
+      operationId: updateOkrType
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOkrTypeBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleOkrOutputBean'
+      summary: Update okr type
+      x-summary-source: derived
+  /api/okr/{okrGoalId}/statusUpdates:
+    get:
+      tags:
+      - okr-resource
+      operationId: fetchLastStatusUpdates_1
+      parameters:
+      - name: okrGoalId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: maxResults
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: before
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: updateType
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - MANUAL
+            - API
+            - AUTO
+      - name: excludePinned
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: includeTransitions
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatesBean'
+      summary: Fetch last status updates 1
+      x-summary-source: derived
+  /api/okr/{okrGoalId}/notStartedObjectiveTree:
+    get:
+      tags:
+      - okr-resource
+      operationId: notStartedObjectiveTree
+      parameters:
+      - name: okrGoalId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OkrGoalOutputBean'
+      summary: Not started objective tree
+      x-summary-source: derived
+  /api/okr/{objectiveId}/progressEntities:
+    get:
+      tags:
+      - okr-resource
+      operationId: getLinkedProgressEntitiesIssueIds
+      parameters:
+      - name: objectiveId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: array
+          default:
+          - JIRA_ISSUE
+          - JQL
+          - BP_BOX
+          items:
+            type: string
+            enum:
+            - JIRA_ISSUE
+            - JQL
+            - BP_BOX
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProgressEntity'
+                uniqueItems: true
+      summary: Get linked progress entities issue ids
+      x-summary-source: derived
+  /api/okr/{goalId}/root:
+    get:
+      tags:
+      - okr-resource
+      operationId: getRootOfType
+      parameters:
+      - name: okrTypeId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+      summary: Get root of type
+      x-summary-source: derived
+  /api/okr/{goalId}/progress:
+    get:
+      tags:
+      - okr-resource
+      operationId: getProgress
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressChartBean'
+      summary: Get progress
+      x-summary-source: derived
+  /api/okr/{goalId}/objectiveTree:
+    get:
+      tags:
+      - okr-resource
+      operationId: getObjectivesInTree
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OKRChangeOutputBean'
+      summary: Get objectives in tree
+      x-summary-source: derived
+  /api/okr/{goalId}/issueIds:
+    get:
+      tags:
+      - okr-resource
+      operationId: getIssueIds
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                uniqueItems: true
+      summary: Get issue ids
+      x-summary-source: derived
+  /api/okr/{goalId}/childrenForCopy:
+    get:
+      tags:
+      - okr-resource
+      operationId: childrenForCopy
+      parameters:
+      - name: goalId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OKRPartialChangeOutputBean'
+      summary: Children for copy
+      x-summary-source: derived
+  /api/okr/key/{key}:
+    get:
+      tags:
+      - okr-resource
+      operationId: getSingleGoalByKey
+      parameters:
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleOkrOutputBean'
+      summary: Get single goal by key
+      x-summary-source: derived
+  /api/okr/filtered:
+    get:
+      tags:
+      - okr-resource
+      operationId: getGoalsFiltered
+      parameters:
+      - name: startDate
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: deadline
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: teamIds
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: okrTypeIds
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: labelIds
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OKRChangeOutputBean'
+      summary: Get goals filtered
+      x-summary-source: derived
+  /api/okr/bulk/partial:
+    get:
+      tags:
+      - okr-resource
+      operationId: getBulkPartial_1
+      parameters:
+      - name: objectiveIds
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: fields
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: query
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: periodId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OKRPartialChangeOutputBean'
+      summary: Get bulk partial 1
+      x-summary-source: derived
+components:
+  schemas:
+    MilestoneOutputBean:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        expectedDate:
+          type: string
+          format: date-time
+        targetValue:
+          type: number
+          format: double
+        actualValue:
+          type:
+          - number
+          - 'null'
+          format: double
+        gapDifference:
+          type: number
+          format: double
+        gapPercent:
+          type: integer
+          format: int32
+        actualOverallPercent:
+          type: integer
+          format: int32
+        expectedOverallPercent:
+          type: integer
+          format: int32
+        entityType:
+          type: string
+          enum:
+          - OBJECTIVE
+          - KEY_RESULT
+        okrId:
+          type: string
+        status:
+          type: string
+          enum:
+          - ACHIEVED
+          - UPCOMING
+          - MISSED
+          - INVALID
+        invalidReason:
+          type: string
+          enum:
+          - DATE_OUT_OF_RANGE
+          - UNIT_MISMATCH
+      required:
+      - actualOverallPercent
+      - entityType
+      - expectedDate
+      - expectedOverallPercent
+      - gapDifference
+      - gapPercent
+      - id
+      - name
+      - okrId
+      - status
+      - targetValue
+    PredefinedPeriod:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - QUARTER
+          - YEAR
+        quarter:
+          type: integer
+          format: int32
+        year:
+          type: integer
+          format: int32
+      required:
+      - type
+      - year
+    UpdateBean:
+      type: object
+      properties:
+        id:
+          type: string
+        entityId:
+          type: string
+        status:
+          type: string
+          enum:
+          - ON_TRACK
+          - AT_RISK
+          - ACTION_REQUIRED
+          - NOT_STARTED
+          - SUCCESS
+          - FINISHED
+          - ASSUMPTIONS_CHANGED
+          - DELAYED
+          - CANCELED
+          - FAILED
+          - UNDEFINED
+          - MISSED_TARGET
+        isComplete:
+          type: boolean
+          writeOnly: true
+        value:
+          type:
+          - number
+          - 'null'
+          format: double
+        createdISODate:
+          type: string
+        editedISODate:
+          type:
+          - string
+          - 'null'
+        updatedBy:
+          $ref: '#/components/schemas/JiraUser'
+        source:
+          type: string
+          enum:
+          - MANUAL
+          - API
+          - AUTO
+        isAutomaticUpdate:
+          type: boolean
+        description:
+          type: string
+        numericProgressBean:
+          $ref: '#/components/schemas/NumericProgressBean'
+        unit:
+          $ref: '#/components/schemas/KeyResultUpdateUnit'
+        pinISODate:
+          type:
+          - string
+          - 'null'
+        updateEvent:
+          type:
+          - string
+          - 'null'
+          enum:
+          - CONVERTED_TO_AUTOMATIC_PROGRESS_TRACKING
+          - CONVERTED_TO_MANUAL_PROGRESS_TRACKING
+        changes:
+          $ref: '#/components/schemas/UpdateTransitionBean'
+        complete:
+          type: boolean
+      required:
+      - createdISODate
+      - entityId
+      - id
+      - source
+      - status
+      - updatedBy
+    NumericProgressBean:
+      type: 'null'
+      properties:
+        startValue:
+          type: number
+          format: double
+        desiredValue:
+          type: number
+          format: double
+        currentValue:
+          type: number
+          format: double
+      required:
+      - currentValue
+      - desiredValue
+      - startValue
+    ProgressGraphDtoValueAggregateBean:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+        points:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValueAggregateBean'
+        unit:
+          $ref: '#/components/schemas/KeyResultUpdateUnit'
+      required:
+      - end
+      - points
+      - start
+    OkrGoalOutputBean:
+      type: object
+      properties:
+        id:
+          type: string
+        key:
+          type: string
+        summary:
+          type: string
+        description:
+          type: string
+        state:
+          type: string
+          enum:
+          - ACTIVE
+          - COMPLETED
+          - CLOSED
+          - DELETED
+        creator:
+          $ref: '#/components/schemas/JiraUser'
+        owner:
+          $ref: '#/components/schemas/JiraUser'
+        collaboratorAccountIds:
+          type: array
+          items:
+            type: string
+        collaborators:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserOrTeam'
+        periodId:
+          type: string
+        expectedStartDate:
+          type: string
+          format: date-time
+        expectedEndDate:
+          type: string
+          format: date-time
+        completionDate:
+          type: string
+          format: date-time
+        created:
+          type: string
+          format: date-time
+        keyResultGradings:
+          type: object
+          additionalProperties:
+            type: number
+            format: double
+        parentGoalId:
+          type: string
+        percentDone:
+          type: number
+          format: double
+        periodAlias:
+          $ref: '#/components/schemas/PeriodAlias'
+        keyResultIds:
+          type: array
+          items:
+            type: string
+        childObjectiveIds:
+          type: array
+          items:
+            type: string
+        latestStatusUpdate:
+          type: string
+          enum:
+          - ON_TRACK
+          - AT_RISK
+          - ACTION_REQUIRED
+          - NOT_STARTED
+          - SUCCESS
+          - FINISHED
+          - ASSUMPTIONS_CHANGED
+          - DELAYED
+          - CANCELED
+          - FAILED
+          - UNDEFINED
+          - MISSED_TARGET
+        latestStatusUpdateDescription:
+          type: string
+        latestStatusUpdateValue:
+          type: number
+          format: double
+        dateOfLastChange:
+          type: string
+          format: date-time
+        finalGrading:
+          type: number
+          format: double
+        weight:
+          type: integer
+          format: int32
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Label'
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleTeamBean'
+        progressType:
+          type: string
+          enum:
+          - BY_CHILDREN
+          - MANUAL
+        objectiveType:
+          $ref: '#/components/schemas/ObjectiveType'
+        copiedFrom:
+          type: string
+        restrictedEntityLevel:
+          type: string
+          enum:
+          - OPEN
+          - EDIT_RESTRICTED
+          - VIEW_EDIT_RESTRICTED
+        userAccessLevel:
+          type: string
+          enum:
+          - VIEW
+          - EDIT
+        restrictingEntityId:
+          type: string
+        rank:
+          type: string
+        displayOrder:
+          type: integer
+          format: int32
+        customFieldValues:
+          type: object
+          additionalProperties: {}
+        latestPastMilestone:
+          $ref: '#/components/schemas/MilestoneOutputBean'
+      required:
+      - childObjectiveIds
+      - collaboratorAccountIds
+      - collaborators
+      - created
+      - dateOfLastChange
+      - expectedEndDate
+      - expectedStartDate
+      - id
+      - key
+      - keyResultIds
+      - labels
+      - latestStatusUpdate
+      - percentDone
+      - progressType
+      - state
+      - summary
+      - teams
+      - weight
+    ObjectiveType:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        iconColors:
+          $ref: '#/components/schemas/ObjectiveTypeIconColors'
+        canOnlyBeAssignedDuringCreation:
+          type: boolean
+        customPrefix:
+          type: object
+          additionalProperties:
+            type: string
+        appProvided:
+          type: boolean
+        hidden:
+          type: boolean
+      required:
+      - name
+    KeyResultUpdateUnit:
+      type: object
+      properties:
+        symbol:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - NUMERIC
+          - PERCENT
+          - CURRENCY
+        isSymbolBefore:
+          type: boolean
+          writeOnly: true
+        symbolBefore:
+          type: boolean
+      required:
+      - name
+      - symbol
+      - type
+    UpdatesBean:
+      type: object
+      properties:
+        maxResults:
+          type: integer
+          format: int64
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateBean'
+      required:
+      - maxResults
+      - values
+    IconColors:
+      type: object
+      properties:
+        backgroundColor:
+          type: string
+          minLength: 1
+        textColor:
+          type: string
+          minLength: 1
+      required:
+      - backgroundColor
+      - textColor
+    ValueAggregateBean:
+      type: object
+      properties:
+        time:
+          type: string
+          format: date-time
+        value:
+          type: number
+          format: double
+        status:
+          type: string
+          enum:
+          - ON_TRACK
+          - AT_RISK
+          - ACTION_REQUIRED
+          - NOT_STARTED
+          - SUCCESS
+          - FINISHED
+          - ASSUMPTIONS_CHANGED
+          - DELAYED
+          - CANCELED
+          - FAILED
+          - UNDEFINED
+          - MISSED_TARGET
+      required:
+      - time
+    RestrictedEntityConfiguration:
+      type: object
+      properties:
+        level:
+          type: string
+          enum:
+          - OPEN
+          - EDIT_RESTRICTED
+          - VIEW_EDIT_RESTRICTED
+        editRestricted:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserOrTeam'
+        viewRestricted:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserOrTeam'
+      required:
+      - editRestricted
+      - level
+      - viewRestricted
+    OkrCompletionBean:
+      type: object
+      properties:
+        keyResultGradings:
+          type: object
+          additionalProperties:
+            type: number
+            format: double
+        objectiveGradings:
+          type: object
+          additionalProperties:
+            type: number
+            format: double
+        keyResultWeights:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+        objectiveWeights:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+        description:
+          type: string
+        state:
+          type: string
+          enum:
+          - ON_TRACK
+          - AT_RISK
+          - ACTION_REQUIRED
+          - NOT_STARTED
+          - SUCCESS
+          - FINISHED
+          - ASSUMPTIONS_CHANGED
+          - DELAYED
+          - CANCELED
+          - FAILED
+          - UNDEFINED
+          - MISSED_TARGET
+        dateOfUpdate:
+          type: integer
+          format: int64
+        completed:
+          type: boolean
+        completionDate:
+          type: integer
+          format: int64
+    ObjectiveWithOptionalFieldsBean:
+      type: object
+      properties:
+        id:
+          type: string
+        key:
+          type: string
+        summary:
+          type: string
+        weight:
+          type: integer
+          format: int32
+        owner:
+          $ref: '#/components/schemas/JiraUser'
+        latestStatusUpdate:
+          type: string
+          enum:
+          - ON_TRACK
+          - AT_RISK
+          - ACTION_REQUIRED
+          - NOT_STARTED
+          - SUCCESS
+          - FINISHED
+          - ASSUMPTIONS_CHANGED
+          - DELAYED
+          - CANCELED
+          - FAILED
+          - UNDEFINED
+          - MISSED_TARGET
+        parentGoalId:
+          type: string
+        state:
+          type: string
+          enum:
+          - ACTIVE
+          - COMPLETED
+          - CLOSED
+          - DELETED
+        periodAlias:
+          $ref: '#/components/schemas/PeriodAlias'
+        objectiveType:
+          $ref: '#/components/schemas/ObjectiveType'
+        userAccessLevel:
+          type: string
+          enum:
+          - VIEW
+          - EDIT
+        restrictingEntityId:
+          type: string
+        keyResultIds:
+          type: array
+          items:
+            type: string
+        childObjectiveIds:
+          type: array
+          items:
+            type: string
+        percentDone:
+          type: number
+          format: double
+        rank:
+          type: string
+    UpdateObjectiveInputBean:
+      type: object
+      properties:
+        description:
+          type: string
+        state:
+          type: string
+          enum:
+          - ON_TRACK
+          - AT_RISK
+          - ACTION_REQUIRED
+          - NOT_STARTED
+          - SUCCESS
+          - FINISHED
+          - ASSUMPTIONS_CHANGED
+          - DELAYED
+          - CANCELED
+          - FAILED
+          - UNDEFINED
+          - MISSED_TARGET
+        value:
+          type: number
+          format: double
+        dateOfUpdate:
+          type: integer
+          format: int64
+        additionalCloseNotStartedObjectives:
+          type: array
+          items:
+            type: string
+      required:
+      - additionalCloseNotStartedObjectives
+      - description
+      - state
+      - value
+    ProgressChartBean:
+      type: object
+      properties:
+        progress:
+          $ref: '#/components/schemas/ProgressGraphDtoValueAggregateBean'
+      required:
+      - progress
+    ObjectiveCopyBean:
+      type: object
+      properties:
+        parentObjectiveId:
+          type: string
+        periodId:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        deadline:
+          type: string
+          format: date-time
+        historyOfUpdates:
+          type: boolean
+        copyMilestones:
+          type: boolean
+        childObjectiveIds:
+          type: array
+          items:
+            type: string
+        childKeyResultIds:
+          type: array
+          items:
+            type: string
+      required:
+      - childKeyResultIds
+      - childObjectiveIds
+      - copyMilestones
+      - deadline
+      - historyOfUpdates
+      - periodId
+      - startDate
+    JiraUser:
+      type: object
+      properties:
+        id:
+          type: string
+        userName:
+          type: string
+        accountId:
+          type: string
+      required:
+      - accountId
+    ProgressEntity:
+      type: object
+      properties:
+        id:
+          type: string
+        externalEntityId:
+          type: string
+        type:
+          type: string
+          enum:
+          - JIRA_ISSUE
+          - JQL
+          - BP_BOX
+        tenantId:
+          type: string
+        progress:
+          type: number
+          format: double
+        weight:
+          type: integer
+          format: int32
+      required:
+      - externalEntityId
+      - progress
+      - type
+      - weight
+    UserOrTeam:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - USER
+          - TEAM
+      required:
+      - type
+    SimpleTeamBean:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        iconColors:
+          $ref: '#/components/schemas/IconColors'
+      required:
+      - iconColors
+      - id
+      - name
+    RestrictedAutoKrEntityOutputBean:
+      allOf:
+      - $ref: '#/components/schemas/RestrictedEntityOutputBean'
+      - type: object
+        properties:
+          id:
+            type: string
+      required:
+      - id
+      - percentDone
+      - weight
+    NumericProgressDefinitionBean:
+      type: object
+      properties:
+        startValue:
+          type: number
+          format: double
+        targetValue:
+          type: number
+          format: double
+      required:
+      - startValue
+      - targetValue
+    BoxFilterData:
+      type: object
+      properties:
+        parentBoxesIds:
+          type: array
+          items:
+            type: string
+        boxTypesIds:
+          type: array
+          items:
+            type: string
+        boxStatusesIds:
+          type: array
+          items:
+            type: string
+        inputSearch:
+          type: string
+    SingleOkrOutputBean:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - OKR
+          - KR
+          - RESTRICTED
+        objective:
+          $ref: '#/components/schemas/OkrGoalOutputBean'
+        kr:
+          $ref: '#/components/schemas/KeyResultOutputBean'
+        restrictedEntity:
+          oneOf:
+          - $ref: '#/components/schemas/RestrictedAutoKrEntityOutputBean'
+          - $ref: '#/components/schemas/RestrictedKrEntityOutputBean'
+          - $ref: '#/components/schemas/RestrictedOkrEntityOutputBean'
+      required:
+      - type
+    RankUpdateBean:
+      type: object
+      properties:
+        after:
+          $ref: '#/components/schemas/RankedEntityId'
+        before:
+          $ref: '#/components/schemas/RankedEntityId'
+    Label:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        backgroundColor:
+          type: string
+        textColor:
+          type: string
+      required:
+      - backgroundColor
+      - name
+      - textColor
+    UpdatePinBean:
+      type: object
+      properties:
+        pinned:
+          type: boolean
+      required:
+      - pinned
+    KeyResultOutputBean:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        key:
+          type: string
+        type:
+          type: string
+          enum:
+          - STANDARD
+          - AUTO
+        description:
+          type: string
+        state:
+          type: string
+          enum:
+          - ACTIVE
+          - COMPLETED
+          - CLOSED
+          - DELETED
+        creator:
+          $ref: '#/components/schemas/JiraUser'
+        owner:
+          $ref: '#/components/schemas/JiraUser'
+        collaboratorAccountIds:
+          type: array
+          items:
+            type: string
+        collaborators:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserOrTeam'
+        created:
+          type: string
+          format: date-time
+        parentObjectiveId:
+          type: string
+        percentDone:
+          type: number
+          format: double
+        numericProgress:
+          $ref: '#/components/schemas/NumericProgressDefinitionBean'
+        jql:
+          type: string
+        updates:
+          $ref: '#/components/schemas/UpdatesBean'
+        latestValue:
+          $ref: '#/components/schemas/LatestValueBean'
+        latestStatusUpdate:
+          type: string
+          enum:
+          - ON_TRACK
+          - AT_RISK
+          - ACTION_REQUIRED
+          - NOT_STARTED
+          - SUCCESS
+          - FINISHED
+          - ASSUMPTIONS_CHANGED
+          - DELAYED
+          - CANCELED
+          - FAILED
+          - UNDEFINED
+          - MISSED_TARGET
+        dateOfLastChange:
+          type: string
+          format: date-time
+        autoLinkedIssueIds:
+          type: array
+          items:
+            type: string
+        linkedEntities:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProgressEntity'
+        manuallyLinkedIssueIds:
+          type: array
+          items:
+            type: string
+        finalGrading:
+          type: number
+          format: double
+        completionDate:
+          type: string
+          format: date-time
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Label'
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleTeamBean'
+        periodId:
+          type: string
+        expectedStartDate:
+          type: string
+          format: date-time
+        expectedEndDate:
+          type: string
+          format: date-time
+        periodAlias:
+          $ref: '#/components/schemas/PeriodAlias'
+        unit:
+          $ref: '#/components/schemas/KeyResultUpdateUnit'
+        copiedFrom:
+          type: string
+        weight:
+          type: integer
+          format: int32
+        objectiveType:
+          $ref: '#/components/schemas/ObjectiveType'
+        restrictedEntityLevel:
+          type: string
+          enum:
+          - OPEN
+          - EDIT_RESTRICTED
+          - VIEW_EDIT_RESTRICTED
+        userAccessLevel:
+          type: string
+          enum:
+          - VIEW
+          - EDIT
+        restrictingEntityId:
+          type: string
+        rank:
+          type: string
+        displayOrder:
+          type: integer
+          format: int32
+        manualJqlFilter:
+          type: string
+        boxFilterData:
+          $ref: '#/components/schemas/BoxFilterData'
+        customFieldValues:
+          type: object
+          additionalProperties: {}
+        latestPastMilestone:
+          $ref: '#/components/schemas/MilestoneOutputBean'
+      required:
+      - autoLinkedIssueIds
+      - collaboratorAccountIds
+      - collaborators
+      - created
+      - dateOfLastChange
+      - expectedEndDate
+      - expectedStartDate
+      - id
+      - key
+      - labels
+      - manuallyLinkedIssueIds
+      - name
+      - owner
+      - parentObjectiveId
+      - percentDone
+      - state
+      - teams
+      - type
+      - updates
+      - weight
+    UpdateOkrTypeBean:
+      type: object
+      properties:
+        okrTypeId:
+          type: string
+      required:
+      - okrTypeId
+    OKRChangeOutputBean:
+      type: object
+      properties:
+        okrs:
+          type: array
+          items:
+            $ref: '#/components/schemas/OkrGoalOutputBean'
+        krs:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyResultOutputBean'
+        restrictedEntities:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/RestrictedAutoKrEntityOutputBean'
+            - $ref: '#/components/schemas/RestrictedKrEntityOutputBean'
+            - $ref: '#/components/schemas/RestrictedOkrEntityOutputBean'
+      required:
+      - krs
+      - okrs
+      - restrictedEntities
+    WizardObjectiveInputBean:
+      type: object
+      properties:
+        summary:
+          type: string
+        description:
+          type: string
+        parentGoalId:
+          type: string
+        expectedStartDate:
+          type: string
+          format: date-time
+        expectedEndDate:
+          type: string
+          format: date-time
+        periodId:
+          type: string
+        ownerAccountId:
+          type: string
+        collaboratorAccountIds:
+          type: array
+          items:
+            type: string
+        collaboratorTeamIds:
+          type: array
+          items:
+            type: string
+        teamIds:
+          type: array
+          items:
+            type: string
+        labelIds:
+          type: array
+          items:
+            type: string
+        okrTypeId:
+          type: string
+        weight:
+          type: integer
+          format: int32
+        initialProgress:
+          type: number
+          format: double
+        progressTrackingType:
+          type: string
+          enum:
+          - BY_CHILDREN
+          - MANUAL
+        restrictedEntityConfiguration:
+          $ref: '#/components/schemas/RestrictedEntityConfiguration'
+        customFieldValues:
+          type: object
+          additionalProperties: {}
+      required:
+      - collaboratorAccountIds
+      - collaboratorTeamIds
+      - expectedStartDate
+      - labelIds
+      - ownerAccountId
+      - summary
+      - teamIds
+    RestrictedKrEntityOutputBean:
+      allOf:
+      - $ref: '#/components/schemas/RestrictedEntityOutputBean'
+      - type: object
+        properties:
+          id:
+            type: string
+      required:
+      - id
+      - percentDone
+      - weight
+    ObjectiveTypeIconColors:
+      type: object
+      properties:
+        backgroundColor:
+          type: string
+        textColor:
+          type: string
+      required:
+      - backgroundColor
+      - textColor
+    PeriodAlias:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        deadline:
+          type: string
+          format: date-time
+        appProvided:
+          type: boolean
+        hidden:
+          type: boolean
+      required:
+      - deadline
+      - name
+      - startDate
+    OkrGoalUpdateInputBean:
+      type: object
+      properties:
+        summary:
+          type: string
+        description:
+          type: string
+        parentGoalId:
+          type: string
+        period:
+          $ref: '#/components/schemas/PredefinedPeriod'
+        ownerAccountId:
+          type: string
+        state:
+          type: string
+          enum:
+          - ACTIVE
+          - COMPLETED
+          - CLOSED
+          - DELETED
+        completionDate:
+          type: string
+          format: date-time
+        labelIds:
+          type: array
+          items:
+            type: string
+        teamIds:
+          type: array
+          items:
+            type: string
+        customFieldValues:
+          type: object
+          additionalProperties: {}
+    UpdateCollaboratorsBean:
+      type: object
+      properties:
+        collaboratorAccountIds:
+          type: array
+          items:
+            type: string
+        collaboratorTeamIds:
+          type: array
+          items:
+            type: string
+      required:
+      - collaboratorAccountIds
+      - collaboratorTeamIds
+    KeyResultWithOptionalFieldsBean:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        key:
+          type: string
+        type:
+          type: string
+          enum:
+          - STANDARD
+          - AUTO
+        weight:
+          type: integer
+          format: int32
+        state:
+          type: string
+          enum:
+          - ACTIVE
+          - COMPLETED
+          - CLOSED
+          - DELETED
+        owner:
+          $ref: '#/components/schemas/JiraUser'
+        parentObjectiveId:
+          type: string
+        latestStatusUpdate:
+          type: string
+          enum:
+          - ON_TRACK
+          - AT_RISK
+          - ACTION_REQUIRED
+          - NOT_STARTED
+          - SUCCESS
+          - FINISHED
+          - ASSUMPTIONS_CHANGED
+          - DELAYED
+          - CANCELED
+          - FAILED
+          - UNDEFINED
+          - MISSED_TARGET
+        periodAlias:
+          $ref: '#/components/schemas/PeriodAlias'
+        userAccessLevel:
+          type: string
+          enum:
+          - VIEW
+          - EDIT
+        restrictingEntityId:
+          type: string
+        percentDone:
+          type: number
+          format: double
+        rank:
+          type: string
+    UpdateParentGoalBean:
+      type: object
+      properties:
+        parentGoal:
+          type: string
+    UpdateProgressTrackingTypeBean:
+      type: object
+      properties:
+        progressType:
+          type: string
+          enum:
+          - BY_CHILDREN
+          - MANUAL
+      required:
+      - progressType
+    LatestValueBean:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+        numericProgress:
+          $ref: '#/components/schemas/NumericProgressDefinitionBean'
+      required:
+      - numericProgress
+      - value
+    UpdateTransitionBean:
+      type: 'null'
+      properties:
+        statusChanged:
+          type: boolean
+        progressChanged:
+          type: boolean
+        previousStatus:
+          type: string
+          enum:
+          - ON_TRACK
+          - AT_RISK
+          - ACTION_REQUIRED
+          - NOT_STARTED
+          - SUCCESS
+          - FINISHED
+          - ASSUMPTIONS_CHANGED
+          - DELAYED
+          - CANCELED
+          - FAILED
+          - UNDEFINED
+          - MISSED_TARGET
+        currentStatus:
+          type: string
+          enum:
+          - ON_TRACK
+          - AT_RISK
+          - ACTION_REQUIRED
+          - NOT_STARTED
+          - SUCCESS
+          - FINISHED
+          - ASSUMPTIONS_CHANGED
+          - DELAYED
+          - CANCELED
+          - FAILED
+          - UNDEFINED
+          - MISSED_TARGET
+        previousProgressDisplay:
+          type: string
+        currentProgressDisplay:
+          type: string
+        changeKind:
+          type: string
+          enum:
+          - status
+          - progress
+          - statusAndProgress
+          - generic
+      required:
+      - changeKind
+      - currentProgressDisplay
+      - currentStatus
+      - previousProgressDisplay
+      - previousStatus
+    RankedEntityId:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - OBJECTIVE
+          - KEY_RESULT
+    RestrictedOkrEntityOutputBean:
+      allOf:
+      - $ref: '#/components/schemas/RestrictedEntityOutputBean'
+      - type: object
+        properties:
+          id:
+            type: string
+      required:
+      - id
+      - percentDone
+      - weight
+    RestrictedEntityOutputBean:
+      type: object
+      discriminator:
+        propertyName: type
+      properties:
+        type:
+          type: string
+          enum:
+          - OKR
+          - KR
+          - AUTO_KR
+        parentObjectiveId:
+          type: string
+        childObjectiveIds:
+          type: array
+          items:
+            type: string
+        keyResultIds:
+          type: array
+          items:
+            type: string
+        percentDone:
+          type: number
+          format: double
+        weight:
+          type: integer
+          format: int32
+        rank:
+          type: string
+        displayOrder:
+          type: integer
+          format: int32
+      required:
+      - percentDone
+      - type
+      - weight
+    OKRPartialChangeOutputBean:
+      type: object
+      properties:
+        okrs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ObjectiveWithOptionalFieldsBean'
+        krs:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyResultWithOptionalFieldsBean'
+        restrictedEntities:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/RestrictedAutoKrEntityOutputBean'
+            - $ref: '#/components/schemas/RestrictedKrEntityOutputBean'
+            - $ref: '#/components/schemas/RestrictedOkrEntityOutputBean'
+      required:
+      - krs
+      - okrs
+      - restrictedEntities

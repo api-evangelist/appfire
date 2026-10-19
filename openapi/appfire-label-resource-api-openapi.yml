@@ -1,0 +1,186 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Label Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: label-resource
+paths:
+  /api/v2/label:
+    get:
+      tags:
+      - label-resource
+      operationId: getAvailableLabels
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Label'
+      summary: Get available labels
+      x-summary-source: derived
+    post:
+      tags:
+      - label-resource
+      operationId: createLabel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelInputBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Create label
+      x-summary-source: derived
+    delete:
+      tags:
+      - label-resource
+      operationId: deleteAliases
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelsDeleteBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Delete aliases
+      x-summary-source: derived
+  /api/v2/label/{labelId}:
+    post:
+      tags:
+      - label-resource
+      operationId: editCustomAlias_2
+      parameters:
+      - name: labelId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelInputBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Edit custom alias 2
+      x-summary-source: derived
+    delete:
+      tags:
+      - label-resource
+      operationId: deleteAlias_1
+      parameters:
+      - name: labelId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Delete alias 1
+      x-summary-source: derived
+  /api/v2/label/merge:
+    post:
+      tags:
+      - label-resource
+      operationId: mergeLabels
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelsMergeBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Merge labels
+      x-summary-source: derived
+components:
+  schemas:
+    LabelsMergeBean:
+      type: object
+      properties:
+        name:
+          type: string
+        backgroundColor:
+          type: string
+        textColor:
+          type: string
+        labelsIds:
+          type: array
+          items:
+            type: string
+      required:
+      - backgroundColor
+      - labelsIds
+      - name
+      - textColor
+    Label:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        backgroundColor:
+          type: string
+        textColor:
+          type: string
+      required:
+      - backgroundColor
+      - name
+      - textColor
+    LabelsDeleteBean:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+      required:
+      - ids
+    LabelInputBean:
+      type: object
+      properties:
+        name:
+          type: string
+        backgroundColor:
+          type: string
+        textColor:
+          type: string
+      required:
+      - backgroundColor
+      - name
+      - textColor

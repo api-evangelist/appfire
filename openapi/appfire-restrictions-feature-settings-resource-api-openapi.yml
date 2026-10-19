@@ -1,0 +1,55 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Restrictions Feature Settings Resource…
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: restrictions-feature-settings-resource
+paths:
+  /api/v2/settings/restrictions:
+    get:
+      tags:
+      - restrictions-feature-settings-resource
+      operationId: getSettings
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestrictionsFeatureSettingsBean'
+      summary: Get settings
+      x-summary-source: derived
+    post:
+      tags:
+      - restrictions-feature-settings-resource
+      operationId: setSettings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestrictionsFeatureSettingsBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestrictionsFeatureSettingsBean'
+      summary: Set settings
+      x-summary-source: derived
+components:
+  schemas:
+    RestrictionsFeatureSettingsBean:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        restrictedEntitiesVisible:
+          type: boolean
+      required:
+      - enabled
+      - restrictedEntitiesVisible

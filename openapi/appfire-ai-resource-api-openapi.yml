@@ -1,0 +1,38 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition AI Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: ai-resource
+paths:
+  /api/v2/ai/usage:
+    get:
+      tags:
+      - ai-resource
+      operationId: getUsage
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AIUsageOutputBean'
+      summary: Get usage
+      x-summary-source: derived
+components:
+  schemas:
+    AIUsageOutputBean:
+      type: object
+      properties:
+        allowed:
+          type: number
+          format: float
+        used:
+          type: number
+          format: float
+        remaining:
+          type: number
+          format: float

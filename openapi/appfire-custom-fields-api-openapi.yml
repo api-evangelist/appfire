@@ -1,0 +1,896 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Custom Fields API
+  version: v0
+  description: 'Manage custom field definitions for Objectives and Key Results.
+
+
+    Custom fields allow workspace administrators to attach additional structured
+
+    data to OKRs — for example a "Risk level" dropdown, a "Budget" number field,
+
+    or a "Owner" user picker.
+
+
+    **Lifecycle**
+
+    1. Create a definition (`POST /api/v2/customField`) — this makes the field
+
+    available in the UI for that field type.
+
+    2. Assign a value to an Objective or KR by including `customFieldValues` in
+
+    the body of `PATCH /api/v2/okr/{id}` or `PATCH /api/v2/kr/{id}`.
+
+    3. Read values back via `GET /api/v2/okr/{id}` — the `customFieldValues` map
+
+    in the response is keyed by field definition ID.
+
+
+    **Permissions** — most write operations require the `MANAGE_CUSTOM_FIELDS`
+
+    app permission (Jira admin role within the OKR app).
+
+    Read operations require OKR view access.'
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: Custom Fields
+  description: 'Manage custom field definitions for Objectives and Key Results.
+
+
+    Custom fields allow workspace administrators to attach additional structured
+
+    data to OKRs — for example a "Risk level" dropdown, a "Budget" number field,
+
+    or a "Owner" user picker.
+
+
+    **Lifecycle**
+
+    1. Create a definition (`POST /api/v2/customField`) — this makes the field
+
+    available in the UI for that field type.
+
+    2. Assign a value to an Objective or KR by including `customFieldValues` in
+
+    the body of `PATCH /api/v2/okr/{id}` or `PATCH /api/v2/kr/{id}`.
+
+    3. Read values back via `GET /api/v2/okr/{id}` — the `customFieldValues` map
+
+    in the response is keyed by field definition ID.
+
+
+    **Permissions** — most write operations require the `MANAGE_CUSTOM_FIELDS`
+
+    app permission (Jira admin role within the OKR app).
+
+    Read operations require OKR view access.'
+paths:
+  /api/v2/customField:
+    get:
+      tags:
+      - Custom Fields
+      summary: List visible custom field definitions
+      description: 'Returns all custom field definitions that are currently visible (not hidden).
+
+        Optionally filters by goal entity type.
+
+
+        Use this endpoint to discover which fields are available for display in the UI.
+
+        Hidden fields (soft-deleted or admin-hidden) are excluded — use
+
+        `GET /api/v2/customField/all` to include them.'
+      operationId: listVisible
+      parameters:
+      - name: goalType
+        in: query
+        description: Filter by goal entity type. Omit to return fields for all entity types.
+        required: false
+        schema:
+          type: string
+          enum:
+          - OBJECTIVE
+          - KEY_RESULT
+      responses:
+        '200':
+          description: List of visible custom field definitions
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  type: string
+                  oneOf:
+                  - $ref: '#/components/schemas/TextFieldOutputBean'
+                  - $ref: '#/components/schemas/NumberFieldOutputBean'
+                  - $ref: '#/components/schemas/HyperlinkFieldOutputBean'
+                  - $ref: '#/components/schemas/SelectFieldOutputBean'
+                  - $ref: '#/components/schemas/MultiSelectFieldOutputBean'
+                  - $ref: '#/components/schemas/UserFieldOutputBean'
+                  - $ref: '#/components/schemas/DateFieldOutputBean'
+        '401':
+          description: Missing or invalid Atlassian JWT token
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  oneOf:
+                  - $ref: '#/components/schemas/DateFieldOutputBean'
+                  - $ref: '#/components/schemas/HyperlinkFieldOutputBean'
+                  - $ref: '#/components/schemas/MultiSelectFieldOutputBean'
+                  - $ref: '#/components/schemas/NumberFieldOutputBean'
+                  - $ref: '#/components/schemas/SelectFieldOutputBean'
+                  - $ref: '#/components/schemas/TextFieldOutputBean'
+                  - $ref: '#/components/schemas/UserFieldOutputBean'
+    post:
+      tags:
+      - Custom Fields
+      summary: Create a new custom field definition
+      description: 'Creates a new custom field definition for this Jira installation.
+
+
+        The `type` property is the discriminator that determines which subtype of the
+
+        request body is expected:
+
+
+        | type | extra fields |
+
+        |--------------|-------------------------------------------|
+
+        | `TEXT` | `maxLength` (optional integer) |
+
+        | `NUMBER` | — |
+
+        | `HYPERLINK` | — |
+
+        | `SELECT` | `selectOptions` (required, non-empty list)|
+
+        | `MULTI_SELECT` | `selectOptions` (required, non-empty list)|
+
+        | `USER` | `multipleUsers` (required boolean) |
+
+        | `DATE` | — |
+
+
+        The `type` **cannot be changed** after creation.
+
+
+        Requires the `MANAGE_CUSTOM_FIELDS` app permission.'
+      operationId: create_2
+      requestBody:
+        description: Custom field definition to create. Use the type-specific schema (discriminated by the `type` field).
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/TextFieldInputBean'
+              - $ref: '#/components/schemas/NumberFieldInputBean'
+              - $ref: '#/components/schemas/HyperlinkFieldInputBean'
+              - $ref: '#/components/schemas/SelectFieldInputBean'
+              - $ref: '#/components/schemas/MultiSelectFieldInputBean'
+              - $ref: '#/components/schemas/UserFieldInputBean'
+              - $ref: '#/components/schemas/DateFieldInputBean'
+        required: true
+      responses:
+        '200':
+          description: Custom field created successfully
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/TextFieldOutputBean'
+                - $ref: '#/components/schemas/NumberFieldOutputBean'
+                - $ref: '#/components/schemas/HyperlinkFieldOutputBean'
+                - $ref: '#/components/schemas/SelectFieldOutputBean'
+                - $ref: '#/components/schemas/MultiSelectFieldOutputBean'
+                - $ref: '#/components/schemas/UserFieldOutputBean'
+                - $ref: '#/components/schemas/DateFieldOutputBean'
+        '400':
+          description: Validation error — e.g. missing selectOptions for SELECT type, or unknown type discriminator
+          content:
+            '*/*':
+              schema:
+                type: string
+        '401':
+          description: Missing or invalid Atlassian JWT token
+          content:
+            '*/*':
+              schema:
+                type: object
+        '403':
+          description: Caller does not have MANAGE_CUSTOM_FIELDS permission
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/v2/customField/{id}:
+    get:
+      tags:
+      - Custom Fields
+      summary: Get a custom field definition by ID
+      description: Returns a single custom field definition. Returns 404 if the field does not exist or belongs to a different tenant.
+      operationId: getById
+      parameters:
+      - name: id
+        in: path
+        description: MongoDB ObjectId of the custom field definition
+        required: true
+        schema:
+          type: string
+        example: 65f3a1b2c3d4e5f6a7b8c9d0
+      responses:
+        '200':
+          description: Custom field definition found
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/TextFieldOutputBean'
+                - $ref: '#/components/schemas/NumberFieldOutputBean'
+                - $ref: '#/components/schemas/HyperlinkFieldOutputBean'
+                - $ref: '#/components/schemas/SelectFieldOutputBean'
+                - $ref: '#/components/schemas/MultiSelectFieldOutputBean'
+                - $ref: '#/components/schemas/UserFieldOutputBean'
+                - $ref: '#/components/schemas/DateFieldOutputBean'
+        '401':
+          description: Missing or invalid Atlassian JWT token
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/DateFieldOutputBean'
+                - $ref: '#/components/schemas/HyperlinkFieldOutputBean'
+                - $ref: '#/components/schemas/MultiSelectFieldOutputBean'
+                - $ref: '#/components/schemas/NumberFieldOutputBean'
+                - $ref: '#/components/schemas/SelectFieldOutputBean'
+                - $ref: '#/components/schemas/TextFieldOutputBean'
+                - $ref: '#/components/schemas/UserFieldOutputBean'
+        '404':
+          description: Custom field definition not found
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/DateFieldOutputBean'
+                - $ref: '#/components/schemas/HyperlinkFieldOutputBean'
+                - $ref: '#/components/schemas/MultiSelectFieldOutputBean'
+                - $ref: '#/components/schemas/NumberFieldOutputBean'
+                - $ref: '#/components/schemas/SelectFieldOutputBean'
+                - $ref: '#/components/schemas/TextFieldOutputBean'
+                - $ref: '#/components/schemas/UserFieldOutputBean'
+    delete:
+      tags:
+      - Custom Fields
+      summary: Soft-delete a custom field definition
+      description: 'Soft-deletes the custom field definition. The field is permanently hidden from
+
+        all API responses, but its stored values on existing OKR documents are preserved
+
+        in MongoDB.
+
+
+        **This operation is not easily reversible** — recovery requires direct database
+
+        access by the on-call engineer. For temporary hiding use
+
+        `PATCH /api/v2/customField/{id}/visibility` instead.
+
+
+        Stored `customFieldValues` on objectives and key results are not cleaned up
+
+        automatically; they will remain as orphaned entries in the document until the
+
+        OKR is next edited.
+
+
+        Requires the `MANAGE_CUSTOM_FIELDS` app permission.'
+      operationId: delete_2
+      parameters:
+      - name: id
+        in: path
+        description: MongoDB ObjectId of the custom field definition to soft-delete
+        required: true
+        schema:
+          type: string
+        example: 65f3a1b2c3d4e5f6a7b8c9d0
+      responses:
+        '204':
+          description: Custom field soft-deleted successfully
+        '400':
+          description: Field not found or deletion failed
+          content:
+            '*/*':
+              schema:
+                type: string
+        '401':
+          description: Missing or invalid Atlassian JWT token
+        '403':
+          description: Caller does not have MANAGE_CUSTOM_FIELDS permission
+    patch:
+      tags:
+      - Custom Fields
+      summary: Update a custom field definition
+      description: 'Partially updates an existing custom field definition. All fields are optional —
+
+        only provided fields are changed.
+
+
+        **Constraints**
+
+        - The `type` cannot be changed after creation.
+
+        - For `SELECT` / `MULTI_SELECT` fields, providing `selectOptions` replaces the
+
+        entire option list. Existing values on OKRs that reference removed options
+
+        are NOT automatically cleaned up.
+
+        - For `USER` fields, `multipleUsers` can be toggled, but changing from
+
+        multi to single does not truncate stored values.
+
+
+        Requires the `MANAGE_CUSTOM_FIELDS` app permission.'
+      operationId: update_3
+      parameters:
+      - name: id
+        in: path
+        description: MongoDB ObjectId of the custom field definition to update
+        required: true
+        schema:
+          type: string
+        example: 65f3a1b2c3d4e5f6a7b8c9d0
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomFieldDefinitionUpdateBean'
+        required: true
+      responses:
+        '200':
+          description: Custom field updated successfully
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/TextFieldOutputBean'
+                - $ref: '#/components/schemas/NumberFieldOutputBean'
+                - $ref: '#/components/schemas/HyperlinkFieldOutputBean'
+                - $ref: '#/components/schemas/SelectFieldOutputBean'
+                - $ref: '#/components/schemas/MultiSelectFieldOutputBean'
+                - $ref: '#/components/schemas/UserFieldOutputBean'
+                - $ref: '#/components/schemas/DateFieldOutputBean'
+        '400':
+          description: Validation error or field not found
+          content:
+            '*/*':
+              schema:
+                type: string
+        '401':
+          description: Missing or invalid Atlassian JWT token
+          content:
+            '*/*':
+              schema:
+                type: object
+        '403':
+          description: Caller does not have MANAGE_CUSTOM_FIELDS permission
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/v2/customField/{id}/visibility:
+    patch:
+      tags:
+      - Custom Fields
+      summary: Show or hide a custom field definition
+      description: 'Toggles the visibility of a custom field definition without deleting it.
+
+
+        - `visible: false` — hides the field from the `GET /api/v2/customField` list
+
+        and from the UI. Values on existing OKRs are preserved. Prefer this over
+
+        DELETE when you want to temporarily suppress a field.
+
+        - `visible: true` — makes a previously hidden field visible again.
+
+
+        Requires the `MANAGE_CUSTOM_FIELDS` app permission.'
+      operationId: updateVisibility
+      parameters:
+      - name: id
+        in: path
+        description: MongoDB ObjectId of the custom field definition
+        required: true
+        schema:
+          type: string
+        example: 65f3a1b2c3d4e5f6a7b8c9d0
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VisibilityUpdateBean'
+        required: true
+      responses:
+        '200':
+          description: Visibility updated successfully
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/TextFieldOutputBean'
+                - $ref: '#/components/schemas/NumberFieldOutputBean'
+                - $ref: '#/components/schemas/HyperlinkFieldOutputBean'
+                - $ref: '#/components/schemas/SelectFieldOutputBean'
+                - $ref: '#/components/schemas/MultiSelectFieldOutputBean'
+                - $ref: '#/components/schemas/UserFieldOutputBean'
+                - $ref: '#/components/schemas/DateFieldOutputBean'
+        '400':
+          description: Field not found or update failed
+          content:
+            '*/*':
+              schema:
+                type: string
+        '401':
+          description: Missing or invalid Atlassian JWT token
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/DateFieldOutputBean'
+                - $ref: '#/components/schemas/HyperlinkFieldOutputBean'
+                - $ref: '#/components/schemas/MultiSelectFieldOutputBean'
+                - $ref: '#/components/schemas/NumberFieldOutputBean'
+                - $ref: '#/components/schemas/SelectFieldOutputBean'
+                - $ref: '#/components/schemas/TextFieldOutputBean'
+                - $ref: '#/components/schemas/UserFieldOutputBean'
+        '403':
+          description: Caller does not have MANAGE_CUSTOM_FIELDS permission
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/DateFieldOutputBean'
+                - $ref: '#/components/schemas/HyperlinkFieldOutputBean'
+                - $ref: '#/components/schemas/MultiSelectFieldOutputBean'
+                - $ref: '#/components/schemas/NumberFieldOutputBean'
+                - $ref: '#/components/schemas/SelectFieldOutputBean'
+                - $ref: '#/components/schemas/TextFieldOutputBean'
+                - $ref: '#/components/schemas/UserFieldOutputBean'
+  /api/v2/customField/{id}/options/usage:
+    get:
+      tags:
+      - Custom Fields
+      summary: Get usage count for a custom field option
+      description: Returns how many OKRs (Objectives and Key Results) use the given option value.
+      operationId: getOptionUsage
+      parameters:
+      - name: id
+        in: path
+        description: Custom field ID
+        required: true
+        schema:
+          type: string
+      - name: value
+        in: query
+        description: Option value to check usage for
+        required: true
+        schema:
+          type: string
+          minLength: 1
+      responses:
+        '200':
+          description: Usage count retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CustomFieldOptionUsageInfoBean'
+        '400':
+          description: Field not found or field type is not SELECT/MULTI_SELECT
+          content:
+            '*/*':
+              schema:
+                type: string
+        '401':
+          description: Missing or invalid Atlassian JWT token
+          content:
+            '*/*':
+              schema:
+                type: object
+        '403':
+          description: Caller does not have MANAGE_CUSTOM_FIELDS permission
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/v2/customField/all:
+    get:
+      tags:
+      - Custom Fields
+      summary: List all custom field definitions including hidden
+      description: 'Returns all custom field definitions for this Jira installation, including
+
+        those that are hidden (either via the visibility endpoint or soft-deleted).
+
+
+        Requires the `MANAGE_CUSTOM_FIELDS` app permission (Jira admin).
+
+
+        Useful during development to inspect the full state of custom fields
+
+        regardless of visibility, e.g. to verify a delete operation or re-enable
+
+        a hidden field.'
+      operationId: listAll
+      responses:
+        '200':
+          description: Full list of all custom field definitions
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  type: string
+                  oneOf:
+                  - $ref: '#/components/schemas/TextFieldOutputBean'
+                  - $ref: '#/components/schemas/NumberFieldOutputBean'
+                  - $ref: '#/components/schemas/HyperlinkFieldOutputBean'
+                  - $ref: '#/components/schemas/SelectFieldOutputBean'
+                  - $ref: '#/components/schemas/MultiSelectFieldOutputBean'
+                  - $ref: '#/components/schemas/UserFieldOutputBean'
+                  - $ref: '#/components/schemas/DateFieldOutputBean'
+        '401':
+          description: Missing or invalid Atlassian JWT token
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  oneOf:
+                  - $ref: '#/components/schemas/DateFieldOutputBean'
+                  - $ref: '#/components/schemas/HyperlinkFieldOutputBean'
+                  - $ref: '#/components/schemas/MultiSelectFieldOutputBean'
+                  - $ref: '#/components/schemas/NumberFieldOutputBean'
+                  - $ref: '#/components/schemas/SelectFieldOutputBean'
+                  - $ref: '#/components/schemas/TextFieldOutputBean'
+                  - $ref: '#/components/schemas/UserFieldOutputBean'
+        '403':
+          description: Caller does not have MANAGE_CUSTOM_FIELDS permission
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  oneOf:
+                  - $ref: '#/components/schemas/DateFieldOutputBean'
+                  - $ref: '#/components/schemas/HyperlinkFieldOutputBean'
+                  - $ref: '#/components/schemas/MultiSelectFieldOutputBean'
+                  - $ref: '#/components/schemas/NumberFieldOutputBean'
+                  - $ref: '#/components/schemas/SelectFieldOutputBean'
+                  - $ref: '#/components/schemas/TextFieldOutputBean'
+                  - $ref: '#/components/schemas/UserFieldOutputBean'
+components:
+  schemas:
+    CustomFieldOptionUpdateBean:
+      type: object
+      properties:
+        oldValue:
+          type: string
+          minLength: 1
+        newValue:
+          type: string
+          minLength: 1
+      required:
+      - newValue
+      - oldValue
+    UserFieldOutputBean:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldDefinitionOutputBean'
+      - type: object
+        properties:
+          multipleUsers:
+            type: boolean
+      required:
+      - applicableGoalTypes
+      - created
+      - hidden
+      - id
+      - multipleUsers
+      - name
+      - updated
+    NumberFieldOutputBean:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldDefinitionOutputBean'
+      required:
+      - applicableGoalTypes
+      - created
+      - hidden
+      - id
+      - name
+      - updated
+    UserFieldInputBean:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldDefinitionInputBean'
+      - type: object
+        properties:
+          multipleUsers:
+            type: boolean
+      required:
+      - applicableGoalTypes
+      - multipleUsers
+      - name
+    MultiSelectFieldInputBean:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldDefinitionInputBean'
+      - type: object
+        properties:
+          selectOptions:
+            type: array
+            items:
+              type: string
+            minItems: 1
+      required:
+      - applicableGoalTypes
+      - name
+      - selectOptions
+    DateFieldInputBean:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldDefinitionInputBean'
+      required:
+      - applicableGoalTypes
+      - name
+    CustomFieldDefinitionOutputBean:
+      type: object
+      discriminator:
+        propertyName: type
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - TEXT
+          - NUMBER
+          - HYPERLINK
+          - SELECT
+          - MULTI_SELECT
+          - USER
+          - DATE
+        applicableGoalTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - OBJECTIVE
+            - KEY_RESULT
+          uniqueItems: true
+        description:
+          type: string
+        hidden:
+          type: boolean
+        displayOrder:
+          type: integer
+          format: int32
+        created:
+          type: string
+          format: date-time
+        updated:
+          type: string
+          format: date-time
+      required:
+      - applicableGoalTypes
+      - created
+      - hidden
+      - id
+      - name
+      - updated
+    TextFieldInputBean:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldDefinitionInputBean'
+      - type: object
+        properties:
+          maxLength:
+            type: integer
+            format: int32
+            minimum: 1
+      required:
+      - applicableGoalTypes
+      - name
+    VisibilityUpdateBean:
+      type: object
+      properties:
+        visible:
+          type: boolean
+      required:
+      - visible
+    HyperlinkFieldOutputBean:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldDefinitionOutputBean'
+      required:
+      - applicableGoalTypes
+      - created
+      - hidden
+      - id
+      - name
+      - updated
+    NumberFieldInputBean:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldDefinitionInputBean'
+      required:
+      - applicableGoalTypes
+      - name
+    SelectFieldInputBean:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldDefinitionInputBean'
+      - type: object
+        properties:
+          selectOptions:
+            type: array
+            items:
+              type: string
+            minItems: 1
+      required:
+      - applicableGoalTypes
+      - name
+      - selectOptions
+    CustomFieldDefinitionInputBean:
+      type: object
+      discriminator:
+        propertyName: type
+      properties:
+        name:
+          type: string
+          maxLength: 40
+          minLength: 0
+        type:
+          type: string
+          enum:
+          - TEXT
+          - NUMBER
+          - HYPERLINK
+          - SELECT
+          - MULTI_SELECT
+          - USER
+          - DATE
+        applicableGoalTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - OBJECTIVE
+            - KEY_RESULT
+          uniqueItems: true
+        description:
+          type: string
+        displayOrder:
+          type: integer
+          format: int32
+      required:
+      - applicableGoalTypes
+      - name
+    DateFieldOutputBean:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldDefinitionOutputBean'
+      required:
+      - applicableGoalTypes
+      - created
+      - hidden
+      - id
+      - name
+      - updated
+    CustomFieldOptionUsageInfoBean:
+      type: object
+      properties:
+        objectivesCount:
+          type: integer
+          format: int64
+        keyResultsCount:
+          type: integer
+          format: int64
+        strategicThemesCount:
+          type: integer
+          format: int64
+      required:
+      - keyResultsCount
+      - objectivesCount
+      - strategicThemesCount
+    TextFieldOutputBean:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldDefinitionOutputBean'
+      - type: object
+        properties:
+          maxLength:
+            type: integer
+            format: int32
+      required:
+      - applicableGoalTypes
+      - created
+      - hidden
+      - id
+      - name
+      - updated
+    CustomFieldDefinitionUpdateBean:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 40
+          minLength: 0
+        applicableGoalTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - OBJECTIVE
+            - KEY_RESULT
+          uniqueItems: true
+        description:
+          type: string
+        selectOptions:
+          type: array
+          items:
+            type: string
+        optionRenames:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldOptionUpdateBean'
+        optionsToDelete:
+          type: array
+          items:
+            type: string
+        multipleUsers:
+          type: boolean
+        maxLength:
+          type: integer
+          format: int32
+          minimum: 1
+        displayOrder:
+          type: integer
+          format: int32
+    SelectFieldOutputBean:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldDefinitionOutputBean'
+      - type: object
+        properties:
+          selectOptions:
+            type: array
+            items:
+              type: string
+      required:
+      - applicableGoalTypes
+      - created
+      - hidden
+      - id
+      - name
+      - selectOptions
+      - updated
+    HyperlinkFieldInputBean:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldDefinitionInputBean'
+      required:
+      - applicableGoalTypes
+      - name
+    MultiSelectFieldOutputBean:
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldDefinitionOutputBean'
+      - type: object
+        properties:
+          selectOptions:
+            type: array
+            items:
+              type: string
+      required:
+      - applicableGoalTypes
+      - created
+      - hidden
+      - id
+      - name
+      - selectOptions
+      - updated

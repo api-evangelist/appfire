@@ -1,0 +1,94 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Team Sync Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: team-sync-resource
+paths:
+  /team-sync/tenant/{tenantId}:
+    get:
+      tags:
+      - team-sync-resource
+      operationId: getSingle
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantIdUrlEntitiesLeftToProcess'
+      summary: Get single
+      x-summary-source: derived
+    post:
+      tags:
+      - team-sync-resource
+      operationId: runSingle
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantIdUrlEntitiesLeftToProcess'
+      summary: Run single
+      x-summary-source: derived
+  /team-sync/list:
+    get:
+      tags:
+      - team-sync-resource
+      operationId: getAllList
+      parameters:
+      - name: skipEmpty
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: skipFinished
+        in: query
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TenantIdUrlEntitiesLeftToProcess'
+      summary: Get all list
+      x-summary-source: derived
+components:
+  schemas:
+    TenantIdUrlEntitiesLeftToProcess:
+      type: object
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+        left:
+          type: integer
+          format: int64
+        lagging:
+          type: integer
+          format: int64
+        all:
+          type: integer
+          format: int64

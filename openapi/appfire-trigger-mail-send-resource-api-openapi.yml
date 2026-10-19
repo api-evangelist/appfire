@@ -1,0 +1,88 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Trigger Mail Send Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: trigger-mail-send-resource
+paths:
+  /mailtest/targeted:
+    post:
+      tags:
+      - trigger-mail-send-resource
+      operationId: scheduleTargetedTestMail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TriggerTargetedTestMailInputBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+      summary: Schedule targeted test mail
+      x-summary-source: derived
+  /mailtest/manual:
+    post:
+      tags:
+      - trigger-mail-send-resource
+      operationId: runManual
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TriggerManualMainInputBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+      summary: Run manual
+      x-summary-source: derived
+  /mailtest/import-okr-data:
+    post:
+      tags:
+      - trigger-mail-send-resource
+      operationId: sendImportOkrDataEmail
+      parameters:
+      - name: emailId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+      summary: Send import okr data email
+      x-summary-source: derived
+components:
+  schemas:
+    TriggerManualMainInputBean:
+      type: object
+      properties:
+        tenantId:
+          type: string
+        isoDateNow:
+          type: string
+        isoDateFrom:
+          type: string
+    TriggerTargetedTestMailInputBean:
+      type: object
+      properties:
+        tenantId:
+          type: string
+        accountId:
+          type: string

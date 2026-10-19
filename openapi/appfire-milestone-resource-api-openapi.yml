@@ -1,0 +1,208 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Milestone Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: milestone-resource
+paths:
+  /api/milestones:
+    get:
+      tags:
+      - milestone-resource
+      operationId: getMilestones
+      parameters:
+      - name: okrId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: entityType
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - OBJECTIVE
+          - KEY_RESULT
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MilestoneOutputBean'
+      summary: Get milestones
+      x-summary-source: derived
+    post:
+      tags:
+      - milestone-resource
+      operationId: createMilestone
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MilestoneInputBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MilestoneOutputBean'
+      summary: Create milestone
+      x-summary-source: derived
+  /api/milestones/{milestoneId}:
+    delete:
+      tags:
+      - milestone-resource
+      operationId: deleteMilestone
+      parameters:
+      - name: milestoneId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      summary: Delete milestone
+      x-summary-source: derived
+    patch:
+      tags:
+      - milestone-resource
+      operationId: updateMilestone
+      parameters:
+      - name: milestoneId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MilestoneUpdateInputBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MilestoneOutputBean'
+      summary: Update milestone
+      x-summary-source: derived
+components:
+  schemas:
+    MilestoneUpdateInputBean:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        expectedDate:
+          type: string
+          format: date-time
+        targetValue:
+          type: number
+          format: double
+      required:
+      - expectedDate
+      - name
+      - targetValue
+    MilestoneOutputBean:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        expectedDate:
+          type: string
+          format: date-time
+        targetValue:
+          type: number
+          format: double
+        actualValue:
+          type:
+          - number
+          - 'null'
+          format: double
+        gapDifference:
+          type: number
+          format: double
+        gapPercent:
+          type: integer
+          format: int32
+        actualOverallPercent:
+          type: integer
+          format: int32
+        expectedOverallPercent:
+          type: integer
+          format: int32
+        entityType:
+          type: string
+          enum:
+          - OBJECTIVE
+          - KEY_RESULT
+        okrId:
+          type: string
+        status:
+          type: string
+          enum:
+          - ACHIEVED
+          - UPCOMING
+          - MISSED
+          - INVALID
+        invalidReason:
+          type: string
+          enum:
+          - DATE_OUT_OF_RANGE
+          - UNIT_MISMATCH
+      required:
+      - actualOverallPercent
+      - entityType
+      - expectedDate
+      - expectedOverallPercent
+      - gapDifference
+      - gapPercent
+      - id
+      - name
+      - okrId
+      - status
+      - targetValue
+    MilestoneInputBean:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        expectedDate:
+          type: string
+          format: date-time
+        targetValue:
+          type: number
+          format: double
+        entityType:
+          type: string
+          enum:
+          - OBJECTIVE
+          - KEY_RESULT
+        okrId:
+          type: string
+      required:
+      - entityType
+      - expectedDate
+      - name
+      - okrId
+      - targetValue

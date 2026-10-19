@@ -1,0 +1,205 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Data Residency Migration API
+  version: v0
+  description: 'Manage data residency migrations for SPM tenants. Follows the standard Appfire migration lifecycle: schedule → start → status → commit/rollback.'
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: Data Residency Migration
+  description: 'Manage data residency migrations for SPM tenants. Follows the standard Appfire migration lifecycle: schedule → start → status → commit/rollback.'
+paths:
+  /api/internal/data-residency-migration/start:
+    post:
+      tags:
+      - Data Residency Migration
+      summary: Start migration
+      description: Begins a previously scheduled data residency migration.
+      operationId: start
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpmDataResidencyMigrationBaseRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            '*/*':
+              schema:
+                type: object
+        '400':
+          description: Invalid request
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/internal/data-residency-migration/schedule:
+    post:
+      tags:
+      - Data Residency Migration
+      summary: Schedule migration
+      description: Schedules a data residency migration for a tenant to a new geographic location. The migration will be executed within the specified time window.
+      operationId: schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpmDataResidencyMigrationScheduleRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            '*/*':
+              schema:
+                type: object
+        '400':
+          description: Invalid request
+          content:
+            '*/*':
+              schema:
+                type: object
+        '404':
+          description: Host not found
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/internal/data-residency-migration/rollback:
+    post:
+      tags:
+      - Data Residency Migration
+      summary: Rollback migration
+      description: Rolls back a data residency migration, reverting to the original data location.
+      operationId: rollback
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpmDataResidencyMigrationBaseRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            '*/*':
+              schema:
+                type: object
+        '400':
+          description: Invalid request
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/internal/data-residency-migration/commit:
+    post:
+      tags:
+      - Data Residency Migration
+      summary: Commit migration
+      description: Finalizes a completed data residency migration, confirming the new data location.
+      operationId: commit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpmDataResidencyMigrationBaseRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            '*/*':
+              schema:
+                type: object
+        '400':
+          description: Invalid request
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/internal/data-residency-migration/status:
+    get:
+      tags:
+      - Data Residency Migration
+      summary: Get migration status
+      description: Returns the current status of a data residency migration.
+      operationId: status
+      parameters:
+      - name: migrationId
+        in: query
+        description: Migration ID to check status for
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Status returned
+          content:
+            '*/*':
+              schema:
+                type: object
+        '400':
+          description: Invalid or missing migration ID
+          content:
+            '*/*':
+              schema:
+                type: object
+components:
+  schemas:
+    SpmDataResidencyMigrationBaseRequest:
+      type: object
+      description: Base migration request with migration identifier
+      properties:
+        migrationId:
+          type: integer
+          format: int64
+          description: Unique migration identifier assigned by the migration orchestrator
+          examples:
+          - 12345678
+    SpmDataResidencyMigrationScheduleRequest:
+      type: object
+      description: Request to schedule a data residency migration to a new location
+      properties:
+        startTime:
+          type: string
+          format: date-time
+          description: Migration window start time
+        endTime:
+          type: string
+          format: date-time
+          description: Migration window end time
+        location:
+          type: string
+          description: Target geographic location for data residency
+          examples:
+          - eu
+        clientKey:
+          type: string
+          deprecated: true
+          description: Tenant identifier (deprecated, use installationId instead)
+        cloudId:
+          type: string
+          description: Atlassian Cloud site ID
+          examples:
+          - a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        installationId:
+          type: string
+          description: Forge installation ID of the tenant
+          examples:
+          - ari:cloud:ecosystem::app/install/a1b2c3d4-e5f6
+        migrationId:
+          type: integer
+          format: int64
+          description: Unique migration identifier assigned by the migration orchestrator
+          examples:
+          - 12345678
+      required:
+      - cloudId
+      - endTime
+      - installationId
+      - location
+      - startTime

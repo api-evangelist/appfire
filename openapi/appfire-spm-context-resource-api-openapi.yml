@@ -1,0 +1,27 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Spm Context Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: spm-context-resource
+paths:
+  /api/spm/app-context:
+    get:
+      tags:
+      - spm-context-resource
+      operationId: auth
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Model'
+      summary: Auth
+      x-summary-source: derived
+components:
+  schemas:
+    Model: {}

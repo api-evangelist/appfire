@@ -1,0 +1,50 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Team migration (internal) API
+  version: v0
+  description: Background migration of local teams to the external Team Service.
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: Team migration (internal)
+  description: Background migration of local teams to the external Team Service.
+paths:
+  /api/internal/team-migration/process:
+    post:
+      tags:
+      - Team migration (internal)
+      summary: Migrate all unmigrated teams for a tenant to the external Team Service
+      operationId: processMigration
+      parameters:
+      - name: X-APPFIRE-M2M-AUTH-INSTALLATION-ID
+        in: header
+        description: Forge installation ID of the tenant
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Migration completed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TeamMigrationResponse'
+components:
+  schemas:
+    TeamMigrationResponse:
+      type: object
+      properties:
+        tenantId:
+          type: string
+        migratedTeams:
+          type: array
+          items:
+            $ref: '#/components/schemas/MigratedTeam'
+    MigratedTeam:
+      type: object
+      properties:
+        localTeamId:
+          type: string
+        externalTeamId:
+          type: string

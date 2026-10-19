@@ -1,0 +1,90 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Child Okr Filter Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: child-okr-filter-resource
+paths:
+  /api/v2/objectives/{objectiveId}/child-okrs/filter:
+    get:
+      tags:
+      - child-okr-filter-resource
+      operationId: getFilter
+      parameters:
+      - name: objectiveId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ChildOkrFilterBean'
+      summary: Get filter
+      x-summary-source: derived
+    put:
+      tags:
+      - child-okr-filter-resource
+      operationId: saveFilter
+      parameters:
+      - name: objectiveId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChildOkrFilterBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ChildOkrFilterBean'
+      summary: Save filter
+      x-summary-source: derived
+components:
+  schemas:
+    ChildOkrFilterBean:
+      type: object
+      properties:
+        statuses:
+          type: array
+          items:
+            type: string
+            enum:
+            - ON_TRACK
+            - AT_RISK
+            - ACTION_REQUIRED
+            - NOT_STARTED
+            - SUCCESS
+            - FINISHED
+            - ASSUMPTIONS_CHANGED
+            - DELAYED
+            - CANCELED
+            - FAILED
+            - UNDEFINED
+            - MISSED_TARGET
+        types:
+          type: array
+          items:
+            type: string
+            enum:
+            - ST
+            - OBJECTIVE
+            - KR
+        hideClosed:
+          type: boolean
+      required:
+      - statuses
+      - types

@@ -1,0 +1,103 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Migrations Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: migrations-resource
+paths:
+  /migration/{index}:
+    get:
+      tags:
+      - migrations-resource
+      operationId: runSingle_2
+      parameters:
+      - name: index
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: forceRun
+        in: query
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Migration'
+      summary: Run single 2
+      x-summary-source: derived
+  /migration/db:
+    get:
+      tags:
+      - migrations-resource
+      operationId: getAllDb
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Migration'
+      summary: Get all db
+      x-summary-source: derived
+  /migration/code:
+    get:
+      tags:
+      - migrations-resource
+      operationId: getAllCode
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MigrationDefinition'
+      summary: Get all code
+      x-summary-source: derived
+components:
+  schemas:
+    MigrationDefinition:
+      type: object
+      properties:
+        name:
+          type: string
+        orderNumber:
+          type: integer
+          format: int64
+    Migration:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        orderNumber:
+          type: integer
+          format: int64
+        startedAt:
+          type: string
+          format: date-time
+        finishedAt:
+          type: string
+          format: date-time
+        failedAt:
+          type: string
+          format: date-time
+        failureMessage:
+          type: string
+      required:
+      - name
+      - orderNumber
+      - startedAt

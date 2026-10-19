@@ -1,0 +1,20 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Schedule Kr Update Reminder Email Job API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: schedule-kr-update-reminder-email-job
+paths:
+  /scheduled/EmailsAboutKeyResultsToUpdate:
+    get:
+      tags:
+      - schedule-kr-update-reminder-email-job
+      operationId: scheduleEmailsAboutKeyResultsToUpdate
+      responses:
+        '200':
+          description: OK
+      summary: Schedule emails about key results to update
+      x-summary-source: derived

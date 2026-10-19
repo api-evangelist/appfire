@@ -1,0 +1,52 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition AI Settings Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: ai-settings-resource
+paths:
+  /api/v2/settings/ai:
+    get:
+      tags:
+      - ai-settings-resource
+      operationId: getSettings_2
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AISettingsBean'
+      summary: Get settings 2
+      x-summary-source: derived
+    patch:
+      tags:
+      - ai-settings-resource
+      operationId: setSettings_2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AISettingsBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AISettingsBean'
+      summary: Set settings 2
+      x-summary-source: derived
+components:
+  schemas:
+    AISettingsBean:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+      required:
+      - enabled

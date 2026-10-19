@@ -1,0 +1,152 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Comments Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: comments-resource
+paths:
+  /api/v2/comments/update-comment:
+    put:
+      tags:
+      - comments-resource
+      operationId: editUpdateComment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentEditBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UpdateComment'
+      summary: Edit update comment
+      x-summary-source: derived
+    post:
+      tags:
+      - comments-resource
+      operationId: createUpdateComment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentCreateBean'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UpdateComment'
+      summary: Create update comment
+      x-summary-source: derived
+  /api/v2/comments/update-comment/{updateId}:
+    get:
+      tags:
+      - comments-resource
+      operationId: getCommentsForUpdate
+      parameters:
+      - name: updateId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UpdateComment'
+      summary: Get comments for update
+      x-summary-source: derived
+  /api/v2/comments/update-comment/{commentId}:
+    delete:
+      tags:
+      - comments-resource
+      operationId: delete_3
+      parameters:
+      - name: commentId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Delete 3
+      x-summary-source: derived
+components:
+  schemas:
+    CommentCreateBean:
+      type: object
+      properties:
+        updateId:
+          type: string
+        text:
+          type: string
+        replyToACommentId:
+          type:
+          - string
+          - 'null'
+      required:
+      - text
+      - updateId
+    CommentEditBean:
+      type: object
+      properties:
+        commentId:
+          type: string
+        text:
+          type: string
+      required:
+      - commentId
+      - text
+    UpdateComment:
+      type: object
+      properties:
+        id:
+          type: string
+        updateId:
+          type: string
+        text:
+          type: string
+        created:
+          type: string
+          format: date-time
+        lastEdited:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        authorUserId:
+          type: string
+        deleted:
+          type: boolean
+        replyToACommentId:
+          type:
+          - string
+          - 'null'
+        threadId:
+          type:
+          - string
+          - 'null'
+      required:
+      - authorUserId
+      - created
+      - deleted
+      - text
+      - updateId

@@ -1,0 +1,242 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Export Resource API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: export-resource
+paths:
+  /api/v2/export:
+    get:
+      tags:
+      - export-resource
+      operationId: export
+      parameters:
+      - name: startDate
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: endDate
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportData'
+      summary: Export
+      x-summary-source: derived
+components:
+  schemas:
+    ExportUnit:
+      type: object
+      properties:
+        name:
+          type: string
+        symbol:
+          type: string
+    ExportLabel:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    ExportData:
+      type: object
+      properties:
+        version:
+          type: string
+        okrs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExportObjective'
+        krs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExportKeyResult'
+        updates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExportUpdate'
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExportTeam'
+        periods:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExportPeriodAlias'
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExportLabel'
+    ExportObjective:
+      type: object
+      properties:
+        id:
+          type: string
+        key:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        parentObjectiveId:
+          type: string
+        ownerAccountId:
+          type: string
+        collaboratorAccountIds:
+          type: array
+          items:
+            type: string
+        percentDone:
+          type: number
+          format: double
+        created:
+          type: string
+          format: date-time
+        startDate:
+          type: string
+          format: date-time
+        deadline:
+          type: string
+          format: date-time
+        labelIds:
+          type: array
+          items:
+            type: string
+        teamIds:
+          type: array
+          items:
+            type: string
+        periodAliasId:
+          type: string
+        weight:
+          type: integer
+          format: int32
+    ExportKeyResult:
+      type: object
+      properties:
+        id:
+          type: string
+        key:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        parentObjectiveId:
+          type: string
+        issueIds:
+          type: array
+          items:
+            type: string
+        ownerAccountId:
+          type: string
+        collaboratorAccountIds:
+          type: array
+          items:
+            type: string
+        percentDone:
+          type: number
+          format: double
+        created:
+          type: string
+          format: date-time
+        startDate:
+          type: string
+          format: date-time
+        deadline:
+          type: string
+          format: date-time
+        labelIds:
+          type: array
+          items:
+            type: string
+        teamIds:
+          type: array
+          items:
+            type: string
+        periodAliasId:
+          type: string
+        unit:
+          $ref: '#/components/schemas/ExportUnit'
+        currentProgressDefinition:
+          $ref: '#/components/schemas/ExportProgressDefinition'
+        weight:
+          type: integer
+          format: int32
+    ExportTeam:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    ExportUpdate:
+      type: object
+      properties:
+        entityId:
+          type: string
+        status:
+          type: string
+          enum:
+          - ON_TRACK
+          - AT_RISK
+          - ACTION_REQUIRED
+          - NOT_STARTED
+          - SUCCESS
+          - FINISHED
+          - ASSUMPTIONS_CHANGED
+          - DELAYED
+          - CANCELED
+          - FAILED
+          - UNDEFINED
+          - MISSED_TARGET
+        created:
+          type: string
+          format: date-time
+        value:
+          type: number
+          format: double
+        description:
+          type: string
+    ExportPeriodAlias:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        deadline:
+          type: string
+          format: date-time
+    ExportProgressDefinition:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - STANDARD
+          - AUTO
+        startValue:
+          type: number
+          format: double
+        desiredValue:
+          type: number
+          format: double
+        jql:
+          type: string

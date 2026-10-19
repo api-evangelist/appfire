@@ -1,0 +1,24 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Send Email Job API
+  version: v0
+servers:
+- url: http://okr-ppm-prod.appfire.com
+  description: Generated server url
+tags:
+- name: send-email-job
+paths:
+  /scheduled/synchronizeAllEmails:
+    get:
+      tags:
+      - send-email-job
+      operationId: synchronizeAllEmails
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Synchronize all emails
+      x-summary-source: derived
