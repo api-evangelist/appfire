@@ -63,43 +63,7 @@ artifacts:
   integrations/appfire-integration-edges.yml:
     method: searched
     evidence: declared in the artifact
-  kin/checks-2026-10-11T110117.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-12T062655.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-12T080032.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-12T204651.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-12T221936.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-13T214537.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-14T064754.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-14T210656.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-14T225847.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-15T211329.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-15T230249.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-16T210549.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-16T225339.yml:
+  kin/checks-2026-10-17T182844.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-17T211151.yml:
@@ -159,7 +123,25 @@ artifacts:
   kin/score-2026-10-03T024842.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-04T202412.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-04T225258.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-09T213714.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
   kin/score-2026-10-11T110117.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-17T145100.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-17T153854.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-17T182844.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   lifecycle/appfire-lifecycle.yml:
@@ -187,17 +169,17 @@ artifacts:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/appfire-addon-descriptor-controller-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-ai-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-ai-settings-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-aikr-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-alignment-resource-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
@@ -205,26 +187,26 @@ artifacts:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/appfire-api-token-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-api-update-methods-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/appfire-atlassian-connect-error-controller-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-auto-kr-index-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-auto-kr-resource-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/appfire-child-okr-filter-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-comments-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-custom-fields-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
@@ -232,11 +214,11 @@ artifacts:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/appfire-data-retention-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-dynamic-module-manual-registration-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-entity-bulk-resource-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
@@ -244,26 +226,26 @@ artifacts:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/appfire-external-link-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-feature-flag-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-filtered-okr-resource-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/appfire-heap-dump-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-host-info-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-impact-resource-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/appfire-import-okr-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-jql-function-resource-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
@@ -280,11 +262,11 @@ artifacts:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/appfire-migrate-tenant-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-migrations-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-milestone-resource-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
@@ -310,32 +292,32 @@ artifacts:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/appfire-one-installation-descriptor-views-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-outgoing-mail-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-period-alias-resource-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/appfire-periods-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-permission-debug-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-permissions-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-permissions-cache-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-permissions-resource-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/appfire-queue-tasks-consumers-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-restriction-mode-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
@@ -343,71 +325,71 @@ artifacts:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/appfire-restrictions-feature-settings-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-saved-view-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-schedule-kr-update-reminder-email-job-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-send-email-job-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-settings-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/appfire-shortened-link-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-spm-context-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-statistics-resource-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/appfire-team-migration-internal-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-team-resource-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/appfire-team-sync-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-tenant-data-removal-service-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-tenant-license-sync-service-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-tenants-synchronization-service-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-test-setup-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-trigger-mail-send-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-ups-global-role-seed-internal-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/appfire-user-permissions-bean-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-user-permissions-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-user-resource-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/appfire-user-setting-resource-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-webhook-configuration-api-openapi.yml:
-    method: derived
-    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+    method: harvested
+    evidence: declared in the artifact
   openapi/appfire-worklogs-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)

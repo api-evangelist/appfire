@@ -829,6 +829,8 @@ apis:
   humanURL: https://developer.bigpicture.one/reference/whatisbigpicture
   baseURL: https://api.bigpicture.one/public/bigpicture/rest
   tags:
+  - TeamResource
+  tags_raw:
   - team-resource
   properties:
   - type: OpenAPI
@@ -934,6 +936,8 @@ apis:
   humanURL: https://developer.bigpicture.one/reference/whatisbigpicture
   baseURL: https://api.bigpicture.one/public/bigpicture/rest
   tags:
+  - User Resource
+  tags_raw:
   - user-resource
   properties:
   - type: OpenAPI
