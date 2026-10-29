@@ -64,5 +64,128 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Appfire is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://forgeglobal.com/appfire_stock/
+Appfire is a global software company that builds, acquires, and operates a large portfolio of apps that enhance, extend, and connect the platforms enterprise teams already run on — principally Atlassian Jira, Confluence and Jira Service Management (Cloud and Data Center), plus Microsoft Azure DevOps, monday.com and Salesforce. Its product families cover portfolio and project management (BigPicture, BigGantt, BigTemplate), goal setting (OKR for Jira), time tracking (7pace Timetracker for Jira and for Azure DevOps), document workflow and approvals (Comala Document Management), workflow automation and scripting (Jira Misc Workflow Extensions, Power Scripts), and administration tooling (the Appfire/Atlassian Command Line Interface). Public, machine-readable API surface is per-product rather than company-wide: 7pace Timetracker for Jira publishes OpenAPI 3.0 for its v1 and v2 REST APIs, the OKR app serves an OpenAPI 3.1 document for its public export/update API, and BigPicture publishes a hosted API reference for its Cloud and Data Center REST APIs.
+
+**Areas:** Atlassian · Jira · Confluence · Project Portfolio Management · Work Management · Time Tracking · OKRs · Workflow Automation · Azure DevOps · marketplace-apps · Document Workflow · Enterprise Software
+
+## Appfire on APIs.io
+
+Everything profiled for Appfire is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/appfire/](https://apis.io/providers/appfire/)** — or go straight to one of the APIs or properties below.
+
+### APIs (5)
+
+- [BigPicture Cloud Public API](https://apis.io/apis/appfire/bigpicture-cloud-public-api/) — Public REST API for BigPicture, BigGantt and BigTemplate on Atlassian Cloud (Appfire's portfolio and project-management suite). Exposes boxes, box types,…
+- [Appfire API query methods API](https://apis.io/apis/appfire/appfire-api-query-methods-api/) — Retrieve objectives, key results, updates, and comments. Use **expand** to include related entities (teams, periods, labels, etc.) instead of IDs only.…
+- [Appfire API update methods API](https://apis.io/apis/appfire/appfire-api-update-methods-api/) — **POST** with a JSON body. Send **Content-Type: application/json** and the **API-Token** header. Creates update records that set current status (and…
+- [Appfire Settings API](https://apis.io/apis/appfire/appfire-settings-api/) — The Settings API from Appfire — 16 operation(s) for settings.
+- [Appfire Worklogs API](https://apis.io/apis/appfire/appfire-worklogs-api/) — The Worklogs API from Appfire — 10 operation(s) for worklogs.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [appfire](https://apis.io/servers/appfire/appfire/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Appfire Agentic Access](https://apis.io/agentic-access/appfire/appfire-agentic-access/)
+
+#### Collections (4)
+
+Postman and Open Collection request collections.
+
+- [OKR API query methods API](https://apis.io/collections/appfire/open-appfire-api-query-methods-api/)
+- [OKR API update methods API](https://apis.io/collections/appfire/open-appfire-api-update-methods-api/)
+- [Appfire Settings API](https://apis.io/collections/appfire/open-appfire-settings-api/)
+- [Appfire Worklogs API](https://apis.io/collections/appfire/open-appfire-worklogs-api/)
+
+#### Overlays (3)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Appfire 7Pace Timetracker V1 Overlay](https://apis.io/overlays/appfire/appfire-7pace-timetracker-v1-overlay/)
+- [Appfire 7Pace Timetracker V2 Overlay](https://apis.io/overlays/appfire/appfire-7pace-timetracker-v2-overlay/)
+- [Appfire Okr Overlay](https://apis.io/overlays/appfire/appfire-okr-overlay/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Appfire Authentication](https://apis.io/security/appfire/appfire-authentication/)
+- [Appfire Domain Security](https://apis.io/security/appfire/appfire-domain-security/)
+- [Appfire Trust Center](https://apis.io/security/appfire/appfire-trust-center/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://appfire.com)
+- [Documentation](https://appfire.atlassian.net/wiki/spaces/APPFIRE/overview)
+- [API reference](https://developer.bigpicture.one/reference/whatisbigpicture)
+- [Support](https://support.appfire.com/)
+- [Blog](https://appfire.com/resources/blog)
+- [Compliance](https://trust.appfire.com/)
+- [Terms of service](https://appfire.com/eula)
+- [Privacy policy](https://appfire.com/privacy-policy)
+- [Status](https://status.appfire.com/)
+
+## API Evangelist rating
+
+**Kin Score 39.3** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 44.5 |
+| Contract governance | 4.5 |
+| Operational transparency | 31.6 |
+| Developer ergonomics | 49.4 |
+| Access clarity | 26.3 |
+
+**Agent readiness 25.0** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | — |
+
+**Regulatory alignment 25.5** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/appfire/](https://apis.io/providers/appfire/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Appfire: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/appfire/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
